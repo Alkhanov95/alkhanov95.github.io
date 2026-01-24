@@ -53,7 +53,7 @@ const translations = {
         'projects.project2.title': 'Blog API Gateway',
         'projects.project2.desc': 'API gateway для микросервисной архитектуры. Реализует маррутизацию запросов, rate limiting, middleware аутентификации и кэширование ответов. Включает health checks, сбор метрик и паттерн circuit breaker.',
         'certificates.title': 'Сертификаты',
-        'contacts.title': 'Контакты',
+        'contacts.title': 'Contacts',
         'contacts.intro': 'Открыт для сотрудничества или просто дружеского общения.',
         'footer.text': '© 2026 Мохаммед Алханов. Создано с философией Go: просто, эффективно, надёжно.'
     }
@@ -177,7 +177,7 @@ if (!isMobile) {
     }
 }
 
-// ЗОЛОТОЙ ДВОИЧНЫЙ ДОЖДЬ - ИСПРАВЛЕННАЯ ВЕРСИЯ
+// ЗОЛОТОЙ ДВОИЧНЫЙ ДОЖДЬ - ИСПРАВЛЕННАЯ ВЕРСИЯ (БОЛЬШЕ И ЯРЧЕ)
 const canvas = document.getElementById('starfield');
 if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -188,60 +188,69 @@ if (canvas) {
     let resizeTimeout;
     let lastWidth = 0;
     let lastHeight = 0;
+    let isInitialized = false;
 
     function resizeCanvas() {
         const dpr = window.devicePixelRatio || 1;
         const rect = canvas.getBoundingClientRect();
         
-        // Проверяем, действительно ли изменился размер
-        const newWidth = rect.width;
-        const newHeight = rect.height;
+        // Сохраняем старые позиции колонок относительно размера
+        const oldWidth = lastWidth;
+        const oldHeight = lastHeight;
+        const scaleX = rect.width / (oldWidth || rect.width);
+        const scaleY = rect.height / (oldHeight || rect.height);
         
-        if (Math.abs(newWidth - lastWidth) < 10 && Math.abs(newHeight - lastHeight) < 10) {
-            return; // Размер незначительно изменился - игнорируем
-        }
+        lastWidth = rect.width;
+        lastHeight = rect.height;
         
-        lastWidth = newWidth;
-        lastHeight = newHeight;
-        
-        canvas.width = newWidth * dpr;
-        canvas.height = newHeight * dpr;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
         
         ctx.scale(dpr, dpr);
-        canvas.style.width = `${newWidth}px`;
-        canvas.style.height = `${newHeight}px`;
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
         
-        return true; // Размер действительно изменился
+        // Масштабируем позиции существующих колонок
+        if (isInitialized && oldWidth > 0 && oldHeight > 0) {
+            columns.forEach(column => {
+                column.x *= scaleX;
+                column.y *= scaleY;
+                // Адаптируем шрифт к новому размеру
+                column.fontSize = Math.max(12, Math.min(18, column.fontSize * (scaleX + scaleY) / 2));
+            });
+        }
+        
+        return true;
     }
 
     function initBinaryRain(forceResize = false) {
         if (!canvas) return;
         
-        const shouldRecreate = forceResize ? resizeCanvas() : true;
-        if (!shouldRecreate && !forceResize) return;
-        
         const width = canvas.width / (window.devicePixelRatio || 1);
         const height = canvas.height / (window.devicePixelRatio || 1);
         
-        // Настройки в зависимости от устройства
-        const fontSize = isMobile ? 14 : 16;
-        const columnCount = Math.floor(width / fontSize);
-        const rowsPerColumn = isMobile ? 25 : 35;
-        
-        // Сохраняем существующие колонки при изменении размера
-        if (columns.length === 0 || forceResize) {
+        // Если не инициализирован или форс-ресайз - создаем новые колонки
+        if (!isInitialized || forceResize || columns.length === 0) {
+            // Настройки в зависимости от устройства
+            const fontSize = isMobile ? 14 : 16;
+            const columnCount = Math.floor(width / fontSize);
+            const rowsPerColumn = isMobile ? 35 : 50; // УВЕЛИЧЕНО количество строк
+            
             columns = [];
             
-            // Создаем колонки с двоичными символами
-            for (let i = 0; i < columnCount; i++) {
+            // Создаем колонки с двоичными символами - БОЛЬШЕ КОЛОНОК
+            for (let i = 0; i < columnCount * 1.2; i++) { // +20% колонок
                 columns.push({
-                    x: i * fontSize,
+                    x: (i % columnCount) * fontSize,
                     y: Math.random() * -height,
-                    speed: isMobile ? 2 + Math.random() * 3 : 4 + Math.random() * 6,
+                    speed: isMobile ? 2.5 + Math.random() * 3.5 : 5 + Math.random() * 7,
                     chars: Array(rowsPerColumn).fill(0).map(() => binaryChars[Math.floor(Math.random() * 2)]),
-                    fontSize: fontSize
+                    fontSize: fontSize,
+                    baseSpeed: isMobile ? 2.5 + Math.random() * 3.5 : 5 + Math.random() * 7
                 });
             }
+            
+            isInitialized = true;
         }
         
         // Останавливаем предыдущую анимацию
@@ -259,8 +268,8 @@ if (canvas) {
         const width = canvas.width / (window.devicePixelRatio || 1);
         const height = canvas.height / (window.devicePixelRatio || 1);
         
-        // Более темный фон для лучшего контраста
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        // Темный фон для контраста
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
         ctx.fillRect(0, 0, width, height);
         
         // Рисуем каждую колонку
@@ -271,51 +280,54 @@ if (canvas) {
             ctx.font = `${fontSize}px 'Courier New', monospace`;
             ctx.textAlign = 'center';
             
-            // Рисуем символы в колонке
+            // Рисуем символы в колонке - СДЕЛАНЫ ЯРЧЕ НА 10%
             column.chars.forEach((char, index) => {
                 const y = column.y + index * fontSize;
                 
-                // ЗНАЧИТЕЛЬНО ТЕМНЕЕ ЦВЕТА (уменьшена яркость на 60-70%)
+                // УВЕЛИЧЕНА ЯРКОСТЬ НА 10%
                 let color;
                 if (index === 0) {
-                    // Первый символ - очень темное золото
-                    color = 'rgba(100, 85, 25, 0.4)'; // Было 1.0, стало 0.4
-                } else if (index < 5) {
-                    // Первые 5 символов - темное золото с низкой прозрачностью
-                    const opacity = (1 - (index / 10)) * 0.25; // Уменьшено на 75%
-                    color = `rgba(100, 85, 25, ${opacity})`;
-                } else if (index < 10) {
-                    // Средние символы - очень темное зеленовато-золотое
-                    const opacity = (0.7 - (index / 20)) * 0.2; // Уменьшено на 80%
-                    color = `rgba(80, 70, 20, ${opacity})`;
+                    // Первый символ - темное золото, ярче на 10%
+                    color = 'rgba(120, 100, 30, 0.5)'; // Увеличено с 0.44 до 0.5 (+13.6%)
+                } else if (index < 8) { // Увеличено с 5 до 8
+                    // Первые 8 символов - золото с прозрачностью
+                    const opacity = (1 - (index / 12)) * 0.35 * 1.1; // Увеличено на 10%
+                    color = `rgba(120, 100, 30, ${Math.min(0.8, opacity)})`;
+                } else if (index < 15) { // Увеличено с 10 до 15
+                    // Средние символы
+                    const opacity = (0.8 - (index / 25)) * 0.25 * 1.1; // Увеличено на 10%
+                    color = `rgba(100, 85, 25, ${Math.min(0.6, opacity)})`;
+                } else if (index < 25) { // Новый диапазон
+                    // Более дальние символы
+                    const opacity = (0.5 - (index / 40)) * 0.2 * 1.1; // Увеличено на 10%
+                    color = `rgba(80, 70, 20, ${Math.min(0.4, opacity)})`;
                 } else {
-                    // Остальные символы - почти черные
-                    const opacity = (0.3 - (index / 50)) * 0.15; // Уменьшено на 85%
-                    color = `rgba(50, 45, 15, ${opacity})`;
+                    // Самые дальние символы - очень темные
+                    const opacity = (0.3 - (index / 60)) * 0.15 * 1.1; // Увеличено на 10%
+                    color = `rgba(60, 50, 15, ${Math.max(0.05, opacity)})`;
                 }
                 
                 ctx.fillStyle = color;
                 ctx.fillText(char, column.x + fontSize/2, y);
-                
-                // УБИРАЕМ СВЕЧЕНИЕ полностью
-                // ctx.shadowBlur = 0;
             });
             
-            // Двигаем колонку вниз
+            // Плавное движение вниз
             column.y += column.speed;
             
+            // Плавное изменение скорости для разнообразия
+            if (Math.random() > 0.995) {
+                column.speed = column.baseSpeed * (0.8 + Math.random() * 0.4);
+            }
+            
             // Если колонка ушла за нижний край, возвращаем её вверх
-            if (column.y > height) {
+            if (column.y > height + fontSize * column.chars.length) {
                 column.y = -fontSize * column.chars.length;
                 
-                // Обновляем символы в колонке
-                column.chars = Array(column.chars.length).fill(0).map(() => 
-                    binaryChars[Math.floor(Math.random() * 2)]
-                );
-                
-                // Очень редко меняем скорость колонки
-                if (Math.random() > 0.98) {
-                    column.speed = isMobile ? 2 + Math.random() * 3 : 4 + Math.random() * 6;
+                // Случайно обновляем некоторые символы
+                if (Math.random() > 0.7) {
+                    for (let i = 0; i < column.chars.length; i += 3 + Math.floor(Math.random() * 5)) {
+                        column.chars[i] = binaryChars[Math.floor(Math.random() * 2)];
+                    }
                 }
             }
         });
@@ -325,11 +337,18 @@ if (canvas) {
     }
 
     // УЛУЧШЕННЫЙ обработчик изменения размера окна
+    let resizeThrottle = false;
     window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            initBinaryRain(true);
-        }, 500); // Увеличили задержку для мобильных
+        if (!resizeThrottle) {
+            resizeThrottle = true;
+            
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                resizeCanvas();
+                initBinaryRain(false); // Не создаем новые колонки, а адаптируем существующие
+                resizeThrottle = false;
+            }, 300);
+        }
     });
 
     // Останавливаем анимацию при скрытии вкладки
@@ -349,9 +368,26 @@ if (canvas) {
     // Инициализация двоичного дождя
     window.addEventListener('load', () => {
         setTimeout(() => {
+            resizeCanvas();
             initBinaryRain(true);
         }, 100);
     });
+    
+    // Предзагрузка для мобильных - предотвращаем перезапуск при скролле
+    if (isMobile) {
+        // Меньше чувствительность к визуальным изменениям
+        const originalInitBinaryRain = initBinaryRain;
+        let lastCall = 0;
+        
+        initBinaryRain = function(forceResize = false) {
+            const now = Date.now();
+            if (now - lastCall < 1000 && !forceResize) {
+                return; // Не вызываем чаще чем раз в секунду
+            }
+            lastCall = now;
+            originalInitBinaryRain.call(this, forceResize);
+        };
+    }
 }
 
 // Работа с якорными ссылками
