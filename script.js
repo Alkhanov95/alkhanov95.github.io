@@ -149,31 +149,34 @@ if (mobileMenuBtn && mobileMenu) {
     });
 }
 
-// Анимация появления элементов при скролле
-const fadeElements = document.querySelectorAll('.fade-in');
+// Определяем мобильное устройство
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1
-};
-
-const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            fadeObserver.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
-
-fadeElements.forEach(el => fadeObserver.observe(el));
+// Анимация появления элементов при скролле - ТОЛЬКО НА ДЕСКТОПЕ
+if (!isMobile) {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+    
+    const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                fadeObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    fadeElements.forEach(el => fadeObserver.observe(el));
+}
 
 // СТАТИЧНОЕ ЗВЁЗДНОЕ НЕБО (упрощённая версия)
 const canvas = document.getElementById('starfield');
 const ctx = canvas.getContext('2d');
-
-let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
@@ -221,88 +224,10 @@ function drawStaticStars() {
 
 function initStarfield() {
     resizeCanvas();
-    
-    if (isMobile) {
-        // На мобильных - только статичные звёзды
-        drawStaticStars();
-    } else {
-        // На десктопе - можно оставить анимацию
-        startAnimation();
-    }
+    drawStaticStars();
 }
 
-// Для десктопа можно оставить анимацию
-function startAnimation() {
-    let stars = [];
-    const numStars = 150;
-    let animationId = null;
-    let lastTime = 0;
-    
-    function createStars() {
-        stars = [];
-        const width = canvas.width / (window.devicePixelRatio || 1);
-        const height = canvas.height / (window.devicePixelRatio || 1);
-        
-        for (let i = 0; i < numStars; i++) {
-            stars.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                radius: Math.random() * 1.2 + 0.3,
-                opacity: Math.random() * 0.5 + 0.2,
-                speed: Math.random() * 0.5 + 0.2
-            });
-        }
-    }
-    
-    function animate(currentTime) {
-        if (!lastTime) lastTime = currentTime;
-        const delta = currentTime - lastTime;
-        
-        if (delta > 32) { // ~30 FPS
-            const width = canvas.width / (window.devicePixelRatio || 1);
-            const height = canvas.height / (window.devicePixelRatio || 1);
-            
-            ctx.clearRect(0, 0, width, height);
-            
-            stars.forEach(star => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(212, 175, 55, ${star.opacity})`;
-                ctx.fill();
-                
-                star.y += star.speed;
-                
-                if (star.y > height) {
-                    star.y = 0;
-                    star.x = Math.random() * width;
-                }
-            });
-            
-            lastTime = currentTime;
-        }
-        
-        animationId = requestAnimationFrame(animate);
-    }
-    
-    createStars();
-    animationId = requestAnimationFrame(animate);
-}
-
-window.addEventListener('resize', () => {
-    resizeCanvas();
-    if (isMobile) {
-        drawStaticStars();
-    }
-});
-
-// Инициализация
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        initStarfield();
-    }, 100);
-});
-
-// ТОЧНАЯ ПРОКРУТКА К СЕКЦИЯМ
+// РАБОТА С ЯКОРНЫМИ ССЫЛКАМИ - РАЗНАЯ ЛОГИКА ДЛЯ МОБИЛЬНЫХ И ДЕСКТОПА
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -317,11 +242,16 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             const headerHeight = document.querySelector('.header').offsetHeight;
             const targetPosition = target.offsetTop - headerHeight;
             
-            // Плавная прокрутка точно к началу секции
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-            });
+            if (isMobile) {
+                // На мобильных - мгновенный скролл без анимации
+                window.scrollTo(0, targetPosition);
+            } else {
+                // На десктопе - плавная анимация
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
             
             // Обновляем URL без перезагрузки
             history.pushState(null, null, targetId);
@@ -335,15 +265,27 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+window.addEventListener('resize', () => {
+    resizeCanvas();
+    drawStaticStars();
+});
+
 // Инициализация всего при загрузке страницы
 window.addEventListener('load', () => {
     // Инициализация звёздного фона
     setTimeout(() => {
         initStarfield();
-    }, 500);
+    }, 100);
     
-    // Плавная прокрутка к якорю если он есть в URL при загрузке
-    if (window.location.hash) {
+    // На мобильных устройствах сразу показываем все элементы
+    if (isMobile) {
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.classList.add('visible');
+        });
+    }
+    
+    // Плавная прокрутка к якорю если он есть в URL при загрузке - ТОЛЬКО НА ДЕСКТОПЕ
+    if (!isMobile && window.location.hash) {
         const target = document.querySelector(window.location.hash);
         if (target) {
             setTimeout(() => {
@@ -366,11 +308,6 @@ window.addEventListener('load', () => {
             title.style.marginRight = 'auto';
         });
     }, 100);
-    
-    // Добавляем класс для анимации после загрузки
-    setTimeout(() => {
-        document.body.classList.add('loaded');
-    }, 300);
 });
 
 // Предотвращаем перезагрузку страницы при клике на якорную ссылку с пустым хэшем
