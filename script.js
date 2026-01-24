@@ -62,39 +62,6 @@ const translations = {
 // Переключение языка
 let currentLang = localStorage.getItem('lang') || 'en';
 
-// Функция для динамической загрузки CV в зависимости от языка
-function updateCVLink() {
-    const cvBtn = document.getElementById('cvDownloadBtn');
-    if (!cvBtn) return;
-    
-    // Удаляем предыдущий обработчик
-    const newCvBtn = cvBtn.cloneNode(true);
-    cvBtn.parentNode.replaceChild(newCvBtn, cvBtn);
-    
-    // Добавляем новый обработчик
-    newCvBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        let cvFile;
-        if (currentLang === 'ru') {
-            cvFile = 'cv_russian.pdf'; // Файл с русским резюме
-        } else {
-            cvFile = 'cv_english.pdf'; // Файл с английским резюме
-        }
-        
-        // Создаем временную ссылку для скачивания
-        const link = document.createElement('a');
-        link.href = cvFile;
-        link.download = cvFile;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    });
-    
-    // Обновляем id для нового элемента
-    newCvBtn.id = 'cvDownloadBtn';
-}
-
 function setLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('lang', lang);
@@ -111,9 +78,6 @@ function setLanguage(lang) {
     const toggleText = lang === 'en' ? 'RU' : 'EN';
     document.getElementById('langToggle').textContent = toggleText;
     document.getElementById('langToggleMobile').textContent = toggleText;
-    
-    // Обновляем ссылку на CV
-    updateCVLink();
 }
 
 function toggleLanguage() {
@@ -126,9 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('langToggle').addEventListener('click', toggleLanguage);
     document.getElementById('langToggleMobile').addEventListener('click', toggleLanguage);
     setLanguage(currentLang);
-    
-    // Инициализируем ссылку на CV
-    updateCVLink();
 });
 
 // Мобильное меню
@@ -174,9 +135,13 @@ if (!isMobile) {
     fadeElements.forEach(el => fadeObserver.observe(el));
 }
 
-// СТАТИЧНОЕ ЗВЁЗДНОЕ НЕБО (упрощённая версия)
+// ЗОЛОТОЙ ДВОИЧНЫЙ ДОЖДЬ (Matrix style)
 const canvas = document.getElementById('starfield');
 const ctx = canvas.getContext('2d');
+
+let binaryChars = ['0', '1'];
+let columns = [];
+let animationId = null;
 
 function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
@@ -190,42 +155,139 @@ function resizeCanvas() {
     canvas.style.height = `${rect.height}px`;
 }
 
-function drawStaticStars() {
+function initBinaryRain() {
+    resizeCanvas();
+    
     const width = canvas.width / (window.devicePixelRatio || 1);
     const height = canvas.height / (window.devicePixelRatio || 1);
     
-    // Очищаем canvas
-    ctx.clearRect(0, 0, width, height);
+    // Настройки в зависимости от устройства
+    const fontSize = isMobile ? 14 : 18;
+    const columnCount = Math.floor(width / fontSize);
+    const rowsPerColumn = isMobile ? 20 : 30;
     
-    // Количество звёзд в зависимости от размера экрана
-    const starCount = Math.floor((width * height) / 8000);
+    // Очищаем старые колонки
+    columns = [];
     
-    // Рисуем статичные звёзды
-    for (let i = 0; i < starCount; i++) {
-        const x = Math.random() * width;
-        const y = Math.random() * height;
-        const radius = Math.random() * 1.2 + 0.3;
-        const opacity = Math.random() * 0.6 + 0.2;
-        
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212, 175, 55, ${opacity})`;
-        ctx.fill();
-        
-        // Добавляем небольшое свечение для некоторых звёзд
-        if (radius > 0.8 && Math.random() > 0.7) {
-            ctx.beginPath();
-            ctx.arc(x, y, radius * 2, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(212, 175, 55, ${opacity * 0.3})`;
-            ctx.fill();
-        }
+    // Создаем колонки с двоичными символами
+    for (let i = 0; i < columnCount; i++) {
+        columns.push({
+            x: i * fontSize,
+            y: Math.random() * -height,
+            speed: isMobile ? 5 + Math.random() * 8 : 8 + Math.random() * 12,
+            chars: Array(rowsPerColumn).fill(0).map(() => binaryChars[Math.floor(Math.random() * 2)]),
+            fontSize: fontSize
+        });
     }
+    
+    // Останавливаем предыдущую анимацию
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+    }
+    
+    // Запускаем анимацию
+    animationId = requestAnimationFrame(drawBinaryRain);
 }
 
-function initStarfield() {
-    resizeCanvas();
-    drawStaticStars();
+function drawBinaryRain() {
+    const width = canvas.width / (window.devicePixelRatio || 1);
+    const height = canvas.height / (window.devicePixelRatio || 1);
+    
+    // Полупрозрачный фон для создания эффекта следа
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, width, height);
+    
+    // Рисуем каждую колонку
+    columns.forEach(column => {
+        const fontSize = column.fontSize;
+        
+        // Устанавливаем шрифт
+        ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
+        ctx.textAlign = 'center';
+        
+        // Рисуем символы в колонке
+        column.chars.forEach((char, index) => {
+            const y = column.y + index * fontSize;
+            
+            // Определяем цвет символа в зависимости от его позиции
+            let color;
+            if (index === 0) {
+                // Первый символ - ярко-золотой
+                color = 'rgba(212, 175, 55, 1)';
+                // Добавляем свечение
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'rgba(212, 175, 55, 0.8)';
+            } else if (index < 5) {
+                // Первые 5 символов - золотые с разной прозрачностью
+                const opacity = 1 - (index / 10);
+                color = `rgba(212, 175, 55, ${opacity})`;
+                ctx.shadowBlur = 0;
+            } else if (index < 10) {
+                // Средние символы - зелёно-золотые
+                const opacity = 0.7 - (index / 20);
+                color = `rgba(150, 130, 50, ${opacity})`;
+                ctx.shadowBlur = 0;
+            } else {
+                // Остальные символы - тёмные
+                const opacity = 0.3 - (index / 50);
+                color = `rgba(100, 90, 40, ${opacity})`;
+                ctx.shadowBlur = 0;
+            }
+            
+            ctx.fillStyle = color;
+            ctx.fillText(char, column.x + fontSize/2, y);
+            
+            // Сбрасываем тень
+            if (index === 0) {
+                ctx.shadowBlur = 0;
+            }
+        });
+        
+        // Двигаем колонку вниз
+        column.y += column.speed;
+        
+        // Если колонка ушла за нижний край, возвращаем её вверх
+        if (column.y > height) {
+            column.y = -fontSize * column.chars.length;
+            
+            // Обновляем символы в колонке
+            column.chars = Array(column.chars.length).fill(0).map(() => 
+                binaryChars[Math.floor(Math.random() * 2)]
+            );
+            
+            // Иногда меняем скорость колонки
+            if (Math.random() > 0.95) {
+                column.speed = isMobile ? 5 + Math.random() * 8 : 8 + Math.random() * 12;
+            }
+        }
+    });
+    
+    // Продолжаем анимацию
+    animationId = requestAnimationFrame(drawBinaryRain);
 }
+
+// Обработчик изменения размера окна
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        initBinaryRain();
+    }, 250);
+});
+
+// Останавливаем анимацию при скрытии вкладки
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+    } else {
+        if (!animationId) {
+            animationId = requestAnimationFrame(drawBinaryRain);
+        }
+    }
+});
 
 // РАБОТА С ЯКОРНЫМИ ССЫЛКАМИ - РАЗНАЯ ЛОГИКА ДЛЯ МОБИЛЬНЫХ И ДЕСКТОПА
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -265,16 +327,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-window.addEventListener('resize', () => {
-    resizeCanvas();
-    drawStaticStars();
-});
-
 // Инициализация всего при загрузке страницы
 window.addEventListener('load', () => {
-    // Инициализация звёздного фона
+    // Инициализация двоичного дождя
     setTimeout(() => {
-        initStarfield();
+        initBinaryRain();
     }, 100);
     
     // На мобильных устройствах сразу показываем все элементы
