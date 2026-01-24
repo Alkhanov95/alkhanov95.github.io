@@ -51,7 +51,7 @@ const translations = {
         'projects.project1.title': 'Crypto Exchange Backend',
         'projects.project1.desc': 'Matching engine для криптовалютной биржи. Обработка ордеров с требованиями низкой задержки, транзакционная логика с поддержкой отката. Построен для горизонтального масштабирования и отказоустойчивости.',
         'projects.project2.title': 'Blog API Gateway',
-        'projects.project2.desc': 'API gateway для микросервисной архитектуры. Реализует маршрутизацию запросов, rate limiting, middleware аутентификации и кэширование ответов. Включает health checks, сбор метрик и паттерн circuit breaker.',
+        'projects.project2.desc': 'API gateway для микросервисной архитектуры. Реализует маррутизацию запросов, rate limiting, middleware аутентификации и кэширование ответов. Включает health checks, сбор метрик и паттерн circuit breaker.',
         'certificates.title': 'Сертификаты',
         'contacts.title': 'Контакты',
         'contacts.intro': 'Открыт для сотрудничества или просто дружеского общения.',
@@ -177,7 +177,7 @@ if (!isMobile) {
     }
 }
 
-// ЗОЛОТОЙ ДВОИЧНЫЙ ДОЖДЬ
+// ЗОЛОТОЙ ДВОИЧНЫЙ ДОЖДЬ - ИСПРАВЛЕННАЯ ВЕРСИЯ
 const canvas = document.getElementById('starfield');
 if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -186,44 +186,62 @@ if (canvas) {
     let columns = [];
     let animationId = null;
     let resizeTimeout;
+    let lastWidth = 0;
+    let lastHeight = 0;
 
     function resizeCanvas() {
         const dpr = window.devicePixelRatio || 1;
         const rect = canvas.getBoundingClientRect();
         
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
+        // Проверяем, действительно ли изменился размер
+        const newWidth = rect.width;
+        const newHeight = rect.height;
+        
+        if (Math.abs(newWidth - lastWidth) < 10 && Math.abs(newHeight - lastHeight) < 10) {
+            return; // Размер незначительно изменился - игнорируем
+        }
+        
+        lastWidth = newWidth;
+        lastHeight = newHeight;
+        
+        canvas.width = newWidth * dpr;
+        canvas.height = newHeight * dpr;
         
         ctx.scale(dpr, dpr);
-        canvas.style.width = `${rect.width}px`;
-        canvas.style.height = `${rect.height}px`;
+        canvas.style.width = `${newWidth}px`;
+        canvas.style.height = `${newHeight}px`;
+        
+        return true; // Размер действительно изменился
     }
 
-    function initBinaryRain() {
+    function initBinaryRain(forceResize = false) {
         if (!canvas) return;
         
-        resizeCanvas();
+        const shouldRecreate = forceResize ? resizeCanvas() : true;
+        if (!shouldRecreate && !forceResize) return;
         
         const width = canvas.width / (window.devicePixelRatio || 1);
         const height = canvas.height / (window.devicePixelRatio || 1);
         
         // Настройки в зависимости от устройства
-        const fontSize = isMobile ? 14 : 18;
+        const fontSize = isMobile ? 14 : 16;
         const columnCount = Math.floor(width / fontSize);
-        const rowsPerColumn = isMobile ? 20 : 30;
+        const rowsPerColumn = isMobile ? 25 : 35;
         
-        // Очищаем старые колонки
-        columns = [];
-        
-        // Создаем колонки с двоичными символами
-        for (let i = 0; i < columnCount; i++) {
-            columns.push({
-                x: i * fontSize,
-                y: Math.random() * -height,
-                speed: isMobile ? 3 + Math.random() * 4 : 6 + Math.random() * 8,
-                chars: Array(rowsPerColumn).fill(0).map(() => binaryChars[Math.floor(Math.random() * 2)]),
-                fontSize: fontSize
-            });
+        // Сохраняем существующие колонки при изменении размера
+        if (columns.length === 0 || forceResize) {
+            columns = [];
+            
+            // Создаем колонки с двоичными символами
+            for (let i = 0; i < columnCount; i++) {
+                columns.push({
+                    x: i * fontSize,
+                    y: Math.random() * -height,
+                    speed: isMobile ? 2 + Math.random() * 3 : 4 + Math.random() * 6,
+                    chars: Array(rowsPerColumn).fill(0).map(() => binaryChars[Math.floor(Math.random() * 2)]),
+                    fontSize: fontSize
+                });
+            }
         }
         
         // Останавливаем предыдущую анимацию
@@ -241,8 +259,8 @@ if (canvas) {
         const width = canvas.width / (window.devicePixelRatio || 1);
         const height = canvas.height / (window.devicePixelRatio || 1);
         
-        // Полупрозрачный фон для создания эффекта следа
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+        // Более темный фон для лучшего контраста
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.fillRect(0, 0, width, height);
         
         // Рисуем каждую колонку
@@ -250,42 +268,37 @@ if (canvas) {
             const fontSize = column.fontSize;
             
             // Устанавливаем шрифт
-            ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
+            ctx.font = `${fontSize}px 'Courier New', monospace`;
             ctx.textAlign = 'center';
             
             // Рисуем символы в колонке
             column.chars.forEach((char, index) => {
                 const y = column.y + index * fontSize;
                 
-                // Определяем цвет символа в зависимости от его позиции
+                // ЗНАЧИТЕЛЬНО ТЕМНЕЕ ЦВЕТА (уменьшена яркость на 60-70%)
                 let color;
                 if (index === 0) {
-                    // Первый символ - ярко-золотой
-                    color = 'rgba(212, 175, 55, 1)';
+                    // Первый символ - очень темное золото
+                    color = 'rgba(100, 85, 25, 0.4)'; // Было 1.0, стало 0.4
                 } else if (index < 5) {
-                    // Первые 5 символов - золотые с разной прозрачностью
-                    const opacity = 1 - (index / 10);
-                    color = `rgba(212, 175, 55, ${opacity})`;
+                    // Первые 5 символов - темное золото с низкой прозрачностью
+                    const opacity = (1 - (index / 10)) * 0.25; // Уменьшено на 75%
+                    color = `rgba(100, 85, 25, ${opacity})`;
                 } else if (index < 10) {
-                    // Средние символы - зелёно-золотые
-                    const opacity = 0.7 - (index / 20);
-                    color = `rgba(150, 130, 50, ${opacity})`;
+                    // Средние символы - очень темное зеленовато-золотое
+                    const opacity = (0.7 - (index / 20)) * 0.2; // Уменьшено на 80%
+                    color = `rgba(80, 70, 20, ${opacity})`;
                 } else {
-                    // Остальные символы - тёмные
-                    const opacity = 0.3 - (index / 50);
-                    color = `rgba(100, 90, 40, ${opacity})`;
+                    // Остальные символы - почти черные
+                    const opacity = (0.3 - (index / 50)) * 0.15; // Уменьшено на 85%
+                    color = `rgba(50, 45, 15, ${opacity})`;
                 }
                 
                 ctx.fillStyle = color;
                 ctx.fillText(char, column.x + fontSize/2, y);
                 
-                // Добавляем небольшое свечение для первого символа
-                if (index === 0) {
-                    ctx.shadowBlur = 8;
-                    ctx.shadowColor = 'rgba(212, 175, 55, 0.7)';
-                    ctx.fillText(char, column.x + fontSize/2, y);
-                    ctx.shadowBlur = 0;
-                }
+                // УБИРАЕМ СВЕЧЕНИЕ полностью
+                // ctx.shadowBlur = 0;
             });
             
             // Двигаем колонку вниз
@@ -300,9 +313,9 @@ if (canvas) {
                     binaryChars[Math.floor(Math.random() * 2)]
                 );
                 
-                // Иногда меняем скорость колонки
-                if (Math.random() > 0.95) {
-                    column.speed = isMobile ? 3 + Math.random() * 4 : 6 + Math.random() * 8;
+                // Очень редко меняем скорость колонки
+                if (Math.random() > 0.98) {
+                    column.speed = isMobile ? 2 + Math.random() * 3 : 4 + Math.random() * 6;
                 }
             }
         });
@@ -311,12 +324,12 @@ if (canvas) {
         animationId = requestAnimationFrame(drawBinaryRain);
     }
 
-    // Обработчик изменения размера окна
+    // УЛУЧШЕННЫЙ обработчик изменения размера окна
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-            initBinaryRain();
-        }, 250);
+            initBinaryRain(true);
+        }, 500); // Увеличили задержку для мобильных
     });
 
     // Останавливаем анимацию при скрытии вкладки
@@ -336,7 +349,7 @@ if (canvas) {
     // Инициализация двоичного дождя
     window.addEventListener('load', () => {
         setTimeout(() => {
-            initBinaryRain();
+            initBinaryRain(true);
         }, 100);
     });
 }
