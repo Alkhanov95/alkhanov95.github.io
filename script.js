@@ -67,22 +67,19 @@ function updateCVLink() {
     const cvBtn = document.getElementById('cvDownloadBtn');
     if (!cvBtn) return;
     
-    // Удаляем предыдущий обработчик
     const newCvBtn = cvBtn.cloneNode(true);
     cvBtn.parentNode.replaceChild(newCvBtn, cvBtn);
     
-    // Добавляем новый обработчик
     newCvBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
         let cvFile;
         if (currentLang === 'ru') {
-            cvFile = 'cv_russian.pdf'; // Файл с русским резюме
+            cvFile = 'cv_russian.pdf';
         } else {
-            cvFile = 'cv_english.pdf'; // Файл с английским резюме
+            cvFile = 'cv_english.pdf';
         }
         
-        // Создаем временную ссылку для скачивания
         const link = document.createElement('a');
         link.href = cvFile;
         link.download = cvFile;
@@ -91,7 +88,6 @@ function updateCVLink() {
         document.body.removeChild(link);
     });
     
-    // Обновляем id для нового элемента
     newCvBtn.id = 'cvDownloadBtn';
 }
 
@@ -112,7 +108,6 @@ function setLanguage(lang) {
     document.getElementById('langToggle').textContent = toggleText;
     document.getElementById('langToggleMobile').textContent = toggleText;
     
-    // Обновляем ссылку на CV
     updateCVLink();
 }
 
@@ -177,162 +172,195 @@ if (!isMobile) {
     }
 }
 
-// УЛУЧШЕННЫЙ ДВОИЧНЫЙ ДОЖДЬ - ИСПРАВЛЕННЫЙ ДЛЯ МОБИЛЬНЫХ
+// ВЕЛИКОЛЕПНЫЕ ЗОЛОТЫЕ ВОЛНЫ - как плавное видео
 const canvas = document.getElementById('starfield');
 if (canvas) {
     const ctx = canvas.getContext('2d');
-    
-    let binaryChars = ['0', '1'];
-    let columns = [];
     let animationId = null;
-    let isInitialized = false;
-    let devicePixelRatio = window.devicePixelRatio || 1;
+    let time = 0;
     
-    // ФИКСИРОВАННЫЕ размеры для предотвращения перезапусков
-    let canvasWidth = 0;
-    let canvasHeight = 0;
-
-    // Устанавливаем canvas на ВЕСЬ ЭКРАН без границ
-    function setCanvasFullScreen() {
-        // Используем window.innerWidth/Height для получения реального размера viewport
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+    // Инициализация размера canvas
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    
+    // Создание волн
+    function createWaves() {
+        return [
+            {
+                amplitude: canvas.height * 0.1,  // Высота волны
+                frequency: 0.003,                 // Частота
+                speed: 0.002,                     // Скорость движения
+                phase: Math.random() * Math.PI * 2, // Фаза
+                color: (ctx, alpha) => {          // Градиент цвета
+                    const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+                    gradient.addColorStop(0, `rgba(180, 160, 100, ${alpha})`);
+                    gradient.addColorStop(0.5, `rgba(212, 175, 55, ${alpha})`);
+                    gradient.addColorStop(1, `rgba(180, 160, 100, ${alpha})`);
+                    return gradient;
+                },
+                lineWidth: 2,
+                segments: 100
+            },
+            {
+                amplitude: canvas.height * 0.08,
+                frequency: 0.002,
+                speed: 0.0015,
+                phase: Math.random() * Math.PI * 2,
+                color: (ctx, alpha) => {
+                    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                    gradient.addColorStop(0, `rgba(150, 130, 50, ${alpha})`);
+                    gradient.addColorStop(0.5, `rgba(180, 150, 60, ${alpha * 0.8})`);
+                    gradient.addColorStop(1, `rgba(150, 130, 50, ${alpha})`);
+                    return gradient;
+                },
+                lineWidth: 1.5,
+                segments: 120
+            },
+            {
+                amplitude: canvas.height * 0.06,
+                frequency: 0.0015,
+                speed: 0.003,
+                phase: Math.random() * Math.PI * 2,
+                color: (ctx, alpha) => `rgba(120, 100, 40, ${alpha})`,
+                lineWidth: 1,
+                segments: 150
+            }
+        ];
+    }
+    
+    // Рисование одной волны
+    function drawWave(wave) {
+        const { amplitude, frequency, speed, phase, color, lineWidth, segments } = wave;
+        const width = canvas.width;
+        const height = canvas.height;
         
-        // Устанавливаем canvas на весь экран
+        ctx.beginPath();
+        ctx.lineWidth = lineWidth;
+        
+        // Создаем эффект множества частиц в волне
+        for (let i = 0; i <= segments; i++) {
+            const x = (i / segments) * width;
+            
+            // Основная синусоида
+            let y = height / 2 + amplitude * Math.sin(x * frequency + time * speed + phase);
+            
+            // Добавляем дополнительные гармоники для реалистичности
+            y += amplitude * 0.3 * Math.sin(x * frequency * 2 + time * speed * 1.5 + phase);
+            y += amplitude * 0.1 * Math.sin(x * frequency * 4 + time * speed * 2 + phase);
+            
+            // Плавные капли (эффект дождя)
+            const dropFrequency = 0.03;
+            const dropAmplitude = amplitude * 0.15;
+            y += dropAmplitude * Math.sin(x * dropFrequency + time * 0.01) * 
+                 Math.sin(time * 0.005 + phase) * 0.3;
+            
+            if (i === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                // Используем кривые Безье для плавности
+                const prevX = ((i - 1) / segments) * width;
+                const prevY = height / 2 + amplitude * Math.sin(prevX * frequency + time * speed + phase);
+                
+                const cp1x = prevX + (width / segments) * 0.3;
+                const cp1y = prevY;
+                const cp2x = x - (width / segments) * 0.3;
+                const cp2y = y;
+                
+                ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+            }
+        }
+        
+        // Добавляем очень тонкую обводку для эффекта свечения
+        ctx.strokeStyle = color(ctx, 0.15);
+        ctx.stroke();
+        
+        // Основная линия волны
+        ctx.strokeStyle = color(ctx, 0.1);
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+    }
+    
+    // Рисование капель/брызг
+    function drawDrops() {
+        const drops = [];
+        const dropCount = 50;
+        const width = canvas.width;
+        const height = canvas.height;
+        
+        // Создаем капли
+        for (let i = 0; i < dropCount; i++) {
+            const x = (Math.sin(time * 0.001 + i) * 0.5 + 0.5) * width;
+            const y = (Math.cos(time * 0.0015 + i * 2) * 0.5 + 0.5) * height;
+            const size = 1 + Math.sin(time * 0.01 + i) * 0.5;
+            const opacity = 0.05 + Math.sin(time * 0.02 + i) * 0.02;
+            
+            drops.push({ x, y, size, opacity });
+        }
+        
+        // Рисуем капли
+        drops.forEach(drop => {
+            ctx.beginPath();
+            ctx.arc(drop.x, drop.y, drop.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(212, 175, 55, ${drop.opacity})`;
+            ctx.fill();
+            
+            // Легкое свечение для некоторых капель
+            if (drop.opacity > 0.06) {
+                ctx.beginPath();
+                ctx.arc(drop.x, drop.y, drop.size * 2, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 175, 55, ${drop.opacity * 0.3})`;
+                ctx.fill();
+            }
+        });
+    }
+    
+    // Основная функция анимации
+    function animate() {
+        // Очищаем с прозрачностью для создания следа
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Рисуем волны
+        const waves = createWaves();
+        waves.forEach(wave => {
+            drawWave(wave);
+        });
+        
+        // Рисуем капли
+        drawDrops();
+        
+        // Добавляем эффект переливающихся частиц
+        const particleCount = 30;
+        for (let i = 0; i < particleCount; i++) {
+            const x = (Math.sin(time * 0.0005 + i * 0.7) * 0.5 + 0.5) * canvas.width;
+            const y = (Math.cos(time * 0.0007 + i * 0.9) * 0.5 + 0.5) * canvas.height;
+            const size = 0.5 + Math.sin(time * 0.01 + i) * 0.3;
+            const opacity = 0.03 + Math.sin(time * 0.02 + i * 2) * 0.02;
+            
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`;
+            ctx.fill();
+        }
+        
+        time += 0.016; // Примерно 60 FPS
+        animationId = requestAnimationFrame(animate);
+    }
+    
+    // Инициализация
+    function initWaves() {
+        resizeCanvas();
+        
+        // Устанавливаем стили для canvas
         canvas.style.position = 'fixed';
         canvas.style.top = '0';
         canvas.style.left = '0';
         canvas.style.width = '100vw';
         canvas.style.height = '100vh';
         canvas.style.zIndex = '-1';
-        
-        // Устанавливаем реальные размеры canvas с учетом pixel ratio
-        canvasWidth = viewportWidth * devicePixelRatio;
-        canvasHeight = viewportHeight * devicePixelRatio;
-        
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
-        
-        // Масштабируем контекст
-        ctx.scale(devicePixelRatio, devicePixelRatio);
-        
-        return {
-            width: viewportWidth,
-            height: viewportHeight
-        };
-    }
-
-    function createColumns(width, height) {
-        // Настройки для мобильных и десктопов
-        const fontSize = isMobile ? 16 : 18;
-        // УВЕЛИЧИВАЕМ количество колонок для более плотного дождя
-        const columnCount = Math.ceil(width / fontSize) * 1.3;
-        // УВЕЛИЧИВАЕМ количество строк, чтобы заполнить всю высоту
-        const rowsPerColumn = Math.ceil(height / fontSize) + 50;
-        
-        columns = [];
-        
-        // Создаем колонки с двоичными символами
-        for (let i = 0; i < columnCount; i++) {
-            const baseSpeed = isMobile ? 2 + Math.random() * 3 : 4 + Math.random() * 6;
-            
-            columns.push({
-                x: (i % columnCount) * fontSize,
-                y: -Math.random() * height, // Начинаем выше экрана
-                speed: baseSpeed,
-                chars: Array(rowsPerColumn).fill(0).map(() => binaryChars[Math.floor(Math.random() * 2)]),
-                fontSize: fontSize,
-                baseSpeed: baseSpeed
-            });
-        }
-    }
-
-    function drawBinaryRain() {
-        if (!canvas || !ctx) return;
-        
-        // ОЧЕНЬ ТЕМНЫЙ фон для едва заметного дождя
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.02)';
-        ctx.fillRect(0, 0, canvasWidth / devicePixelRatio, canvasHeight / devicePixelRatio);
-        
-        const visibleWidth = canvasWidth / devicePixelRatio;
-        const visibleHeight = canvasHeight / devicePixelRatio;
-        
-        // Рисуем каждую колонку
-        columns.forEach(column => {
-            const fontSize = column.fontSize;
-            
-            // Устанавливаем шрифт
-            ctx.font = `${fontSize}px 'Courier New', monospace`;
-            ctx.textAlign = 'center';
-            
-            // Рисуем символы в колонке - СДЕЛАНЫ ЯРЧЕ НА 15%
-            column.chars.forEach((char, index) => {
-                const y = column.y + index * fontSize;
-                
-                // Пропускаем символы за пределами видимой области
-                if (y < -fontSize || y > visibleHeight + fontSize) {
-                    return;
-                }
-                
-                // УВЕЛИЧЕНА ЯРКОСТЬ НА 15% и сделана более тёмной основной тон
-                let color;
-                const position = index / column.chars.length;
-                
-                if (position < 0.1) {
-                    // Первые 10% символов - темное золото
-                    const opacity = (1 - position * 5) * 0.5 * 1.15; // +15%
-                    color = `rgba(120, 100, 30, ${Math.min(0.6, opacity)})`;
-                } else if (position < 0.3) {
-                    // Следующие 20% - средне-темное золото
-                    const opacity = (0.8 - position * 2) * 0.4 * 1.15; // +15%
-                    color = `rgba(100, 85, 25, ${Math.min(0.5, opacity)})`;
-                } else if (position < 0.6) {
-                    // Средние 30% - темно-зеленоватое золото
-                    const opacity = (0.6 - position) * 0.3 * 1.15; // +15%
-                    color = `rgba(80, 70, 20, ${Math.min(0.4, opacity)})`;
-                } else {
-                    // Остальные - очень темные
-                    const opacity = (0.3 - position * 0.3) * 0.2 * 1.15; // +15%
-                    color = `rgba(60, 50, 15, ${Math.max(0.05, opacity)})`;
-                }
-                
-                ctx.fillStyle = color;
-                ctx.fillText(char, column.x + fontSize/2, y);
-            });
-            
-            // Плавное движение вниз
-            column.y += column.speed;
-            
-            // ОЧЕНЬ РЕДКО меняем скорость для разнообразия
-            if (Math.random() > 0.998) {
-                column.speed = column.baseSpeed * (0.7 + Math.random() * 0.6);
-            }
-            
-            // Если колонка полностью ушла за нижний край
-            if (column.y > visibleHeight + column.chars.length * fontSize) {
-                // Возвращаем вверх со случайным смещением
-                column.y = -column.chars.length * fontSize;
-                column.x = Math.random() * visibleWidth;
-                
-                // Обновляем некоторые символы
-                if (Math.random() > 0.5) {
-                    for (let i = 0; i < column.chars.length; i += 2 + Math.floor(Math.random() * 8)) {
-                        column.chars[i] = binaryChars[Math.floor(Math.random() * 2)];
-                    }
-                }
-            }
-        });
-        
-        // Продолжаем анимацию
-        animationId = requestAnimationFrame(drawBinaryRain);
-    }
-
-    // ОСНОВНАЯ ИНИЦИАЛИЗАЦИЯ - один раз при загрузке
-    function initBinaryRain() {
-        if (isInitialized) return;
-        
-        const { width, height } = setCanvasFullScreen();
-        createColumns(width, height);
+        canvas.style.pointerEvents = 'none';
         
         // Останавливаем предыдущую анимацию
         if (animationId) {
@@ -340,77 +368,40 @@ if (canvas) {
         }
         
         // Запускаем анимацию
-        animationId = requestAnimationFrame(drawBinaryRain);
-        isInitialized = true;
-    }
-
-    // СУПЕР-ОПТИМИЗИРОВАННЫЙ обработчик изменения размера (только для поворота экрана)
-    let resizeTimeout;
-    let isResizing = false;
-    
-    window.addEventListener('resize', () => {
-        if (isResizing) return;
-        isResizing = true;
+        animate();
         
-        clearTimeout(resizeTimeout);
+        // Добавляем обработчик изменения размера
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                resizeCanvas();
+            }, 250);
+        });
         
-        // ТОЛЬКО при значительном изменении размера (поворот экрана)
-        resizeTimeout = setTimeout(() => {
-            const newWidth = window.innerWidth;
-            const newHeight = window.innerHeight;
-            
-            // Проверяем, действительно ли изменился размер (поворот экрана)
-            const widthChanged = Math.abs(newWidth - (canvasWidth / devicePixelRatio)) > 100;
-            const heightChanged = Math.abs(newHeight - (canvasHeight / devicePixelRatio)) > 100;
-            
-            if (widthChanged || heightChanged) {
-                // Обновляем canvas и колонки
-                const { width, height } = setCanvasFullScreen();
-                createColumns(width, height);
-            }
-            
-            isResizing = false;
-        }, 1000); // Большая задержка для мобильных
-    });
-
-    // Останавливаем анимацию при скрытии вкладки
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            if (animationId) {
+        // Останавливаем анимацию при скрытии вкладки
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
                 cancelAnimationFrame(animationId);
                 animationId = null;
+            } else if (!animationId) {
+                animate();
             }
-        } else {
-            if (!animationId && canvas) {
-                animationId = requestAnimationFrame(drawBinaryRain);
-            }
-        }
-    });
-
+        });
+    }
+    
     // Запускаем при загрузке
     window.addEventListener('load', () => {
-        // Небольшая задержка для стабилизации
         setTimeout(() => {
-            initBinaryRain();
-        }, 300);
+            initWaves();
+        }, 100);
     });
     
-    // Предотвращаем стандартное поведение на мобильных
-    if (isMobile) {
-        // Отключаем прокрутку на canvas
-        canvas.style.touchAction = 'none';
-        
-        // Предотвращаем масштабирование при двойном тапе
-        canvas.addEventListener('touchstart', (e) => {
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-        
-        // Предотвращаем контекстное меню
-        canvas.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-        });
+    // Запускаем сразу если страница уже загружена
+    if (document.readyState === 'complete') {
+        setTimeout(() => {
+            initWaves();
+        }, 100);
     }
 }
 
@@ -420,30 +411,24 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const targetId = this.getAttribute('href');
         
-        // Пропускаем пустые ссылки
         if (targetId === '#') return;
         
         const target = document.querySelector(targetId);
         if (target) {
-            // Вычисляем позицию с учетом фиксированного хедера
             const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
             const targetPosition = target.offsetTop - headerHeight;
             
             if (isMobile) {
-                // На мобильных - мгновенный скролл без анимации
                 window.scrollTo(0, targetPosition);
             } else {
-                // На десктопе - плавная анимация
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth'
                 });
             }
             
-            // Обновляем URL без перезагрузки
             history.pushState(null, null, targetId);
             
-            // Закрываем мобильное меню если открыто
             if (mobileMenu && mobileMenu.classList.contains('active')) {
                 mobileMenuBtn.classList.remove('active');
                 mobileMenu.classList.remove('active');
