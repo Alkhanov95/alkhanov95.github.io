@@ -17,9 +17,9 @@ const translations = {
         'hero.email': 'Email Me',
         'hero.cv': 'Download CV',
         'about.title': 'About',
-        'about.p1': "I'm a backend developer specializing in Go, with a deep passion for building robust, high-performance systems. My journey in software development has taken me through many interesting challenges and opportunities.",
-        'about.p2': 'With experience in microservices architecture, I focus on creating scalable solutions that handle high loads efficiently. I believe in writing clean, maintainable code and following sound engineering practices.',
-        'about.p3': "When I'm not coding, I enjoy exploring new technologies, contributing to open-source projects, and sharing knowledge with the developer community. I am always eager to take on new challenges.",
+        'about.p1': "I'm a backend developer specializing in Go, with a deep passion for building robust, high-performance systems. My journey in software development has taken me through many interes[...]
+        'about.p2': 'With experience in microservices architecture, I focus on creating scalable solutions that handle high loads efficiently. I believe in writing clean, maintainable code and followi[...]
+        'about.p3': "When I'm not coding, I enjoy exploring new technologies, contributing to open-source projects, and sharing knowledge with the developer community. I am always eager to take on new[...]
         'skills.title': 'Technical Skills',
         'skills.programming': 'Programming',
         'skills.backend': 'Backend',
@@ -57,14 +57,14 @@ const translations = {
         'nav.contacts': 'Контакты',
         'hero.greeting': 'Привет, я',
         'hero.title': 'Golang Backend Разработчик',
-        'hero.intro': 'Создаю высокопроизводительные, масштабируемые backend-системы на Go. Увлечён чистой архитектурой, распределёнными системами и качественным кодом.',
+        'hero.intro': 'Создаю высокопроизводительные, масштабируемые backend-системы на Go. Увлечён чистой архитектурой, р�[...]
         'hero.github': 'GitHub',
         'hero.email': 'Написать мне',
         'hero.cv': 'Скачать CV',
         'about.title': 'Обо мне',
-        'about.p1': 'Я backend-разработчик, специализирующийся на Go, с глубоким интересом к созданию надёжных, высокопроизводительных систем. Мой путь в разработке привёл меня к множеству интересных задач и проектов.',
-        'about.p2': 'Имея опыт работы с микросервисной архитектурой, я сосредоточен на создании масштабируемых решений, которые эффективно обрабатывают большие нагрузки. Я придерживаюсь принципов чистого и поддерживаемого кода.',
-        'about.p3': 'Когда я не программирую, я изучаю новые технологии, вношу вклад в open-source проекты и делюсь знаниями с сообществом. Всегда открыт новым вызовам.',
+        'about.p1': 'Я backend-разработчик, специализирующийся на Go, с глубоким интересом к созданию надёжных, высокопрои�[...]
+        'about.p2': 'Имея опыт работы с микросервисной архитектурой, я сосредоточен на создании масштабируемых решен�[...]
+        'about.p3': 'Когда я не программирую, я изучаю новые технологии, вношу вклад в open-source проекты и делюсь знаниями [...]
         'skills.title': 'Технические навыки',
         'skills.programming': 'Программирование',
         'skills.backend': 'Backend',
@@ -77,9 +77,9 @@ const translations = {
         'skills.tools': 'Инструменты',
         'projects.title': 'Проекты',
         'projects.crypto.title': 'Crypto Exchange Backend',
-        'projects.crypto.desc': 'Движок сопоставления ордеров для криптовалютной биржи с управлением книгой заявок в реальном времени и высокой производительностью.',
+        'projects.crypto.desc': 'Движок сопоставления ордеров для криптовалютной биржи с управлением книгой заявок в реаль[...]
         'projects.blog.title': 'Blog API Gateway',
-        'projects.blog.desc': 'API-шлюз для микросервисной архитектуры с ограничением запросов, аутентификацией и маршрутизацией.',
+        'projects.blog.desc': 'API-шлюз для микросервисной архитектуры с ограничением запросов, аутентификацией и маршрути�[...]
         'projects.viewCode': 'Смотреть код',
         'certificates.title': 'Сертификаты',
         'certificates.sql.name': 'SQL Academy',
@@ -89,7 +89,7 @@ const translations = {
         'certificates.step.name': 'STEP IT Academy',
         'certificates.step.desc': 'Диплом по разработке ПО',
         'contacts.title': 'Контакты',
-        'contacts.intro': 'Не стесняйтесь обращаться для сотрудничества, по вопросам возможностей или просто чтобы поздороваться!',
+        'contacts.intro': 'Не стесняйтесь обращаться для сотрудничества, по вопросам возможностей или просто чтобы позд�[...]
         'footer.copyright': '© 2026 Мохаммед Алханов. Создано с менталитетом Go: просто, эффективно, надёжно.'
     }
 };
@@ -140,7 +140,15 @@ function setLanguage(lang) {
     if (langToggleMobile) langToggleMobile.textContent = toggleText;
 }
 
-function toggleLanguage() {
+function toggleLanguage(e) {
+    // Prevent default navigation if the toggle is inside a link or other interactive element
+    if (e && typeof e.preventDefault === 'function') {
+        e.preventDefault();
+    }
+    if (e && typeof e.stopPropagation === 'function') {
+        e.stopPropagation();
+    }
+
     const newLang = currentLanguage === 'en' ? 'ru' : 'en';
     setLanguage(newLang);
 }
@@ -148,7 +156,18 @@ function toggleLanguage() {
 // ===================================
 // Mobile Menu Functions
 // ===================================
-function toggleMobileMenu() {
+function toggleMobileMenu(e) {
+    // Avoid duplicate toggles when touchstart + click both fire:
+    if (e && e.type === 'click' && Date.now() - _lastTouch < 700) {
+        // ignore click shortly after touch
+        _lastTouch = 0;
+        return;
+    }
+
+    // Prevent default and stop propagation to avoid outside click handlers interfering
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
 
@@ -165,7 +184,11 @@ function toggleMobileMenu() {
     }
 }
 
-function closeMobileMenu() {
+function closeMobileMenu(e) {
+    // If called from touchstart, prevent default behavior and stop propagation
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
 
@@ -464,6 +487,30 @@ function debounce(func, wait) {
     };
 }
 
+// Small helper to add both touchstart and click without double-invocation
+let _lastTouch = 0;
+function addClickTouchListener(element, handler) {
+    if (!element) return;
+
+    // touchstart: call handler and mark last touch
+    element.addEventListener('touchstart', function(e) {
+        _lastTouch = Date.now();
+        // try to prevent default so click doesn't also navigate if element is a link
+        try { e.preventDefault(); } catch (er) {}
+        try { e.stopPropagation(); } catch (er) {}
+        handler(e);
+    }, { passive: false });
+
+    // click: ignore if a recent touch happened
+    element.addEventListener('click', function(e) {
+        if (Date.now() - _lastTouch < 700) {
+            _lastTouch = 0;
+            return;
+        }
+        handler(e);
+    });
+}
+
 // ===================================
 // Handle Initial Hash
 // ===================================
@@ -507,7 +554,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up mobile menu links
     const mobileLinks = document.querySelectorAll('.mobile-menu a[href^="#"]');
     mobileLinks.forEach(link => {
-        link.addEventListener('click', closeMobileMenu);
+        // use both touch and click to ensure proper behavior on mobile
+        addClickTouchListener(link, closeMobileMenu);
     });
 
     // Close mobile menu on outside click
@@ -536,14 +584,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const langToggle = document.getElementById('langToggle');
     const langToggleMobile = document.getElementById('langToggleMobile');
 
-    if (langToggle) langToggle.addEventListener('click', toggleLanguage);
-    if (langToggleMobile) langToggleMobile.addEventListener('click', toggleLanguage);
+    addClickTouchListener(langToggle, toggleLanguage);
+    addClickTouchListener(langToggleMobile, toggleLanguage);
 
     // Setup mobile menu button
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-    }
+    addClickTouchListener(mobileMenuBtn, toggleMobileMenu);
 });
 
 // Make functions globally available for onclick handlers
