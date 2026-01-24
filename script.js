@@ -62,6 +62,39 @@ const translations = {
 // Переключение языка
 let currentLang = localStorage.getItem('lang') || 'en';
 
+// Функция для динамической загрузки CV в зависимости от языка
+function updateCVLink() {
+    const cvBtn = document.getElementById('cvDownloadBtn');
+    if (!cvBtn) return;
+    
+    // Удаляем предыдущий обработчик
+    const newCvBtn = cvBtn.cloneNode(true);
+    cvBtn.parentNode.replaceChild(newCvBtn, cvBtn);
+    
+    // Добавляем новый обработчик
+    newCvBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        let cvFile;
+        if (currentLang === 'ru') {
+            cvFile = 'cv_russian.pdf'; // Файл с русским резюме
+        } else {
+            cvFile = 'cv_english.pdf'; // Файл с английским резюме
+        }
+        
+        // Создаем временную ссылку для скачивания
+        const link = document.createElement('a');
+        link.href = cvFile;
+        link.download = cvFile;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+    
+    // Обновляем id для нового элемента
+    newCvBtn.id = 'cvDownloadBtn';
+}
+
 function setLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('lang', lang);
@@ -78,6 +111,9 @@ function setLanguage(lang) {
     const toggleText = lang === 'en' ? 'RU' : 'EN';
     document.getElementById('langToggle').textContent = toggleText;
     document.getElementById('langToggleMobile').textContent = toggleText;
+    
+    // Обновляем ссылку на CV
+    updateCVLink();
 }
 
 function toggleLanguage() {
@@ -87,8 +123,12 @@ function toggleLanguage() {
 
 // Инициализация перевода
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('langToggle').addEventListener('click', toggleLanguage);
-    document.getElementById('langToggleMobile').addEventListener('click', toggleLanguage);
+    const langToggle = document.getElementById('langToggle');
+    const langToggleMobile = document.getElementById('langToggleMobile');
+    
+    if (langToggle) langToggle.addEventListener('click', toggleLanguage);
+    if (langToggleMobile) langToggleMobile.addEventListener('click', toggleLanguage);
+    
     setLanguage(currentLang);
 });
 
@@ -113,7 +153,7 @@ if (mobileMenuBtn && mobileMenu) {
 // Определяем мобильное устройство
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-// Анимация появления элементов при скролле - ТОЛЬКО НА ДЕСКТОПЕ
+// Анимация появления элементов при скролле
 if (!isMobile) {
     const fadeElements = document.querySelectorAll('.fade-in');
     
@@ -123,173 +163,185 @@ if (!isMobile) {
         threshold: 0.1
     };
     
-    const fadeObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                fadeObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    fadeElements.forEach(el => fadeObserver.observe(el));
+    if (fadeElements.length > 0) {
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    fadeObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        fadeElements.forEach(el => fadeObserver.observe(el));
+    }
 }
 
-// ЗОЛОТОЙ ДВОИЧНЫЙ ДОЖДЬ (Matrix style)
+// ЗОЛОТОЙ ДВОИЧНЫЙ ДОЖДЬ
 const canvas = document.getElementById('starfield');
-const ctx = canvas.getContext('2d');
+if (canvas) {
+    const ctx = canvas.getContext('2d');
+    
+    let binaryChars = ['0', '1'];
+    let columns = [];
+    let animationId = null;
+    let resizeTimeout;
 
-let binaryChars = ['0', '1'];
-let columns = [];
-let animationId = null;
-
-function resizeCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    
-    ctx.scale(dpr, dpr);
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
-}
-
-function initBinaryRain() {
-    resizeCanvas();
-    
-    const width = canvas.width / (window.devicePixelRatio || 1);
-    const height = canvas.height / (window.devicePixelRatio || 1);
-    
-    // Настройки в зависимости от устройства
-    const fontSize = isMobile ? 14 : 18;
-    const columnCount = Math.floor(width / fontSize);
-    const rowsPerColumn = isMobile ? 20 : 30;
-    
-    // Очищаем старые колонки
-    columns = [];
-    
-    // Создаем колонки с двоичными символами
-    for (let i = 0; i < columnCount; i++) {
-        columns.push({
-            x: i * fontSize,
-            y: Math.random() * -height,
-            speed: isMobile ? 5 + Math.random() * 8 : 8 + Math.random() * 12,
-            chars: Array(rowsPerColumn).fill(0).map(() => binaryChars[Math.floor(Math.random() * 2)]),
-            fontSize: fontSize
-        });
+    function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        
+        ctx.scale(dpr, dpr);
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
     }
-    
-    // Останавливаем предыдущую анимацию
-    if (animationId) {
-        cancelAnimationFrame(animationId);
-    }
-    
-    // Запускаем анимацию
-    animationId = requestAnimationFrame(drawBinaryRain);
-}
 
-function drawBinaryRain() {
-    const width = canvas.width / (window.devicePixelRatio || 1);
-    const height = canvas.height / (window.devicePixelRatio || 1);
-    
-    // Полупрозрачный фон для создания эффекта следа
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-    ctx.fillRect(0, 0, width, height);
-    
-    // Рисуем каждую колонку
-    columns.forEach(column => {
-        const fontSize = column.fontSize;
+    function initBinaryRain() {
+        if (!canvas) return;
         
-        // Устанавливаем шрифт
-        ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
-        ctx.textAlign = 'center';
+        resizeCanvas();
         
-        // Рисуем символы в колонке
-        column.chars.forEach((char, index) => {
-            const y = column.y + index * fontSize;
+        const width = canvas.width / (window.devicePixelRatio || 1);
+        const height = canvas.height / (window.devicePixelRatio || 1);
+        
+        // Настройки в зависимости от устройства
+        const fontSize = isMobile ? 14 : 18;
+        const columnCount = Math.floor(width / fontSize);
+        const rowsPerColumn = isMobile ? 20 : 30;
+        
+        // Очищаем старые колонки
+        columns = [];
+        
+        // Создаем колонки с двоичными символами
+        for (let i = 0; i < columnCount; i++) {
+            columns.push({
+                x: i * fontSize,
+                y: Math.random() * -height,
+                speed: isMobile ? 3 + Math.random() * 4 : 6 + Math.random() * 8,
+                chars: Array(rowsPerColumn).fill(0).map(() => binaryChars[Math.floor(Math.random() * 2)]),
+                fontSize: fontSize
+            });
+        }
+        
+        // Останавливаем предыдущую анимацию
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+        }
+        
+        // Запускаем анимацию
+        animationId = requestAnimationFrame(drawBinaryRain);
+    }
+
+    function drawBinaryRain() {
+        if (!canvas) return;
+        
+        const width = canvas.width / (window.devicePixelRatio || 1);
+        const height = canvas.height / (window.devicePixelRatio || 1);
+        
+        // Полупрозрачный фон для создания эффекта следа
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+        ctx.fillRect(0, 0, width, height);
+        
+        // Рисуем каждую колонку
+        columns.forEach(column => {
+            const fontSize = column.fontSize;
             
-            // Определяем цвет символа в зависимости от его позиции
-            let color;
-            if (index === 0) {
-                // Первый символ - ярко-золотой
-                color = 'rgba(212, 175, 55, 1)';
-                // Добавляем свечение
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'rgba(212, 175, 55, 0.8)';
-            } else if (index < 5) {
-                // Первые 5 символов - золотые с разной прозрачностью
-                const opacity = 1 - (index / 10);
-                color = `rgba(212, 175, 55, ${opacity})`;
-                ctx.shadowBlur = 0;
-            } else if (index < 10) {
-                // Средние символы - зелёно-золотые
-                const opacity = 0.7 - (index / 20);
-                color = `rgba(150, 130, 50, ${opacity})`;
-                ctx.shadowBlur = 0;
-            } else {
-                // Остальные символы - тёмные
-                const opacity = 0.3 - (index / 50);
-                color = `rgba(100, 90, 40, ${opacity})`;
-                ctx.shadowBlur = 0;
-            }
+            // Устанавливаем шрифт
+            ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
+            ctx.textAlign = 'center';
             
-            ctx.fillStyle = color;
-            ctx.fillText(char, column.x + fontSize/2, y);
+            // Рисуем символы в колонке
+            column.chars.forEach((char, index) => {
+                const y = column.y + index * fontSize;
+                
+                // Определяем цвет символа в зависимости от его позиции
+                let color;
+                if (index === 0) {
+                    // Первый символ - ярко-золотой
+                    color = 'rgba(212, 175, 55, 1)';
+                } else if (index < 5) {
+                    // Первые 5 символов - золотые с разной прозрачностью
+                    const opacity = 1 - (index / 10);
+                    color = `rgba(212, 175, 55, ${opacity})`;
+                } else if (index < 10) {
+                    // Средние символы - зелёно-золотые
+                    const opacity = 0.7 - (index / 20);
+                    color = `rgba(150, 130, 50, ${opacity})`;
+                } else {
+                    // Остальные символы - тёмные
+                    const opacity = 0.3 - (index / 50);
+                    color = `rgba(100, 90, 40, ${opacity})`;
+                }
+                
+                ctx.fillStyle = color;
+                ctx.fillText(char, column.x + fontSize/2, y);
+                
+                // Добавляем небольшое свечение для первого символа
+                if (index === 0) {
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = 'rgba(212, 175, 55, 0.7)';
+                    ctx.fillText(char, column.x + fontSize/2, y);
+                    ctx.shadowBlur = 0;
+                }
+            });
             
-            // Сбрасываем тень
-            if (index === 0) {
-                ctx.shadowBlur = 0;
+            // Двигаем колонку вниз
+            column.y += column.speed;
+            
+            // Если колонка ушла за нижний край, возвращаем её вверх
+            if (column.y > height) {
+                column.y = -fontSize * column.chars.length;
+                
+                // Обновляем символы в колонке
+                column.chars = Array(column.chars.length).fill(0).map(() => 
+                    binaryChars[Math.floor(Math.random() * 2)]
+                );
+                
+                // Иногда меняем скорость колонки
+                if (Math.random() > 0.95) {
+                    column.speed = isMobile ? 3 + Math.random() * 4 : 6 + Math.random() * 8;
+                }
             }
         });
         
-        // Двигаем колонку вниз
-        column.y += column.speed;
-        
-        // Если колонка ушла за нижний край, возвращаем её вверх
-        if (column.y > height) {
-            column.y = -fontSize * column.chars.length;
-            
-            // Обновляем символы в колонке
-            column.chars = Array(column.chars.length).fill(0).map(() => 
-                binaryChars[Math.floor(Math.random() * 2)]
-            );
-            
-            // Иногда меняем скорость колонки
-            if (Math.random() > 0.95) {
-                column.speed = isMobile ? 5 + Math.random() * 8 : 8 + Math.random() * 12;
+        // Продолжаем анимацию
+        animationId = requestAnimationFrame(drawBinaryRain);
+    }
+
+    // Обработчик изменения размера окна
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            initBinaryRain();
+        }, 250);
+    });
+
+    // Останавливаем анимацию при скрытии вкладки
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        } else {
+            if (!animationId && canvas) {
+                animationId = requestAnimationFrame(drawBinaryRain);
             }
         }
     });
-    
-    // Продолжаем анимацию
-    animationId = requestAnimationFrame(drawBinaryRain);
+
+    // Инициализация двоичного дождя
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            initBinaryRain();
+        }, 100);
+    });
 }
 
-// Обработчик изменения размера окна
-let resizeTimeout;
-window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        initBinaryRain();
-    }, 250);
-});
-
-// Останавливаем анимацию при скрытии вкладки
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        if (animationId) {
-            cancelAnimationFrame(animationId);
-            animationId = null;
-        }
-    } else {
-        if (!animationId) {
-            animationId = requestAnimationFrame(drawBinaryRain);
-        }
-    }
-});
-
-// РАБОТА С ЯКОРНЫМИ ССЫЛКАМИ - РАЗНАЯ ЛОГИКА ДЛЯ МОБИЛЬНЫХ И ДЕСКТОПА
+// Работа с якорными ссылками
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -301,7 +353,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const target = document.querySelector(targetId);
         if (target) {
             // Вычисляем позицию с учетом фиксированного хедера
-            const headerHeight = document.querySelector('.header').offsetHeight;
+            const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
             const targetPosition = target.offsetTop - headerHeight;
             
             if (isMobile) {
@@ -329,11 +381,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // Инициализация всего при загрузке страницы
 window.addEventListener('load', () => {
-    // Инициализация двоичного дождя
-    setTimeout(() => {
-        initBinaryRain();
-    }, 100);
-    
     // На мобильных устройствах сразу показываем все элементы
     if (isMobile) {
         document.querySelectorAll('.fade-in').forEach(el => {
@@ -346,7 +393,7 @@ window.addEventListener('load', () => {
         const target = document.querySelector(window.location.hash);
         if (target) {
             setTimeout(() => {
-                const headerHeight = document.querySelector('.header').offsetHeight;
+                const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
                 const targetPosition = target.offsetTop - headerHeight;
                 window.scrollTo({
                     top: targetPosition,
