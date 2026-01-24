@@ -167,106 +167,132 @@ const fadeObserver = new IntersectionObserver((entries) => {
 
 fadeElements.forEach(el => fadeObserver.observe(el));
 
-// ЗВЁЗДНОЕ НЕБО - быстрые золотые звёзды
+// ОПТИМИЗИРОВАННОЕ ЗВЁЗДНОЕ НЕБО для мобильных
 const canvas = document.getElementById('starfield');
 const ctx = canvas.getContext('2d');
 
 let stars = [];
-const numStars = 400;
+let animationId = null;
+let lastTimestamp = 0;
+const targetFPS = 30; // Снижаем FPS для мобильных
+const frameInterval = 1000 / targetFPS;
+
+// Определяем мобильное устройство
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+// Настраиваем параметры в зависимости от устройства
+const numStars = isMobile ? 100 : 250; // Меньше звёзд на мобильных
+const starSpeed = isMobile ? 0.5 : 1.2; // Медленнее на мобильных
 
 // Размеры холста
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    
+    ctx.scale(dpr, dpr);
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
 }
 
-// Создание звёзд
+// Создание звёзд - оптимизировано
 function createStars() {
     stars = [];
+    const width = canvas.width / (window.devicePixelRatio || 1);
+    const height = canvas.height / (window.devicePixelRatio || 1);
+    
     for (let i = 0; i < numStars; i++) {
         stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            radius: Math.random() * 2 + 0.5,
-            opacity: Math.random() * 0.7 + 0.3,
-            speed: Math.random() * 1.5 + 0.8,
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: isMobile ? Math.random() * 0.8 + 0.3 : Math.random() * 1.2 + 0.5,
+            opacity: Math.random() * 0.4 + 0.2, // Более прозрачные
+            speed: Math.random() * starSpeed + 0.3,
             twinkle: Math.random() * Math.PI * 2,
-            twinkleSpeed: Math.random() * 0.05 + 0.03,
-            color: `rgba(212, 175, 55, ${Math.random() * 0.8 + 0.2})`
+            twinkleSpeed: Math.random() * 0.02 + 0.01, // Медленнее мерцание
+            color: `rgba(212, 175, 55, ${Math.random() * 0.6 + 0.2})`
         });
     }
 }
 
-// Отрисовка звёзд
-function drawStars() {
-    // Очищаем canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Отрисовка звёзд - оптимизировано для мобильных
+function drawStars(timestamp) {
+    if (!lastTimestamp) lastTimestamp = timestamp;
     
-    // Рисуем звёзды
-    stars.forEach(star => {
-        // Мерцание
-        star.twinkle += star.twinkleSpeed;
-        const twinkleFactor = 0.5 + 0.5 * Math.sin(star.twinkle);
-        const currentOpacity = star.opacity * twinkleFactor;
+    const elapsed = timestamp - lastTimestamp;
+    
+    if (elapsed > frameInterval) {
+        // Очищаем canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Основная звезда
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        const width = canvas.width / (window.devicePixelRatio || 1);
+        const height = canvas.height / (window.devicePixelRatio || 1);
         
-        // Золотой градиент
-        const gradient = ctx.createRadialGradient(
-            star.x, star.y, 0,
-            star.x, star.y, star.radius * 2
-        );
-        gradient.addColorStop(0, `rgba(255, 215, 0, ${currentOpacity * 0.9})`);
-        gradient.addColorStop(0.5, `rgba(212, 175, 55, ${currentOpacity * 0.6})`);
-        gradient.addColorStop(1, `rgba(212, 175, 55, 0)`);
-        
-        ctx.fillStyle = gradient;
-        ctx.fill();
-        
-        // Свечение для крупных звёзд
-        if (star.radius > 1.5) {
+        // Рисуем звёзды
+        stars.forEach(star => {
+            // Упрощённое мерцание
+            star.twinkle += star.twinkleSpeed;
+            const currentOpacity = star.opacity * (0.7 + 0.3 * Math.sin(star.twinkle));
+            
+            // Рисуем простую звезду без градиента
             ctx.beginPath();
-            ctx.arc(star.x, star.y, star.radius * 3, 0, Math.PI * 2);
-            const glowGradient = ctx.createRadialGradient(
-                star.x, star.y, star.radius,
-                star.x, star.y, star.radius * 3
-            );
-            glowGradient.addColorStop(0, `rgba(212, 175, 55, ${currentOpacity * 0.3})`);
-            glowGradient.addColorStop(1, `rgba(212, 175, 55, 0)`);
-            ctx.fillStyle = glowGradient;
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(212, 175, 55, ${currentOpacity})`;
             ctx.fill();
-        }
+            
+            // Движение звёзд ВНИЗ
+            star.y += star.speed;
+            
+            // Если звезда ушла за нижний край, появляемся сверху
+            if (star.y > height + star.radius * 2) {
+                star.y = -star.radius * 2;
+                star.x = Math.random() * width;
+            }
+        });
         
-        // Движение звёзд ВНИЗ
-        star.y += star.speed;
-        
-        // Если звезда ушла за нижний край, появляемся сверху
-        if (star.y > canvas.height + star.radius * 2) {
-            star.y = -star.radius * 2;
-            star.x = Math.random() * canvas.width;
-            // Обновляем параметры для разнообразия
-            star.radius = Math.random() * 2 + 0.5;
-            star.speed = Math.random() * 1.5 + 0.8;
-            star.opacity = Math.random() * 0.7 + 0.3;
-        }
-    });
+        lastTimestamp = timestamp - (elapsed % frameInterval);
+    }
     
-    requestAnimationFrame(drawStars);
+    animationId = requestAnimationFrame(drawStars);
 }
 
 // Инициализация звёздного неба
 function initStarfield() {
     resizeCanvas();
     createStars();
-    drawStars();
+    
+    // Используем более экономную анимацию
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+    }
+    
+    animationId = requestAnimationFrame(drawStars);
 }
 
-// Обработчик изменения размера окна
+// Оптимизированный обработчик изменения размера окна
+let resizeTimeout;
 window.addEventListener('resize', () => {
-    resizeCanvas();
-    createStars();
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        resizeCanvas();
+        createStars();
+    }, 250);
+});
+
+// Останавливаем анимацию при скрытии вкладки
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+    } else {
+        if (!animationId) {
+            animationId = requestAnimationFrame(drawStars);
+        }
+    }
 });
 
 // ТОЧНАЯ ПРОКРУТКА К СЕКЦИЯМ
@@ -304,8 +330,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // Инициализация всего при загрузке страницы
 window.addEventListener('load', () => {
-    // Инициализация звёздного фона
-    initStarfield();
+    // Инициализация звёздного фона с задержкой
+    setTimeout(() => {
+        initStarfield();
+    }, 500);
     
     // Плавная прокрутка к якорю если он есть в URL при загрузке
     if (window.location.hash) {
@@ -345,51 +373,37 @@ document.querySelectorAll('a[href="#"]').forEach(anchor => {
     });
 });
 
-// Дополнительные улучшения для звёзд
-let isScrolling = false;
-let scrollTimer = null;
-
-// Ускоряем звёзды при скролле
-window.addEventListener('scroll', () => {
-    isScrolling = true;
-    
-    // Временно ускоряем звёзды
-    stars.forEach(star => {
-        star.speed = star.speed * 1.3;
-    });
-    
-    // Очищаем предыдущий таймер
-    if (scrollTimer) clearTimeout(scrollTimer);
-    
-    // Возвращаем нормальную скорость через 300мс после остановки скролла
-    scrollTimer = setTimeout(() => {
-        isScrolling = false;
-        stars.forEach(star => {
-            star.speed = star.speed / 1.3;
+// Отключаем интерактивность на мобильных для производительности
+if (!isMobile) {
+    // Добавляем звёзды при клике (интерактивность) - только на десктопе
+    canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const x = (e.clientX - rect.left) * dpr;
+        const y = (e.clientY - rect.top) * dpr;
+        
+        // Добавляем новую звезду в месте клика
+        stars.push({
+            x: x / dpr,
+            y: y / dpr,
+            radius: Math.random() * 1.5 + 0.5,
+            opacity: Math.random() * 0.8 + 0.1,
+            speed: Math.random() * 1.5 + 0.8,
+            twinkle: Math.random() * Math.PI * 2,
+            twinkleSpeed: Math.random() * 0.05 + 0.02,
+            color: `rgba(255, 215, 0, ${Math.random() * 0.8 + 0.1})`
         });
-    }, 300);
-});
-
-// Добавляем звёзды при клике (интерактивность)
-canvas.addEventListener('click', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Добавляем новую звезду в месте клика
-    stars.push({
-        x: x,
-        y: y,
-        radius: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.9 + 0.1,
-        speed: Math.random() * 2 + 1.5,
-        twinkle: Math.random() * Math.PI * 2,
-        twinkleSpeed: Math.random() * 0.08 + 0.05,
-        color: `rgba(255, 215, 0, ${Math.random() * 0.9 + 0.1})`
+        
+        // Ограничиваем количество звёзд
+        if (stars.length > (isMobile ? 150 : 350)) {
+            stars = stars.slice(50);
+        }
     });
-    
-    // Ограничиваем количество звёзд
-    if (stars.length > 500) {
-        stars = stars.slice(100);
+}
+
+// Очистка при размонтировании
+window.addEventListener('beforeunload', () => {
+    if (animationId) {
+        cancelAnimationFrame(animationId);
     }
 });
