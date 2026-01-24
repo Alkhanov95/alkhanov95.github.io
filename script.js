@@ -67,19 +67,22 @@ function updateCVLink() {
     const cvBtn = document.getElementById('cvDownloadBtn');
     if (!cvBtn) return;
     
+    // Удаляем предыдущий обработчик
     const newCvBtn = cvBtn.cloneNode(true);
     cvBtn.parentNode.replaceChild(newCvBtn, cvBtn);
     
+    // Добавляем новый обработчик
     newCvBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
         let cvFile;
         if (currentLang === 'ru') {
-            cvFile = 'cv_russian.pdf';
+            cvFile = 'cv_russian.pdf'; // Файл с русским резюме
         } else {
-            cvFile = 'cv_english.pdf';
+            cvFile = 'cv_english.pdf'; // Файл с английским резюме
         }
         
+        // Создаем временную ссылку для скачивания
         const link = document.createElement('a');
         link.href = cvFile;
         link.download = cvFile;
@@ -88,6 +91,7 @@ function updateCVLink() {
         document.body.removeChild(link);
     });
     
+    // Обновляем id для нового элемента
     newCvBtn.id = 'cvDownloadBtn';
 }
 
@@ -108,6 +112,7 @@ function setLanguage(lang) {
     document.getElementById('langToggle').textContent = toggleText;
     document.getElementById('langToggleMobile').textContent = toggleText;
     
+    // Обновляем ссылку на CV
     updateCVLink();
 }
 
@@ -172,237 +177,115 @@ if (!isMobile) {
     }
 }
 
-// ВЕЛИКОЛЕПНЫЕ ЗОЛОТЫЕ ВОЛНЫ - как плавное видео
+// ПРОСТОЙ И НАДЕЖНЫЙ ЗВЕЗДНЫЙ ФОН
 const canvas = document.getElementById('starfield');
 if (canvas) {
     const ctx = canvas.getContext('2d');
     let animationId = null;
-    let time = 0;
+    let stars = [];
+    let lastTime = 0;
     
-    // Инициализация размера canvas
     function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
     }
     
-    // Создание волн
-    function createWaves() {
-        return [
-            {
-                amplitude: canvas.height * 0.1,  // Высота волны
-                frequency: 0.003,                 // Частота
-                speed: 0.002,                     // Скорость движения
-                phase: Math.random() * Math.PI * 2, // Фаза
-                color: (ctx, alpha) => {          // Градиент цвета
-                    const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-                    gradient.addColorStop(0, `rgba(180, 160, 100, ${alpha})`);
-                    gradient.addColorStop(0.5, `rgba(212, 175, 55, ${alpha})`);
-                    gradient.addColorStop(1, `rgba(180, 160, 100, ${alpha})`);
-                    return gradient;
-                },
-                lineWidth: 2,
-                segments: 100
-            },
-            {
-                amplitude: canvas.height * 0.08,
-                frequency: 0.002,
-                speed: 0.0015,
-                phase: Math.random() * Math.PI * 2,
-                color: (ctx, alpha) => {
-                    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-                    gradient.addColorStop(0, `rgba(150, 130, 50, ${alpha})`);
-                    gradient.addColorStop(0.5, `rgba(180, 150, 60, ${alpha * 0.8})`);
-                    gradient.addColorStop(1, `rgba(150, 130, 50, ${alpha})`);
-                    return gradient;
-                },
-                lineWidth: 1.5,
-                segments: 120
-            },
-            {
-                amplitude: canvas.height * 0.06,
-                frequency: 0.0015,
-                speed: 0.003,
-                phase: Math.random() * Math.PI * 2,
-                color: (ctx, alpha) => `rgba(120, 100, 40, ${alpha})`,
-                lineWidth: 1,
-                segments: 150
-            }
-        ];
-    }
-    
-    // Рисование одной волны
-    function drawWave(wave) {
-        const { amplitude, frequency, speed, phase, color, lineWidth, segments } = wave;
-        const width = canvas.width;
-        const height = canvas.height;
+    function createStars() {
+        stars = [];
+        const starCount = isMobile ? 100 : 200;
         
-        ctx.beginPath();
-        ctx.lineWidth = lineWidth;
-        
-        // Создаем эффект множества частиц в волне
-        for (let i = 0; i <= segments; i++) {
-            const x = (i / segments) * width;
-            
-            // Основная синусоида
-            let y = height / 2 + amplitude * Math.sin(x * frequency + time * speed + phase);
-            
-            // Добавляем дополнительные гармоники для реалистичности
-            y += amplitude * 0.3 * Math.sin(x * frequency * 2 + time * speed * 1.5 + phase);
-            y += amplitude * 0.1 * Math.sin(x * frequency * 4 + time * speed * 2 + phase);
-            
-            // Плавные капли (эффект дождя)
-            const dropFrequency = 0.03;
-            const dropAmplitude = amplitude * 0.15;
-            y += dropAmplitude * Math.sin(x * dropFrequency + time * 0.01) * 
-                 Math.sin(time * 0.005 + phase) * 0.3;
-            
-            if (i === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                // Используем кривые Безье для плавности
-                const prevX = ((i - 1) / segments) * width;
-                const prevY = height / 2 + amplitude * Math.sin(prevX * frequency + time * speed + phase);
-                
-                const cp1x = prevX + (width / segments) * 0.3;
-                const cp1y = prevY;
-                const cp2x = x - (width / segments) * 0.3;
-                const cp2y = y;
-                
-                ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
-            }
+        for (let i = 0; i < starCount; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.2 + 0.3,
+                speed: Math.random() * 0.5 + 0.2,
+                opacity: Math.random() * 0.4 + 0.1, // Очень прозрачные
+                twinkle: Math.random() * Math.PI * 2,
+                twinkleSpeed: Math.random() * 0.02 + 0.01
+            });
         }
-        
-        // Добавляем очень тонкую обводку для эффекта свечения
-        ctx.strokeStyle = color(ctx, 0.15);
-        ctx.stroke();
-        
-        // Основная линия волны
-        ctx.strokeStyle = color(ctx, 0.1);
-        ctx.lineWidth = lineWidth;
-        ctx.stroke();
     }
     
-    // Рисование капель/брызг
-    function drawDrops() {
-        const drops = [];
-        const dropCount = 50;
-        const width = canvas.width;
-        const height = canvas.height;
+    function drawStars(timestamp) {
+        if (!lastTime) lastTime = timestamp;
+        const delta = timestamp - lastTime;
         
-        // Создаем капли
-        for (let i = 0; i < dropCount; i++) {
-            const x = (Math.sin(time * 0.001 + i) * 0.5 + 0.5) * width;
-            const y = (Math.cos(time * 0.0015 + i * 2) * 0.5 + 0.5) * height;
-            const size = 1 + Math.sin(time * 0.01 + i) * 0.5;
-            const opacity = 0.05 + Math.sin(time * 0.02 + i) * 0.02;
+        // Ограничиваем FPS для производительности
+        if (delta > 16) { // ~60 FPS
+            // Очищаем с легкой прозрачностью для следа
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            drops.push({ x, y, size, opacity });
-        }
-        
-        // Рисуем капли
-        drops.forEach(drop => {
-            ctx.beginPath();
-            ctx.arc(drop.x, drop.y, drop.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(212, 175, 55, ${drop.opacity})`;
-            ctx.fill();
-            
-            // Легкое свечение для некоторых капель
-            if (drop.opacity > 0.06) {
+            // Рисуем звезды
+            stars.forEach(star => {
+                // Мерцание
+                star.twinkle += star.twinkleSpeed;
+                const currentOpacity = star.opacity * (0.8 + 0.2 * Math.sin(star.twinkle));
+                
                 ctx.beginPath();
-                ctx.arc(drop.x, drop.y, drop.size * 2, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(212, 175, 55, ${drop.opacity * 0.3})`;
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 175, 55, ${currentOpacity * 0.5})`; // Еще темнее
                 ctx.fill();
-            }
-        });
-    }
-    
-    // Основная функция анимации
-    function animate() {
-        // Очищаем с прозрачностью для создания следа
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Рисуем волны
-        const waves = createWaves();
-        waves.forEach(wave => {
-            drawWave(wave);
-        });
-        
-        // Рисуем капли
-        drawDrops();
-        
-        // Добавляем эффект переливающихся частиц
-        const particleCount = 30;
-        for (let i = 0; i < particleCount; i++) {
-            const x = (Math.sin(time * 0.0005 + i * 0.7) * 0.5 + 0.5) * canvas.width;
-            const y = (Math.cos(time * 0.0007 + i * 0.9) * 0.5 + 0.5) * canvas.height;
-            const size = 0.5 + Math.sin(time * 0.01 + i) * 0.3;
-            const opacity = 0.03 + Math.sin(time * 0.02 + i * 2) * 0.02;
+                
+                // Движение вниз
+                star.y += star.speed;
+                
+                // Возврат наверх
+                if (star.y > canvas.height + star.radius) {
+                    star.y = -star.radius;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
             
-            ctx.beginPath();
-            ctx.arc(x, y, size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`;
-            ctx.fill();
+            lastTime = timestamp;
         }
         
-        time += 0.016; // Примерно 60 FPS
-        animationId = requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(drawStars);
     }
     
-    // Инициализация
-    function initWaves() {
+    function initStarfield() {
         resizeCanvas();
+        createStars();
         
-        // Устанавливаем стили для canvas
-        canvas.style.position = 'fixed';
-        canvas.style.top = '0';
-        canvas.style.left = '0';
-        canvas.style.width = '100vw';
-        canvas.style.height = '100vh';
-        canvas.style.zIndex = '-1';
-        canvas.style.pointerEvents = 'none';
-        
-        // Останавливаем предыдущую анимацию
         if (animationId) {
             cancelAnimationFrame(animationId);
         }
         
-        // Запускаем анимацию
-        animate();
+        animationId = requestAnimationFrame(drawStars);
         
-        // Добавляем обработчик изменения размера
+        // Простой обработчик resize
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
                 resizeCanvas();
+                createStars();
             }, 250);
         });
         
-        // Останавливаем анимацию при скрытии вкладки
+        // Пауза при скрытии вкладки
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            } else if (!animationId) {
-                animate();
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            } else {
+                if (!animationId) {
+                    animationId = requestAnimationFrame(drawStars);
+                }
             }
         });
     }
     
-    // Запускаем при загрузке
+    // Инициализация
     window.addEventListener('load', () => {
         setTimeout(() => {
-            initWaves();
+            initStarfield();
         }, 100);
     });
-    
-    // Запускаем сразу если страница уже загружена
-    if (document.readyState === 'complete') {
-        setTimeout(() => {
-            initWaves();
-        }, 100);
-    }
 }
 
 // Работа с якорными ссылками
@@ -411,24 +294,30 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const targetId = this.getAttribute('href');
         
+        // Пропускаем пустые ссылки
         if (targetId === '#') return;
         
         const target = document.querySelector(targetId);
         if (target) {
+            // Вычисляем позицию с учетом фиксированного хедера
             const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
             const targetPosition = target.offsetTop - headerHeight;
             
             if (isMobile) {
+                // На мобильных - мгновенный скролл без анимации
                 window.scrollTo(0, targetPosition);
             } else {
+                // На десктопе - плавная анимация
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth'
                 });
             }
             
+            // Обновляем URL без перезагрузки
             history.pushState(null, null, targetId);
             
+            // Закрываем мобильное меню если открыто
             if (mobileMenu && mobileMenu.classList.contains('active')) {
                 mobileMenuBtn.classList.remove('active');
                 mobileMenu.classList.remove('active');
