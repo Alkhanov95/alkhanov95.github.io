@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Backend Golang Developer Portfolio">
+    <title>Mohammed Alkhanov — Backend Developer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    
+    <header class="header">
+        <nav class="nav">
+            <a href="#hero" class="nav-logo" data-i18n="nav.name">Alkhanov</a>
+            <div class="nav-links">
+                <a href="#about" data-i18n="nav.about">About</a>
+                <a href="#skills" data-i18n="nav.skills">Skills</a>
+                <a href="#projects" data-i18n="nav.projects">Projects</a>
+                <a href="#certificates" data-i18n="nav.certificates">Certificates</a>
+                <a href="#contacts" data-i18n="nav.contacts">Contacts</a>
+                <button class="lang-toggle" id="langToggle">RU</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" data-i18n="nav.about">About</a>
+        <a href="#skills" data-i18n="nav.skills">Skills</a>
+        <a href="#projects" data-i18n="nav.projects">Projects</a>
+        <a href="#certificates" data-i18n="nav.certificates">Certificates</a>
+        <a href="#contacts" data-i18n="nav.contacts">Contacts</a>
+        <button class="lang-toggle" id="langToggleMobile">RU</button>
+    </div>
+
+    <main>
+        <section id="hero" class="hero section">
+            <div class="container fade-in">
+                <p class="hero-greeting" data-i18n="hero.greeting">Hello, I'm</p>
+                <h1 class="hero-name">Mohammed Alkhanov</h1>
+                <p class="hero-title" data-i18n="hero.title">Golang Backend Developer</p>
+                <p class="hero-intro" data-i18n="hero.intro">Building scalable, high-performance backend systems with clean architecture and modern practices.</p>
+                <div class="hero-buttons">
+                    <a href="https://github.com/Alkhanov95" class="btn btn-primary" target="_blank" rel="noopener">
+                        <span data-i18n="hero.github">GitHub</span>
+                    </a>
+                    <a href="mailto:mohammedalkhanov95@gmail.com" class="btn btn-secondary">
+                        <span data-i18n="hero.email">Email Me</span>
+                    </a>
+                    <a href="#" class="btn btn-secondary" onclick="downloadCV()">
+    <span data-i18n="hero.cv">Download CV</span>
+    </a>
+
+            <script>
+                    function downloadCV() {
+                    const lang = localStorage.getItem('lang') || 'en';
+                    const cvFile = lang === 'ru' ? 'cv_ru.pdf' : 'cv_en.pdf';
+    
+                    const link = document.createElement('a');
+                    link.href = cvFile;
+                    link.download = cvFile;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    }
+</script>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="about.title">About</h2>
+                <div class="about-content fade-in">
+                    <p data-i18n="about.p1">Backend engineer with 5+ years of commercial experience. I specialize in Go and building reliable, high-load services and microservice architectures.</p>
+                    <p data-i18n="about.p2">I design APIs, optimize databases, implement caching and asynchronous processing, set up monitoring, and take systems from development to stable production.</p>
+                    <p data-i18n="about.p3">Focused on performance, fault tolerance, and clean, maintainable architecture. Graduated in Applied Informatics from the Finance University. Fluent in English.</p>      
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="skills section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="skills.title">Technical Skills</h2>
+                
+                <div class="skills-grid">
+                    <div class="skill-group fade-in">
+                        <h3 class="skill-group-title">Programming</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Go</span>
+                            <span class="skill-tag">SQL</span>
+                            <span class="skill-tag">Linux</span>
+                            <span class="skill-tag">Shell</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group fade-in">
+                        <h3 class="skill-group-title">Backend</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">REST</span>
+                            <span class="skill-tag">gRPC</span>
+                            <span class="skill-tag">Concurrency</span>
+                            <span class="skill-tag">Highload</span>
+                            <span class="skill-tag">Caching</span>
+                            <span class="skill-tag">Retries</span>
+                            <span class="skill-tag">Idempotency</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group fade-in">
+                        <h3 class="skill-group-title">Databases</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">PostgreSQL</span>
+                            <span class="skill-tag">Redis</span>
+                            <span class="skill-tag">ClickHouse</span>
+                            <span class="skill-tag">Indexes</span>
+                            <span class="skill-tag">Transactions</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group fade-in">
+                        <h3 class="skill-group-title">Messaging</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Kafka</span>
+                            <span class="skill-tag">Async</span>
+                            <span class="skill-tag">Consumers</span>
+                            <span class="skill-tag">DLQ</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group fade-in">
+                        <h3 class="skill-group-title">DevOps</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Docker</span>
+                            <span class="skill-tag">Kubernetes</span>
+                            <span class="skill-tag">CI CD</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group fade-in">
+                        <h3 class="skill-group-title">Observability</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Prometheus</span>
+                            <span class="skill-tag">Grafana</span>
+                            <span class="skill-tag">OpenTelemetry</span>
+                            <span class="skill-tag">Jaeger</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group fade-in">
+                        <h3 class="skill-group-title">Architecture</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Microservices</span>
+                            <span class="skill-tag">API Design</span>
+                            <span class="skill-tag">Scaling</span>
+                            <span class="skill-tag">Fault tolerance</span>
+                            <span class="skill-tag">Clean Architecture</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group fade-in">
+                        <h3 class="skill-group-title">Testing</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Unit tests</span>
+                            <span class="skill-tag">Integration tests</span>
+                            <span class="skill-tag">Mocks</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group fade-in">
+                        <h3 class="skill-group-title">Tools</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Git</span>
+                            <span class="skill-tag">GitLab</span>
+                            <span class="skill-tag">Swagger</span>
+                            <span class="skill-tag">Postman</span>
+                            <span class="skill-tag">curl</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="projects section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="projects.title">Projects</h2>
+                
+                <div class="projects-grid">
+                    <article class="project-card fade-in">
+                        <h3 class="project-title" data-i18n="projects.project1.title">Crypto Exchange Backend</h3>
+                        <p class="project-desc" data-i18n="projects.project1.desc">Matching engine for cryptocurrency trading platform. Handles order processing with low-latency requirements, implements transaction logic with rollback support. Built for horizontal scaling and fault tolerance.</p>
+                        <div class="project-stack">
+                            <span>Go</span>
+                            <span>PostgreSQL</span>
+                            <span>Redis</span>
+                            <span>Kafka</span>
+                        </div>
+                        <a href="https://github.com/apetrov/crypto-exchange" class="project-link" target="_blank" rel="noopener">
+                            <span data-i18n="projects.viewCode">View Code</span> →
+                        </a>
+                    </article>
+                    
+                    <article class="project-card fade-in">
+                        <h3 class="project-title" data-i18n="projects.project2.title">Blog API Gateway</h3>
+                        <p class="project-desc" data-i18n="projects.project2.desc">API gateway for microservices architecture. Implements request routing, rate limiting, authentication middleware, and response caching. Includes health checks, metrics collection, and circuit breaker pattern.</p>
+                        <div class="project-stack">
+                            <span>Go</span>
+                            <span>Redis</span>
+                            <span>Docker</span>
+                            <span>Prometheus</span>
+                        </div>
+                        <a href="https://github.com/apetrov/blog-gateway" class="project-link" target="_blank" rel="noopener">
+                            <span data-i18n="projects.viewCode">View Code</span> →
+                        </a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="certificates" class="certificates section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="certificates.title">Certificates</h2>
+                
+                <div class="certificates-list">
+                    <div class="certificate-item fade-in">
+                        <div class="certificate-info">
+                            <h3 class="certificate-name">SQL Academy</h3>
+                            <p class="certificate-issuer">Database Management Course</p>
+                        </div>
+                        <span class="certificate-year">2021</span>
+                    </div>
+                    
+                    <div class="certificate-item fade-in">
+                        <div class="certificate-info">
+                            <h3 class="certificate-name">IELTS Academic</h3>
+                            <p class="certificate-issuer">B2 Level - English Proficiency</p>
+                        </div>
+                        <span class="certificate-year">2021</span>
+                    </div>
+                    
+                    <div class="certificate-item fade-in">
+                        <div class="certificate-info">
+                            <h3 class="certificate-name">STEP IT Academy</h3>
+                            <p class="certificate-issuer">Software Development Diploma</p>
+                        </div>
+                        <span class="certificate-year">2019</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacts" class="contacts section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="contacts.title">Contacts</h2>
+                <p class="contacts-intro fade-in" data-i18n="contacts.intro">Feel free to reach out for collaborations or just a friendly chat.</p>
+                
+                <div class="contacts-grid fade-in">
+                    <a href="mailto:mohammedalkhanov95@gmail.com" class="contact-item">
+                        <span class="contact-label">Email</span>
+                        <span class="contact-value">Click me</span>
+                    </a>
+                    
+                    <a href="https://github.com/Alkhanov95" class="contact-item" target="_blank" rel="noopener">
+                        <span class="contact-label">GitHub</span>
+                        <span class="contact-value">@alkhanov95</span>
+                    </a>
+                    
+                    <a href="https://www.linkedin.com/in/mohammed-alkhanov-1b2391263/
+" class="contact-item" target="_blank" rel="noopener">
+                        <span class="contact-label">LinkedIn</span>
+                        <span class="contact-value">Mohammed Alkhanov</span>
+                    </a>
+                    
+                    <a href="https://t.me/carrerachka95" class="contact-item" target="_blank" rel="noopener">
+                        <span class="contact-label">Telegram</span>
+                        <span class="contact-value">@carrerachka95</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p data-i18n="footer.text">© 2026 Mohammed Alkhanov. Built with Go mentality: simple, efficient, reliable.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
