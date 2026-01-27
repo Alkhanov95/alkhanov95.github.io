@@ -701,6 +701,7 @@ main,
 @media (max-width: 768px) {
     .navbar {
         height: 64px;
+        align-items: center;
     }
 
     .navbar__links {
