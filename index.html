@@ -19,7 +19,7 @@
 <body>
     <canvas id="starfield"></canvas>
 
-    <header class="header" id="top">
+ <header class="header" id="top">
         <nav class="navbar">
             <div class="navbar__left">
                 <a href="#top" class="navbar__brand">
@@ -31,39 +31,21 @@
                 <span class="navbar__toggle-line"></span>
                 <span class="navbar__toggle-line"></span>
             </button>
-          <nav class="navbar">
-
-    <div class="navbar__left">
-        <a href="#top" class="navbar__brand">
-            <span class="navbar__logo">MA</span>
-            <span class="navbar__name">Mohammed Alkhanov</span>
-        </a>
-    </div>
-
-    <!-- BURGER (отдельно, НЕ внутри right) -->
-    <button class="navbar__toggle" aria-label="Toggle navigation">
-        <span class="navbar__toggle-line"></span>
-        <span class="navbar__toggle-line"></span>
-        <span class="navbar__toggle-line"></span>
-    </button>
-
-    <div class="navbar__right">
-        <ul class="navbar__links">
-            <li><a href="#hero" class="nav-link active">Home</a></li>
-            <li><a href="#about" class="nav-link">About</a></li>
-            <li><a href="#skills" class="nav-link">Skills</a></li>
-            <li><a href="#projects" class="nav-link">Projects</a></li>
-            <li><a href="#certificates" class="nav-link">Certificates</a></li>
-            <li><a href="#contact" class="nav-link">Contact</a></li>
-        </ul>
-
-        <div class="navbar__controls">
-            <button class="lang-switch">EN</button>
-            <button class="lang-switch lang-switch--inactive">RU</button>
-        </div>
-    </div>
-
-</nav>
+            <div class="navbar__right">
+                <ul class="navbar__links">
+                    <li><a href="#hero" data-nav="hero" class="nav-link active" id="nav-hero">Home</a></li>
+                    <li><a href="#about" data-nav="about" class="nav-link" id="nav-about">About</a></li>
+                    <li><a href="#skills" data-nav="skills" class="nav-link" id="nav-skills">Skills</a></li>
+                    <li><a href="#projects" data-nav="projects" class="nav-link" id="nav-projects">Projects</a></li>
+                    <li><a href="#certificates" data-nav="certificates" class="nav-link" id="nav-certificates">Certificates</a></li>
+                    <li><a href="#contact" data-nav="contact" class="nav-link" id="nav-contact">Contact</a></li>
+                </ul>
+                <div class="navbar__controls">
+                    <button class="lang-switch" id="lang-en" data-lang="en">EN</button>
+                    <button class="lang-switch lang-switch--inactive" id="lang-ru" data-lang="ru">RU</button>
+                </div>
+            </div>
+        </nav>
     </header>
 
     <main>
