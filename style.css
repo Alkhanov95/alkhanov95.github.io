@@ -25,7 +25,7 @@
 
 html {
     background: #000;
-    overscroll-behavior: smooth;
+    overscroll-behavior: none;
 }
 body {
     margin: 0;
