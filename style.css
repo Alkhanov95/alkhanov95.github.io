@@ -492,7 +492,7 @@ main,
     gap: 2.7rem;
     align-items: start;
     position: relative;
-    top: -20px; /* Поднять весь блок */
+    top: -50px; /* Поднять весь блок */
 }
 
 .about__text {
