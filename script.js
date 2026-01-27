@@ -399,7 +399,7 @@
 
     "footer-text":
         "© 2026 Мохаммед Алханов. Backend Go разработчик."
-};
+}
 
 
     let currentLang = "en";
