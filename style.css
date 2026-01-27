@@ -462,6 +462,7 @@ main,
     display: grid;
     grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.5fr);
     gap: 2.7rem;
+    align-items: start;
 }
 
 .about__text {
@@ -728,13 +729,12 @@ main,
         transform: scaleY(1);
     }
 
-    .navbar__toggle {
+      .navbar__toggle {
+        display: inline-flex;   /* ← ВОТ ЭТО КЛЮЧ */
         position: absolute;
-        right: 16px;   /* отступ от края */
+        right: 16px;
         top: 50%;
         transform: translateY(-50%);
-        margin: 0;
-        display: inline-flex;
     }
 
     .navbar__right {
