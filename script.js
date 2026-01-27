@@ -11,14 +11,14 @@ const TRANSLATIONS = {
     "nav.projects": "Projects",
     "nav.contact": "Contact",
 
-    "hero.kicker": "Backend Engineering • Systems Design",
+    // Subtitle under the name
+    "hero.subtitle": "Backend Engineering • Systems Design",
     "hero.name": "Mohammed Alkhanov",
-    "hero.subtitle": "Go Backend Developer",
     "hero.text":
-      "I design and build reliable backend systems with a focus on performance, observability, and clean architecture.",
+      "Go backend developer focused on reliable systems with strong performance, observability, and clean architecture.",
     "hero.viewProjects": "View Projects",
-    "hero.cvEn": "Download CV (EN)",
-    "hero.cvRu": "Download CV (RU)",
+    "hero.cvEn": "Download CV",
+    "hero.cvRu": "Download CV", // text not shown in EN, safe fallback
 
     "about.title": "About",
     "about.subtitle":
@@ -56,18 +56,18 @@ const TRANSLATIONS = {
     "nav.projects": "Проекты",
     "nav.contact": "Контакты",
 
-    "hero.kicker": "Серверная разработка • Архитектура систем",
+    // Subtitle under the name (RU)
+    "hero.subtitle": "Серверная разработка • Архитектура систем",
     "hero.name": "Мохаммед Алханов",
-    "hero.subtitle": "Go Backend Разработчик",
     "hero.text":
-      "Проектирую и разрабатываю надежные backend‑системы с упором на производительность, наблюдаемость и чистую архитектуру.",
+      "Go‑backend разработчик, создающий надёжные системы с упором на производительность, наблюдаемость и чистую архитектуру.",
     "hero.viewProjects": "Проекты",
-    "hero.cvEn": "Скачать резюме (EN)",
-    "hero.cvRu": "Скачать резюме (RU)",
+    "hero.cvEn": "Download CV", // not shown in RU
+    "hero.cvRu": "Скачать резюме",
 
     "about.title": "Обо мне",
     "about.subtitle":
-      "Фокус на надежных, поддерживаемых и наблюдаемых Go‑сервисах.",
+      "Фокус на надёжных, поддерживаемых и наблюдаемых Go‑сервисах.",
     "about.paragraph1":
       "Специализируюсь на создании backend‑систем, где важны корректность, пропускная способность и наблюдаемость. От торговых движков до API‑шлюзов — для меня важны предсказуемое поведение и аккуратный код.",
     "about.paragraph2":
@@ -75,7 +75,7 @@ const TRANSLATIONS = {
 
     "projects.title": "Проекты",
     "projects.subtitle":
-      "Выбранные backend‑проекты, демонстрирующие производительность, надежность и понятную архитектуру.",
+      "Выбранные backend‑проекты, демонстрирующие производительность, надёжность и понятную архитектуру.",
     "projects.p1.title": "Backend для криптобиржи",
     "projects.p1.role": "Matching‑движок и стакан заявок",
     "projects.p1.description":
@@ -137,25 +137,43 @@ function applyTranslations(lang) {
   document.documentElement.lang = lang;
 }
 
+// show only one CV button depending on language
+function updateCvButtons(lang) {
+  const cvEn = document.getElementById("cv-en");
+  const cvRu = document.getElementById("cv-ru");
+  if (!cvEn || !cvRu) return;
+
+  if (lang === "ru") {
+    cvEn.style.display = "none";
+    cvRu.style.display = "inline-flex";
+  } else {
+    cvEn.style.display = "inline-flex";
+    cvRu.style.display = "none";
+  }
+}
+
 function initLanguageToggle(initialLang) {
   const buttons = document.querySelectorAll(".lang-toggle");
+  let currentLang = initialLang;
 
   buttons.forEach((btn) => {
     const lang = btn.getAttribute("data-lang");
-    btn.classList.toggle("lang-toggle--active", lang === initialLang);
+    btn.classList.toggle("lang-toggle--active", lang === currentLang);
 
     btn.addEventListener("click", () => {
       const selectedLang = btn.getAttribute("data-lang");
-      if (!selectedLang || selectedLang === initialLang) return;
+      if (!selectedLang || selectedLang === currentLang) return;
 
-      applyTranslations(selectedLang);
+      currentLang = selectedLang;
+      applyTranslations(currentLang);
       injectYear();
-      storeLanguage(selectedLang);
+      updateCvButtons(currentLang);
+      storeLanguage(currentLang);
 
       buttons.forEach((b) => {
         b.classList.toggle(
           "lang-toggle--active",
-          b.getAttribute("data-lang") === selectedLang
+          b.getAttribute("data-lang") === currentLang
         );
       });
     });
@@ -194,7 +212,6 @@ function initSmoothScroll() {
 }
 
 // ================================
-//
 // Section highlight in navbar
 // ================================
 
@@ -312,21 +329,18 @@ function initStarBackground() {
     for (let i = 0; i < stars.length; i++) {
       const star = stars[i];
 
-      const speedFactor = 35; // controls overall movement speed
+      const speedFactor = 35;
       star.x += star.vx * delta * speedFactor;
       star.y += star.vy * delta * speedFactor;
 
-      // wrap around edges
       if (star.x < -6) star.x = width + 6;
       if (star.x > width + 6) star.x = -6;
       if (star.y < -6) star.y = height + 6;
       if (star.y > height + 6) star.y = -6;
 
-      // subtle parallax based on layer depth
       const parallaxX = (star.layer - 1) * (width * 0.0006);
       const x = star.x + parallaxX;
 
-      // twinkling
       const twinkle =
         0.6 + 0.4 * Math.sin(t * 1.2 + star.twinkleOffset + star.layer);
       ctx.globalAlpha = star.alpha * twinkle;
@@ -374,6 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const initialLang = getInitialLanguage();
   applyTranslations(initialLang);
   injectYear();
+  updateCvButtons(initialLang);
   initLanguageToggle(initialLang);
   initSmoothScroll();
   initSectionHighlight();
