@@ -486,6 +486,7 @@ main,
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    margin-top: -8px;
 }
 
 .about__highlight {
@@ -729,6 +730,7 @@ main,
 
     .navbar__toggle {
         display: inline-flex;
+        margin-right: 12px; /* 8–16px по вкусу */
     }
 
     .navbar__right {
