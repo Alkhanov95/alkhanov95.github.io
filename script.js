@@ -1,5 +1,5 @@
 // Starfield background
-(function () {
+(function() {
     const canvas = document.getElementById("starfield");
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -58,7 +58,7 @@
                 star.y,
                 star.radius * 2.5
             );
-            gradient.addColorStop(0, `${STAR_COLOR}`);
+            gradient.addColorStop(0, STAR_COLOR);
             gradient.addColorStop(1, "rgba(184, 134, 11, 0)");
             ctx.fillStyle = gradient;
             ctx.arc(star.x, star.y, star.radius * 2.5, 0, Math.PI * 2);
@@ -81,7 +81,7 @@
 })();
 
 // Smooth scroll + active nav link
-(function () {
+(function() {
     const navLinks = document.querySelectorAll(".nav-link");
     const navbar = document.querySelector(".header");
     const sections = Array.from(
@@ -168,7 +168,7 @@
 })();
 
 // Language switcher
-(function () {
+(function() {
     const translations = {
         en: {
             "nav-name": "Mohammed\nAlkhanov",
@@ -181,8 +181,7 @@
 
             "hero-eyebrow": "Backend Go Developer",
             "hero-title": "Mohammed Alkhanov",
-            "hero-subtitle":
-                "I design and build reliable backend systems with Go, focusing on high-load, fault-tolerant architectures and clean, maintainable code.",
+            "hero-subtitle": "I design and build reliable backend systems with Go, focusing on high-load, fault-tolerant architectures and clean, maintainable code.",
             "btn-contact": "Contact",
             "btn-resume": "Download Resume",
             "hero-meta-role-label": "Role",
@@ -191,216 +190,150 @@
             "hero-meta-focus": "High-load, microservices, observability",
 
             "about-title": "About Me",
-            "about-subtitle":
-                "I build backend systems that stay fast, predictable, and observable under real-world load.",
-            "about-p1":
-                "I specialize in backend engineering with Go, focusing on robust APIs, distributed systems, and data-intensive workloads.",
-            "about-p2":
-                "My experience covers designing microservices, optimizing database access patterns, and implementing resilient communication between services with proper observability.",
-            "about-p3":
-                "I care about clean architecture, pragmatic testing, and clear operational visibility so teams can move fast without losing control in production.",
+            "about-subtitle": "I build backend systems that stay fast, predictable, and observable under real-world load.",
+            "about-p1": "I specialize in backend engineering with Go, focusing on robust APIs, distributed systems, and data-intensive workloads.",
+            "about-p2": "My experience covers designing microservices, optimizing database access patterns, and implementing resilient communication between services with proper observability.",
+            "about-p3": "I care about clean architecture, pragmatic testing, and clear operational visibility so teams can move fast without losing control in production.",
             "about-highlight-1-label": "Core stack",
-            "about-highlight-1-value":
-                "Go, PostgreSQL, Redis, Kafka",
+            "about-highlight-1-value": "Go, PostgreSQL, Redis, Kafka",
             "about-highlight-2-label": "Domains",
-            "about-highlight-2-value":
-                "APIs, highload, microservices",
+            "about-highlight-2-value": "APIs, highload, microservices",
             "about-highlight-3-label": "Mindset",
-            "about-highlight-3-value":
-                "Reliability, clarity, ownership",
+            "about-highlight-3-value": "Reliability, clarity, ownership",
 
             "skills-title": "Skills",
-            "skills-subtitle":
-                "A focused toolkit for designing, building, and operating production backends.",
+            "skills-subtitle": "A focused toolkit for designing, building, and operating production backends.",
             "skills-backend-title": "Backend",
-            "skills-backend-body":
-                "Go, SQL, Linux, Shell, Backend, REST, gRPC, Concurrency, Highload, Caching, Retries, Idempotency",
+            "skills-backend-body": "Go, SQL, Linux, Shell, Backend, REST, gRPC, Concurrency, Highload, Caching, Retries, Idempotency",
             "skills-databases-title": "Databases",
-            "skills-databases-body":
-                "PostgreSQL, Redis, ClickHouse, Indexes, Transactions",
+            "skills-databases-body": "PostgreSQL, Redis, ClickHouse, Indexes, Transactions",
             "skills-messaging-title": "Messaging",
-            "skills-messaging-body":
-                "Kafka, Async, Consumers, DLQ",
+            "skills-messaging-body": "Kafka, Async, Consumers, DLQ",
             "skills-devops-title": "DevOps",
-            "skills-devops-body":
-                "Docker, Kubernetes, CI/CD",
+            "skills-devops-body": "Docker, Kubernetes, CI/CD",
             "skills-observability-title": "Observability",
-            "skills-observability-body":
-                "Prometheus, Grafana, OpenTelemetry, Jaeger",
+            "skills-observability-body": "Prometheus, Grafana, OpenTelemetry, Jaeger",
             "skills-architecture-title": "Architecture",
-            "skills-architecture-body":
-                "Microservices, API Design, Scaling, Fault tolerance, Clean Architecture",
+            "skills-architecture-body": "Microservices, API Design, Scaling, Fault tolerance, Clean Architecture",
             "skills-testing-title": "Testing",
-            "skills-testing-body":
-                "Unit tests, Integration tests, Mocks",
+            "skills-testing-body": "Unit tests, Integration tests, Mocks",
             "skills-tools-title": "Tools",
-            "skills-tools-body":
-                "Git, GitLab, Swagger, Postman, curl",
+            "skills-tools-body": "Git, GitLab, Swagger, Postman, curl",
 
             "projects-title": "Projects",
-            "projects-subtitle":
-                "Selected backend projects focused on reliability, throughput, and clear observability.",
+            "projects-subtitle": "Selected backend projects focused on reliability, throughput, and clear observability.",
             "project-1-title": "Crypto Exchange Backend",
             "project-1-tag": "High-load trading engine",
-            "project-1-body":
-                "Matching engine for cryptocurrency trading with real-time order book management, trade execution, and high-throughput processing capabilities.",
-            "project-1-stack":
-                "Stack: Go, PostgreSQL, Redis, Kafka",
+            "project-1-body": "Matching engine for cryptocurrency trading with real-time order book management, trade execution, and high-throughput processing capabilities.",
+            "project-1-stack": "Stack: Go, PostgreSQL, Redis, Kafka",
             "project-1-github": "View on GitHub",
             "project-2-title": "Blog API Gateway",
             "project-2-tag": "Microservices gateway",
-            "project-2-body":
-                "API gateway for microservices architecture with rate limiting, authentication, request routing, and monitoring.",
-            "project-2-stack":
-                "Stack: Go, Redis, Docker, Prometheus",
+            "project-2-body": "API gateway for microservices architecture with rate limiting, authentication, request routing, and monitoring.",
+            "project-2-stack": "Stack: Go, Redis, Docker, Prometheus",
             "project-2-github": "View on GitHub",
 
             "certificates-title": "Certificates",
-            "certificates-subtitle":
-                "Formal recognition of skills in backend engineering and distributed systems.",
+            "certificates-subtitle": "Formal recognition of skills in backend engineering and distributed systems.",
             "cert-1-title": "Go Backend Development",
             "cert-1-tag": "Go / Backend",
-            "cert-1-body":
-                "Certificate confirming strong understanding of Go, concurrency patterns, and production-ready backend development.",
+            "cert-1-body": "Certificate confirming strong understanding of Go, concurrency patterns, and production-ready backend development.",
             "cert-2-title": "Distributed Systems & Microservices",
             "cert-2-tag": "Architecture",
-            "cert-2-body":
-                "Training focused on microservices, message-driven communication, resiliency patterns, and high-load system design.",
+            "cert-2-body": "Training focused on microservices, message-driven communication, resiliency patterns, and high-load system design.",
 
             "contact-title": "Contacts",
-            "contact-subtitle":
-                "Reach out for backend roles, consulting, or collaborations.",
+            "contact-subtitle": "Reach out for backend roles, consulting, or collaborations.",
             "contact-email-label": "Email",
             "contact-github-label": "GitHub",
             "contact-linkedin-label": "LinkedIn",
             "contact-telegram-label": "Telegram",
 
-            "footer-text":
-                "© 2026 Mohammed Alkhanov. Backend Go Developer."
+            "footer-text": "© 2026 Mohammed Alkhanov. Backend Go Developer."
         },
-        
+
         ru: {
-    "nav-name": "Мохаммед\nАлханов",
-    "nav-hero": "Главная",
-    "nav-about": "Обо мне",
-    "nav-skills": "Навыки",
-    "nav-projects": "Проекты",
-    "nav-certificates": "Сертификаты",
-    "nav-contact": "Контакты",
+            "nav-name": "Мохаммед\nАлханов",
+            "nav-hero": "Главная",
+            "nav-about": "Обо мне",
+            "nav-skills": "Навыки",
+            "nav-projects": "Проекты",
+            "nav-certificates": "Сертификаты",
+            "nav-contact": "Контакты",
 
-    "hero-eyebrow": "Backend Go разработчик",
-    "hero-title": "Мохаммед Алханов",
-    "hero-subtitle":
-        "Проектирую и разрабатываю надёжные backend-системы на Go для высоких нагрузок, отказоустойчивой архитектуры и чистого, поддерживаемого кода.",
-    "btn-contact": "Связаться",
-    "btn-resume": "Скачать резюме",
+            "hero-eyebrow": "Backend Go разработчик",
+            "hero-title": "Мохаммед Алханов",
+            "hero-subtitle": "Проектирую и разрабатываю надёжные backend-системы на Go для высоких нагрузок, отказоустойчивой архитектуры и чистого, поддерживаемого кода.",
+            "btn-contact": "Связаться",
+            "btn-resume": "Скачать резюме",
+            "hero-meta-role-label": "Роль",
+            "hero-meta-role": "Backend инженер (Go)",
+            "hero-meta-focus-label": "Фокус",
+            "hero-meta-focus": "Высокие нагрузки • микросервисы • наблюдаемость",
 
-    "hero-meta-role-label": "Роль",
-    "hero-meta-role": "Backend инженер (Go)",
-    "hero-meta-focus-label": "Фокус",
-    "hero-meta-focus": "Высокие нагрузки • микросервисы • наблюдаемость",
+            "about-title": "Обо мне",
+            "about-subtitle": "Разрабатываю backend-системы, которые остаются быстрыми, предсказуемыми и наблюдаемыми под реальной нагрузкой.",
+            "about-p1": "Специализируюсь на backend-разработке на Go: надёжные API, распределённые системы и работа с большими объёмами данных.",
+            "about-p2": "Проектирую микросервисы, оптимизирую базы данных, внедряю кэширование и асинхронную обработку, обеспечиваю прозрачную наблюдаемость через метрики и трейсинг.",
+            "about-p3": "Следую принципам чистой архитектуры, тестируемости и отказоустойчивости — системы должны стабильно работать в продакшене, а не только на демо.",
+            "about-highlight-1-label": "Основной стек",
+            "about-highlight-1-value": "Go, PostgreSQL, Redis, Kafka",
+            "about-highlight-2-label": "Области",
+            "about-highlight-2-value": "API, высокие нагрузки, микросервисы",
+            "about-highlight-3-label": "Подход",
+            "about-highlight-3-value": "Надёжность, простота, ответственность",
 
-    "about-title": "Обо мне",
-    "about-subtitle":
-        "Разрабатываю backend-системы, которые остаются быстрыми, предсказуемыми и наблюдаемыми под реальной нагрузкой.",
+            "skills-title": "Навыки",
+            "skills-subtitle": "Инструменты и технологии для проектирования, разработки и эксплуатации продакшн-backend-сервисов.",
+            "skills-backend-title": "Backend",
+            "skills-backend-body": "Go, SQL, Linux, Shell, REST, gRPC, конкурентность, highload, кэширование, retries, idempotency",
+            "skills-databases-title": "Базы данных",
+            "skills-databases-body": "PostgreSQL, Redis, ClickHouse, индексы, транзакции",
+            "skills-messaging-title": "Очереди и messaging",
+            "skills-messaging-body": "Kafka, асинхронная обработка, consumers, DLQ",
+            "skills-devops-title": "DevOps",
+            "skills-devops-body": "Docker, Kubernetes, CI/CD",
+            "skills-observability-title": "Наблюдаемость",
+            "skills-observability-body": "Prometheus, Grafana, OpenTelemetry, Jaeger",
+            "skills-architecture-title": "Архитектура",
+            "skills-architecture-body": "Микросервисы, API-дизайн, масштабирование, отказоустойчивость, Clean Architecture",
+            "skills-testing-title": "Тестирование",
+            "skills-testing-body": "Unit-тесты, интеграционные тесты, моки",
+            "skills-tools-title": "Инструменты",
+            "skills-tools-body": "Git, GitLab, Swagger, Postman, curl",
 
-    "about-p1":
-        "Специализируюсь на backend-разработке на Go: надёжные API, распределённые системы и работа с большими объёмами данных.",
-    "about-p2":
-        "Проектирую микросервисы, оптимизирую базы данных, внедряю кэширование и асинхронную обработку, обеспечиваю прозрачную наблюдаемость через метрики и трейсинг.",
-    "about-p3":
-        "Следую принципам чистой архитектуры, тестируемости и отказоустойчивости — системы должны стабильно работать в продакшене, а не только на демо.",
+            "projects-title": "Проекты",
+            "projects-subtitle": "Backend-проекты с упором на надёжность, производительность и прозрачную эксплуатацию.",
+            "project-1-title": "Backend криптобиржи",
+            "project-1-tag": "Высоконагруженный движок",
+            "project-1-body": "Мэтчинг-движок для торговли криптовалютой: ордербук в реальном времени, исполнение сделок и обработка большого потока заявок с низкой задержкой.",
+            "project-1-stack": "Стек: Go, PostgreSQL, Redis, Kafka",
+            "project-1-github": "Открыть GitHub",
+            "project-2-title": "API-шлюз для микросервисов",
+            "project-2-tag": "Gateway",
+            "project-2-body": "API-gateway с маршрутизацией запросов, аутентификацией, rate limiting и мониторингом для микросервисной архитектуры.",
+            "project-2-stack": "Стек: Go, Redis, Docker, Prometheus",
+            "project-2-github": "Открыть GitHub",
 
-    "about-highlight-1-label": "Основной стек",
-    "about-highlight-1-value": "Go, PostgreSQL, Redis, Kafka",
+            "certificates-title": "Сертификаты",
+            "certificates-subtitle": "Подтверждение знаний в backend-разработке и распределённых системах.",
+            "cert-1-title": "Go Backend Development",
+            "cert-1-tag": "Go / Backend",
+            "cert-1-body": "Подтверждение знаний Go, конкурентных паттернов и разработки production-backend-сервисов.",
+            "cert-2-title": "Distributed Systems & Microservices",
+            "cert-2-tag": "Архитектура",
+            "cert-2-body": "Обучение по микросервисной архитектуре, обмену сообщениями, паттернам отказоустойчивости и highload-системам.",
 
-    "about-highlight-2-label": "Области",
-    "about-highlight-2-value": "API, высокие нагрузки, микросервисы",
+            "contact-title": "Контакты",
+            "contact-subtitle": "Открыт к предложениям по backend-разработке, консалтингу и сотрудничеству.",
+            "contact-email-label": "Email",
+            "contact-github-label": "GitHub",
+            "contact-linkedin-label": "LinkedIn",
+            "contact-telegram-label": "Telegram",
 
-    "about-highlight-3-label": "Подход",
-    "about-highlight-3-value": "Надёжность, простота, ответственность",
-
-    "skills-title": "Навыки",
-    "skills-subtitle":
-        "Инструменты и технологии для проектирования, разработки и эксплуатации продакшн-backend-сервисов.",
-
-    "skills-backend-title": "Backend",
-    "skills-backend-body":
-        "Go, SQL, Linux, Shell, REST, gRPC, конкурентность, highload, кэширование, retries, idempotency",
-
-    "skills-databases-title": "Базы данных",
-    "skills-databases-body":
-        "PostgreSQL, Redis, ClickHouse, индексы, транзакции",
-
-    "skills-messaging-title": "Очереди и messaging",
-    "skills-messaging-body":
-        "Kafka, асинхронная обработка, consumers, DLQ",
-
-    "skills-devops-title": "DevOps",
-    "skills-devops-body":
-        "Docker, Kubernetes, CI/CD",
-
-    "skills-observability-title": "Наблюдаемость",
-    "skills-observability-body":
-        "Prometheus, Grafana, OpenTelemetry, Jaeger",
-
-    "skills-architecture-title": "Архитектура",
-    "skills-architecture-body":
-        "Микросервисы, API-дизайн, масштабирование, отказоустойчивость, Clean Architecture",
-
-    "skills-testing-title": "Тестирование",
-    "skills-testing-body":
-        "Unit-тесты, интеграционные тесты, моки",
-
-    "skills-tools-title": "Инструменты",
-    "skills-tools-body":
-        "Git, GitLab, Swagger, Postman, curl",
-
-    "projects-title": "Проекты",
-    "projects-subtitle":
-        "Backend-проекты с упором на надёжность, производительность и прозрачную эксплуатацию.",
-
-    "project-1-title": "Backend криптобиржи",
-    "project-1-tag": "Высоконагруженный движок",
-    "project-1-body":
-        "Мэтчинг-движок для торговли криптовалютой: ордербук в реальном времени, исполнение сделок и обработка большого потока заявок с низкой задержкой.",
-    "project-1-stack": "Стек: Go, PostgreSQL, Redis, Kafka",
-    "project-1-github": "Открыть GitHub",
-
-    "project-2-title": "API-шлюз для микросервисов",
-    "project-2-tag": "Gateway",
-    "project-2-body":
-        "API-gateway с маршрутизацией запросов, аутентификацией, rate limiting и мониторингом для микросервисной архитектуры.",
-    "project-2-stack": "Стек: Go, Redis, Docker, Prometheus",
-    "project-2-github": "Открыть GitHub",
-
-    "certificates-title": "Сертификаты",
-    "certificates-subtitle":
-        "Подтверждение знаний в backend-разработке и распределённых системах.",
-
-    "cert-1-title": "Go Backend Development",
-    "cert-1-tag": "Go / Backend",
-    "cert-1-body":
-        "Подтверждение знаний Go, конкурентных паттернов и разработки production-backend-сервисов.",
-
-    "cert-2-title": "Distributed Systems & Microservices",
-    "cert-2-tag": "Архитектура",
-    "cert-2-body":
-        "Обучение по микросервисной архитектуре, обмену сообщениями, паттернам отказоустойчивости и highload-системам.",
-
-    "contact-title": "Контакты",
-    "contact-subtitle":
-        "Открыт к предложениям по backend-разработке, консалтингу и сотрудничеству.",
-
-    "contact-email-label": "Email",
-    "contact-github-label": "GitHub",
-    "contact-linkedin-label": "LinkedIn",
-    "contact-telegram-label": "Telegram",
-
-    "footer-text":
-        "© 2026 Мохаммед Алханов. Backend Go разработчик."
-},
-}; 
+            "footer-text": "© 2026 Мохаммед Алханов. Backend Go разработчик."
+        }
+    };
 
     let currentLang = "en";
 
