@@ -700,8 +700,7 @@ main,
 
 @media (max-width: 768px) {
     .navbar {
-        height: 64px;
-        align-items: center;
+        position: relative;
     }
 
     .navbar__links {
@@ -730,8 +729,11 @@ main,
     }
 
     .navbar__toggle {
-        display: inline-flex;
-        margin-right: 12px; /* 8–16px по вкусу */
+        position: absolute;
+        right: 16px;   /* отступ от края */
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0;
     }
 
     .navbar__right {
