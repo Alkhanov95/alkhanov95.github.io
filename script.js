@@ -194,6 +194,7 @@ function initSmoothScroll() {
 }
 
 // ================================
+//
 // Section highlight in navbar
 // ================================
 
@@ -272,7 +273,7 @@ function initStarBackground() {
   canvas.height = height;
 
   const baseCount = (width * height) / 26000;
-  const STAR_COUNT = Math.min(120, Math.max(60, Math.floor(baseCount)));
+  const STAR_COUNT = Math.min(140, Math.max(70, Math.floor(baseCount)));
 
   const stars = [];
   const layers = 3;
@@ -280,12 +281,18 @@ function initStarBackground() {
   for (let i = 0; i < STAR_COUNT; i++) {
     const layer = i % layers; // 0,1,2
     const depth = 1 + layer; // 1,2,3
+
+    const angle = Math.random() * Math.PI * 2;
+    const speed = (Math.random() * 0.04 + 0.015) / depth;
+
     stars.push({
       x: Math.random() * width,
       y: Math.random() * height,
       radius: Math.random() * 0.9 + 0.3,
-      speedY: (Math.random() * 0.04 + 0.02) / depth,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
       alpha: Math.random() * 0.25 + 0.06,
+      twinkleOffset: Math.random() * Math.PI * 2,
       layer
     });
   }
@@ -297,28 +304,38 @@ function initStarBackground() {
     lastTime = now;
 
     ctx.clearRect(0, 0, width, height);
-
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, width, height);
 
-    stars.forEach((star) => {
-      const speedFactor = 0.06;
-      star.y += star.speedY * delta * speedFactor;
+    const t = now * 0.001;
 
-      if (star.y > height + 6) {
-        star.y = -6;
-        star.x = Math.random() * width;
-      }
+    for (let i = 0; i < stars.length; i++) {
+      const star = stars[i];
 
-      const parallaxX = (star.layer - 1) * 0.15;
-      const x = star.x + parallaxX * (width / 200);
+      const speedFactor = 35; // controls overall movement speed
+      star.x += star.vx * delta * speedFactor;
+      star.y += star.vy * delta * speedFactor;
 
-      ctx.globalAlpha = star.alpha;
+      // wrap around edges
+      if (star.x < -6) star.x = width + 6;
+      if (star.x > width + 6) star.x = -6;
+      if (star.y < -6) star.y = height + 6;
+      if (star.y > height + 6) star.y = -6;
+
+      // subtle parallax based on layer depth
+      const parallaxX = (star.layer - 1) * (width * 0.0006);
+      const x = star.x + parallaxX;
+
+      // twinkling
+      const twinkle =
+        0.6 + 0.4 * Math.sin(t * 1.2 + star.twinkleOffset + star.layer);
+      ctx.globalAlpha = star.alpha * twinkle;
+
       ctx.beginPath();
       ctx.arc(x, star.y, star.radius, 0, Math.PI * 2);
       ctx.fillStyle = "#c9a24d";
       ctx.fill();
-    });
+    }
 
     ctx.globalAlpha = 1;
     requestAnimationFrame(draw);
