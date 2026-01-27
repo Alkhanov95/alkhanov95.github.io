@@ -29,7 +29,7 @@ html {
 
 body {
     margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-family: 'Quantico', system-ui, sans-serif;
     background: radial-gradient(circle at 0% 0%, #1a0f00 0, transparent 55%), radial-gradient(circle at 100% 100%, #221200 0, transparent 55%), linear-gradient(145deg, var(--bg-gradient-start), var(--bg-gradient-end));
     color: var(--gold);
     min-height: 100vh;
@@ -40,6 +40,13 @@ body {
     overflow-x: hidden;
 }
 
+
+main,
+.footer {
+    position: relative;
+    z-index: 1;
+}
+
 /* Canvas background */
 
 #starfield {
@@ -47,8 +54,9 @@ body {
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: 0;
     display: block;
+    pointer-events: none;
 }
 
 /* Layout helpers */
@@ -117,6 +125,7 @@ body {
     justify-content: center;
     font-size: 0.95rem;
     letter-spacing: 0.06em;
+    font-family: 'Orbitron', system-ui, sans-serif;
     background: radial-gradient(circle at 30% 0%, rgba(255, 215, 0, 0.2), transparent 65%), radial-gradient(circle at 80% 120%, rgba(255, 215, 0, 0.06), transparent 65%), rgba(8, 8, 16, 0.8);
     box-shadow: 0 0 25px rgba(184, 134, 11, 0.6);
 }
@@ -126,6 +135,7 @@ body {
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--gold-muted);
+    font-family: 'Orbitron', system-ui, sans-serif;
 }
 
 .navbar__right {
