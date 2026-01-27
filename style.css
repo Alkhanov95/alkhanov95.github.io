@@ -700,10 +700,6 @@ main,
 }
 
 @media (max-width: 768px) {
-    .navbar {
-        position: relative;
-    }
-
     .navbar__links {
         position: absolute;
         inset-inline: 1.25rem;
@@ -729,12 +725,9 @@ main,
         transform: scaleY(1);
     }
 
-      .navbar__toggle {
-        display: inline-flex;   /* ← ВОТ ЭТО КЛЮЧ */
-        position: absolute;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
+    .navbar__toggle {
+        display: inline-flex;
+        margin-right: 12px; /* 👈 единственное что реально нужно */
     }
 
     .navbar__right {
