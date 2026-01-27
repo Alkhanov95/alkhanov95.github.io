@@ -24,9 +24,9 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    background: #000;
+    overscroll-behavior: smooth;
 }
-
 body {
     margin: 0;
     font-family: 'Quantico', system-ui, sans-serif;
@@ -38,6 +38,7 @@ body {
     text-rendering: optimizeLegibility;
     position: relative;
     overflow-x: hidden;
+    overscroll-behavior: none;
 }
 
 
