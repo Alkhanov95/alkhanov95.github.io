@@ -279,7 +279,7 @@
                 "© 2026 Mohammed Alkhanov. Backend Go Developer."
         },
         ru: {
-            "nav-name": "Мохаммед Алханов",
+            "hero-title": "Мохаммед\nАлханов",
             "nav-hero": "Главная",
             "nav-about": "Обо мне",
             "nav-skills": "Навыки",
@@ -288,7 +288,7 @@
             "nav-contact": "Контакты",
 
             "hero-eyebrow": "Backend Go разработчик",
-            "hero-title": "Мохаммед\nАлханов",
+            "hero-title": "Мохаммед Алханов",
             "hero-subtitle":
                 "Проектирую и разрабатываю надежные backend‑системы на Go с фокусом на высокую нагрузку, отказоустойчивость и чистую архитектуру.",
             "btn-contact": "Связаться",
