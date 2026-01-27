@@ -1,11 +1,9 @@
+// script.js
+
 // ================================
-// Configuration
+// Translations
 // ================================
 
-/**
- * Language dictionary.
- * All dynamic texts are kept here to avoid hardcoding.
- */
 const TRANSLATIONS = {
   en: {
     "nav.name": "Mohammed Alkhanov",
@@ -101,39 +99,31 @@ const TRANSLATIONS = {
 const STORAGE_KEY_LANG = "portfolio_lang";
 
 // ================================
-// Helpers
+// Language helpers
 // ================================
 
-/**
- * Get persisted language or fallback to English.
- */
 function getInitialLanguage() {
-  const stored = window.localStorage.getItem(STORAGE_KEY_LANG);
-  if (stored && (stored === "en" || stored === "ru")) {
-    return stored;
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY_LANG);
+    if (stored && (stored === "en" || stored === "ru")) {
+      return stored;
+    }
+  } catch (_) {
+    // ignore
   }
+
   const browserLang = navigator.language || navigator.userLanguage || "en";
   return browserLang.toLowerCase().startsWith("ru") ? "ru" : "en";
 }
 
-/**
- * Persist language selection.
- */
 function storeLanguage(lang) {
   try {
     window.localStorage.setItem(STORAGE_KEY_LANG, lang);
   } catch (_) {
-    // Ignore storage errors
+    // ignore
   }
 }
 
-// ================================
-// Language Switching
-// ================================
-
-/**
- * Apply translations to all elements with [data-i18n] attributes.
- */
 function applyTranslations(lang) {
   const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
   const nodes = document.querySelectorAll("[data-i18n]");
@@ -141,65 +131,47 @@ function applyTranslations(lang) {
     const key = node.getAttribute("data-i18n");
     const value = dict[key];
     if (!value) return;
-
-    // For simple use we set innerHTML to support the year span in footer.
     node.innerHTML = value;
   });
 
-  // Update lang attribute on <html> for accessibility
   document.documentElement.lang = lang;
 }
 
-/**
- * Set up language toggle buttons.
- */
 function initLanguageToggle(initialLang) {
   const buttons = document.querySelectorAll(".lang-toggle");
+
   buttons.forEach((btn) => {
     const lang = btn.getAttribute("data-lang");
-    if (lang === initialLang) {
-      btn.classList.add("lang-toggle--active");
-    } else {
-      btn.classList.remove("lang-toggle--active");
-    }
+    btn.classList.toggle("lang-toggle--active", lang === initialLang);
 
     btn.addEventListener("click", () => {
-      if (btn.classList.contains("lang-toggle--active")) return;
       const selectedLang = btn.getAttribute("data-lang");
-      if (!selectedLang) return;
+      if (!selectedLang || selectedLang === initialLang) return;
 
       applyTranslations(selectedLang);
+      injectYear();
       storeLanguage(selectedLang);
 
-      buttons.forEach((b) =>
+      buttons.forEach((b) => {
         b.classList.toggle(
           "lang-toggle--active",
           b.getAttribute("data-lang") === selectedLang
-        )
-      );
-
-      // Ensure the footer year element is not overwritten
-      injectYear();
+        );
+      });
     });
   });
 }
 
 // ================================
-// Smooth Scrolling
+// Smooth scrolling
 // ================================
 
-/**
- * Scroll smoothly to target element.
- */
 function smoothScrollTo(targetSelector) {
   const target = document.querySelector(targetSelector);
   if (!target) return;
   target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/**
- * Attach smooth scroll behavior to elements with [data-scroll-target].
- */
 function initSmoothScroll() {
   document.querySelectorAll("[data-scroll-target]").forEach((el) => {
     el.addEventListener("click", (event) => {
@@ -210,7 +182,6 @@ function initSmoothScroll() {
     });
   });
 
-  // Also adjust nav anchor clicks if any default anchors used
   document.querySelectorAll(".navbar__link").forEach((link) => {
     link.addEventListener("click", (event) => {
       const href = link.getAttribute("href");
@@ -223,24 +194,17 @@ function initSmoothScroll() {
 }
 
 // ================================
-// Section Highlight in Navbar
+// Section highlight in navbar
 // ================================
 
-/**
- * Observe sections and add active state to corresponding nav link.
- */
 function initSectionHighlight() {
   const sections = document.querySelectorAll("[data-section]");
   const navLinks = document.querySelectorAll(".navbar__link");
 
-  const sectionById = {};
-  sections.forEach((section) => {
-    sectionById[section.id] = section;
-  });
+  if (!sections.length || !navLinks.length) return;
 
   const observer = new IntersectionObserver(
     (entries) => {
-      // Pick the most visible section in viewport
       let bestEntry = null;
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
@@ -259,7 +223,7 @@ function initSectionHighlight() {
     },
     {
       root: null,
-      threshold: 0.4
+      threshold: 0.45
     }
   );
 
@@ -267,12 +231,9 @@ function initSectionHighlight() {
 }
 
 // ================================
-// Fade-in on Scroll
+// Fade-in on scroll
 // ================================
 
-/**
- * Fade in elements with .fade-target class when they appear.
- */
 function initFadeIn() {
   const targets = document.querySelectorAll(".fade-target");
   if (!targets.length) return;
@@ -295,12 +256,9 @@ function initFadeIn() {
 }
 
 // ================================
-// Star Background Animation
+// Star background animation
 // ================================
 
-/**
- * Lightweight star animation: small number of stars, slow drift.
- */
 function initStarBackground() {
   const canvas = document.getElementById("star-canvas");
   if (!canvas) return;
@@ -313,54 +271,61 @@ function initStarBackground() {
   canvas.width = width;
   canvas.height = height;
 
-  const STAR_COUNT = Math.min(80, Math.floor((width * height) / 30000)); // density-based
+  const baseCount = (width * height) / 26000;
+  const STAR_COUNT = Math.min(120, Math.max(60, Math.floor(baseCount)));
+
   const stars = [];
+  const layers = 3;
 
   for (let i = 0; i < STAR_COUNT; i++) {
+    const layer = i % layers; // 0,1,2
+    const depth = 1 + layer; // 1,2,3
     stars.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      radius: Math.random() * 0.7 + 0.3,
-      speedY: Math.random() * 0.08 + 0.02,
-      alpha: Math.random() * 0.3 + 0.05
+      radius: Math.random() * 0.9 + 0.3,
+      speedY: (Math.random() * 0.04 + 0.02) / depth,
+      alpha: Math.random() * 0.25 + 0.06,
+      layer
     });
   }
 
-  let lastTime = 0;
+  let lastTime = performance.now();
 
-  function draw(timestamp) {
-    const delta = timestamp - lastTime;
-    lastTime = timestamp;
+  function draw(now) {
+    const delta = now - lastTime;
+    lastTime = now;
 
     ctx.clearRect(0, 0, width, height);
 
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, width, height);
 
-    ctx.save();
-    ctx.fillStyle = "#c9a24d";
-
     stars.forEach((star) => {
-      star.y += star.speedY * (delta * 0.06); // small drift
-      if (star.y > height + 5) {
-        star.y = -5;
+      const speedFactor = 0.06;
+      star.y += star.speedY * delta * speedFactor;
+
+      if (star.y > height + 6) {
+        star.y = -6;
         star.x = Math.random() * width;
       }
 
+      const parallaxX = (star.layer - 1) * 0.15;
+      const x = star.x + parallaxX * (width / 200);
+
       ctx.globalAlpha = star.alpha;
       ctx.beginPath();
-      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.arc(x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fillStyle = "#c9a24d";
       ctx.fill();
     });
 
-    ctx.restore();
-
-    window.requestAnimationFrame(draw);
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
   }
 
-  window.requestAnimationFrame(draw);
+  requestAnimationFrame(draw);
 
-  // Handle resize with debouncing to reduce work
   let resizeTimeout;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
@@ -377,10 +342,6 @@ function initStarBackground() {
 // Misc
 // ================================
 
-/**
- * Insert current year into element with id="year".
- * Called after translation to restore the dynamic year.
- */
 function injectYear() {
   const yearEl = document.getElementById("year");
   if (yearEl) {
