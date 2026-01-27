@@ -1,383 +1,70 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-  <title>Mohammed Alkhanov – Go Backend Developer</title>
-  <meta
-    name="description"
-    content="Premium portfolio of Mohammed Alkhanov, Go backend developer specializing in high-performance systems, API gateways, and distributed architectures."
-  />
-  <meta name="theme-color" content="#000000" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio</title>
 
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
 </head>
+
 <body>
-  <canvas id="star-canvas" aria-hidden="true"></canvas>
+  <canvas id="star-canvas"></canvas>
 
-  <div class="page">
-    <!-- NAVBAR -->
-    <header class="navbar" id="navbar">
-      <div class="navbar__inner">
-        <a href="#hero" class="navbar__brand" aria-label="Go to top">
-          <div class="navbar__logo-wrap">
-            <span class="navbar__logo">MA</span>
-            <span class="navbar__glow"></span>
-          </div>
-          <span class="navbar__name" data-i18n="nav.name">Mohammed Alkhanov</span>
-        </a>
+  <header class="navbar">
+    <div class="navbar__inner">
 
-        <nav class="navbar__nav" aria-label="Main navigation">
-          <a
-            href="#about"
-            class="navbar__link"
-            data-nav-target="about"
-            data-i18n="nav.about"
-          >
-            About
-          </a>
-          <a
-            href="#projects"
-            class="navbar__link"
-            data-nav-target="projects"
-            data-i18n="nav.projects"
-          >
-            Projects
-          </a>
-          <a
-            href="#contact"
-            class="navbar__link"
-            data-nav-target="contact"
-            data-i18n="nav.contact"
-          >
-            Contact
-          </a>
-        </nav>
+      <span class="navbar__name" data-i18n="nav.name">Mohammed Alkhanov</span>
 
-        <div class="navbar__controls" aria-label="Language switch">
-          <button
-            class="lang-toggle lang-toggle--active"
-            data-lang="en"
-            type="button"
-            aria-label="Switch to English"
-          >
-            EN
-          </button>
-          <span class="lang-toggle__divider">/</span>
-          <button
-            class="lang-toggle"
-            data-lang="ru"
-            type="button"
-            aria-label="Переключить на русский"
-          >
-            RU
-          </button>
-        </div>
+      <nav class="navbar__nav">
+        <a data-scroll-target="#about" data-i18n="nav.about">About</a>
+        <a data-scroll-target="#projects" data-i18n="nav.projects">Projects</a>
+        <a data-scroll-target="#certificates" data-i18n="nav.certs">Certificates</a>
+        <a data-scroll-target="#contact" data-i18n="nav.contact">Contact</a>
+      </nav>
+
+      <div>
+        <button class="lang-toggle lang-toggle--active" data-lang="en">EN</button>
+        /
+        <button class="lang-toggle" data-lang="ru">RU</button>
       </div>
-      <div class="navbar__border"></div>
-    </header>
 
-    <main>
-      <!-- HERO -->
-      <section class="section section--hero" id="hero" data-section>
-        <div class="section__inner section__inner--hero">
-          <div class="hero">
-            <div class="hero__content fade-target">
-              <h1 class="hero__title" data-i18n="hero.name">Mohammed Alkhanov</h1>
-              <p class="hero__subtitle" data-i18n="hero.subtitle">
-                Backend Engineering • Systems Design
-              </p>
+    </div>
+  </header>
 
-              <p class="hero__text" data-i18n="hero.text">
-                Go backend developer focused on reliable systems with strong performance, observability, and clean architecture.
-              </p>
+  <main>
 
-              <div class="hero__actions">
-                <button
-                  class="btn btn--primary"
-                  type="button"
-                  data-scroll-target="#projects"
-                  data-i18n="hero.viewProjects"
-                >
-                  View Projects
-                </button>
-                <a
-                  id="cv-en"
-                  class="btn btn--ghost"
-                  href="cv/cv-en.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-i18n="hero.cvEn"
-                >
-                  Download CV
-                </a>
-                <a
-                  id="cv-ru"
-                  class="btn btn--ghost"
-                  href="cv/cv-ru.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-i18n="hero.cvRu"
-                >
-                  Скачать резюме
-                </a>
-              </div>
-            </div>
-          </div>
+    <section id="hero" class="section center">
+      <h1 data-i18n="hero.name">Mohammed Alkhanov</h1>
+      <p data-i18n="hero.subtitle"></p>
+      <p data-i18n="hero.text"></p>
+    </section>
 
-          <button
-            class="hero__scroll-indicator"
-            type="button"
-            aria-label="Scroll to about section"
-            data-scroll-target="#about"
-          >
-            <span class="hero__scroll-line"></span>
-            <span class="hero__scroll-text">Scroll</span>
-          </button>
-        </div>
-      </section>
+    <section id="about" class="section center">
+      <h2 data-i18n="about.title"></h2>
+      <p data-i18n="about.subtitle"></p>
+    </section>
 
-      <!-- ABOUT -->
-      <section class="section section--accent" id="about" data-section>
-        <div class="section__inner">
-          <header class="section__header fade-target">
-            <h2 class="section__title" data-i18n="about.title">About</h2>
-            <p class="section__subtitle" data-i18n="about.subtitle">
-              Focused on robust, maintainable, and observable Go services.
-            </p>
-          </header>
+    <section id="projects" class="section center">
+      <h2 data-i18n="projects.title"></h2>
+    </section>
 
-          <div class="section__body section__body--two-col">
-            <div class="section__col fade-target">
-              <p class="section__text" data-i18n="about.paragraph1">
-                I specialize in building backend systems where correctness, throughput, and observability are critical.
-                From trading engines to API gateways, I care about predictable behavior and clean, well-structured code.
-              </p>
-            </div>
-            <div class="section__col fade-target">
-              <p class="section__text" data-i18n="about.paragraph2">
-                My work typically involves Go, relational databases, caching layers, and message brokers.
-                I enjoy designing APIs, improving latency, and making systems easier to operate and evolve.
-              </p>
-              <div class="about-highlight">
-                <span class="about-highlight__dot"></span>
-                <span class="about-highlight__text">
-                  High‑signal, low‑noise backend design with a focus on operational simplicity.
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <section id="certificates" class="section center">
+      <h2 data-i18n="certs.title"></h2>
+      <p data-i18n="certs.subtitle"></p>
 
-      <!-- PROJECTS -->
-      <section class="section" id="projects" data-section>
-        <div class="section__inner">
-          <header class="section__header fade-target">
-            <h2 class="section__title" data-i18n="projects.title">Projects</h2>
-            <p class="section__subtitle" data-i18n="projects.subtitle">
-              Selected backend projects showcasing performance, reliability, and clear architecture.
-            </p>
-          </header>
-
-          <div class="projects">
-            <!-- Project 1 -->
-            <article class="project-card fade-target">
-              <div class="project-card__halo"></div>
-              <header class="project-card__header">
-                <div class="project-card__kicker" data-i18n="projects.p1.role">
-                  Matching Engine &amp; Order Book
-                </div>
-                <h3 class="project-card__title" data-i18n="projects.p1.title">
-                  Crypto Exchange Backend
-                </h3>
-              </header>
-
-              <p class="project-card__description" data-i18n="projects.p1.description">
-                Matching engine for cryptocurrency trading with real-time order book management,
-                trade execution, and high-throughput processing capabilities.
-              </p>
-
-              <div class="project-card__stack">
-                <span class="badge">Go</span>
-                <span class="badge">PostgreSQL</span>
-                <span class="badge">Redis</span>
-                <span class="badge">Kafka</span>
-              </div>
-
-              <div class="project-card__footer">
-                <div class="project-card__meta">
-                  <span class="project-card__meta-label">Focus</span>
-                  <span class="project-card__meta-value">Performance · Consistency</span>
-                </div>
-                <a
-                  href="#"
-                  class="btn btn--ghost btn--small"
-                  aria-label="View code for Crypto Exchange Backend"
-                  data-i18n="projects.viewCode"
-                >
-                  View Code
-                </a>
-              </div>
-            </article>
-
-            <!-- Project 2 -->
-            <article class="project-card fade-target">
-              <div class="project-card__halo project-card__halo--right"></div>
-              <header class="project-card__header">
-                <div class="project-card__kicker" data-i18n="projects.p2.role">
-                  Edge Routing &amp; Observability
-                </div>
-                <h3 class="project-card__title" data-i18n="projects.p2.title">
-                  Blog API Gateway
-                </h3>
-              </header>
-
-              <p class="project-card__description" data-i18n="projects.p2.description">
-                API gateway for microservices architecture with rate limiting, authentication,
-                request routing, and comprehensive monitoring.
-              </p>
-
-              <div class="project-card__stack">
-                <span class="badge">Go</span>
-                <span class="badge">Redis</span>
-                <span class="badge">Docker</span>
-                <span class="badge">Prometheus</span>
-              </div>
-
-              <div class="project-card__footer">
-                <div class="project-card__meta">
-                  <span class="project-card__meta-label">Focus</span>
-                  <span class="project-card__meta-value">Resilience · Insight</span>
-                </div>
-                <a
-                  href="#"
-                  class="btn btn--ghost btn--small"
-                  aria-label="View code for Blog API Gateway"
-                  data-i18n="projects.viewCode"
-                >
-                  View Code
-                </a>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- CONTACT -->
-      <section class="section section--accent" id="contact" data-section>
-        <div class="section__inner">
-          <header class="section__header fade-target">
-            <h2 class="section__title" data-i18n="contact.title">Contact</h2>
-            <p class="section__subtitle" data-i18n="contact.subtitle">
-              Feel free to reach out for collaborations, opportunities, or just to say hello!
-            </p>
-          </header>
-
-          <div class="contact">
-            <ul class="contact__list">
-              <li class="contact__item fade-target">
-                <a
-                  href="mailto:mohammedalkhanov95@gmail.com"
-                  class="contact__link"
-                  aria-label="Send email to Mohammed Alkhanov"
-                >
-                  <span class="contact__icon contact__icon--mail" aria-hidden="true">
-                    <span class="contact__icon-glow"></span>
-                    <span class="contact__icon-label">@</span>
-                  </span>
-                  <div class="contact__text">
-                    <span class="contact__label">Email</span>
-                    <span class="contact__value">mohammedalkhanov95@gmail.com</span>
-                  </div>
-                </a>
-              </li>
-
-              <li class="contact__item fade-target">
-                <a
-                  href="https://github.com/Alkhanov95"
-                  class="contact__link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Open GitHub profile Alkhanov95"
-                >
-                  <span class="contact__icon contact__icon--gh" aria-hidden="true">
-                    <span class="contact__icon-glow"></span>
-                    <span class="contact__icon-label">GH</span>
-                  </span>
-                  <div class="contact__text">
-                    <span class="contact__label">GitHub</span>
-                    <span class="contact__value">Alkhanov95</span>
-                  </div>
-                </a>
-              </li>
-
-              <li class="contact__item fade-target">
-                <a
-                  href="https://www.linkedin.com/in/mohammed-alkhanov"
-                  class="contact__link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Open LinkedIn profile of Mohammed Alkhanov"
-                >
-                  <span class="contact__icon contact__icon--in" aria-hidden="true">
-                    <span class="contact__icon-glow"></span>
-                    <span class="contact__icon-label">in</span>
-                  </span>
-                  <div class="contact__text">
-                    <span class="contact__label">LinkedIn</span>
-                    <span class="contact__value">Mohammed Alkhanov</span>
-                  </div>
-                </a>
-              </li>
-
-              <li class="contact__item fade-target">
-                <a
-                  href="https://t.me/carrerachka95"
-                  class="contact__link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Open Telegram profile @carrerachka95"
-                >
-                  <span class="contact__icon contact__icon--tg" aria-hidden="true">
-                    <span class="contact__icon-glow"></span>
-                    <span class="contact__icon-label">TG</span>
-                  </span>
-                  <div class="contact__text">
-                    <span class="contact__label">Telegram</span>
-                    <span class="contact__value">@carrerachka95</span>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="footer__divider"></div>
-      <div class="footer__inner">
-        <p class="footer__copy" data-i18n="footer.copy">
-          © <span id="year"></span> Mohammed Alkhanov. All rights reserved.
-        </p>
-        <button
-          class="footer__top"
-          type="button"
-          data-scroll-target="#hero"
-          aria-label="Back to top"
-          data-i18n="footer.backToTop"
-        >
-          Back to top
-        </button>
+      <div class="certs">
+        <a href="#">Go Backend Advanced</a>
+        <a href="#">System Design</a>
+        <a href="#">Docker & DevOps</a>
       </div>
-    </footer>
-  </div>
+    </section>
+
+    <section id="contact" class="section center">
+      <h2 data-i18n="contact.title"></h2>
+    </section>
+
+  </main>
 </body>
 </html>
