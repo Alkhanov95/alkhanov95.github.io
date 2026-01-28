@@ -358,6 +358,13 @@
             el.textContent = value;
         });
 
+    const resumeBtn = document.getElementById("btn-resume");
+    if (resumeBtn) {
+        resumeBtn.href = lang === "ru" ? "/cv_ru.pdf" : "/cv_en.pdf";
+    }
+
+    document.documentElement.lang = lang === "en" ? "en" : "ru";
+
         document.documentElement.lang = lang === "en" ? "en" : "ru";
 
         const enBtn = document.getElementById("lang-en");
