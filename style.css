@@ -502,7 +502,7 @@ main,
     background: var(--surface-strong);
     box-shadow: var(--shadow-soft);
     font-size: 0.95rem;
-    /* margin-top: -20px; ← УБРАТЬ ЭТУ СТРОКУ */
+    margin-bottom: 20px;
 }
 
 .about__text p {
