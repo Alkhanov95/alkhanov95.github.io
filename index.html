@@ -3,328 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohammed Alkhanov | Backend Go Developer</title>
-    <meta name="description" content="Personal portfolio of Mohammed Alkhanov, Backend Go Developer specializing in high-load systems, microservices, and distributed backends.">
-    <meta name="keywords" content="Go developer, Golang backend, microservices, highload, distributed systems, Kafka, PostgreSQL, Redis, Docker, Kubernetes">
-    <meta name="author" content="Mohammed Alkhanov">
-    <meta property="og:title" content="Mohammed Alkhanov | Backend Go Developer">
-    <meta property="og:description" content="Backend Go Developer focused on high-load systems, microservices, and clean architecture.">
-    <meta property="og:type" content="website">
-
-    <!-- Added Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Quantico:wght@400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="style.css">
+    <title>Alkhanov Mohammed - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <canvas id="starfield"></canvas>
+    <canvas id="particle-canvas"></canvas>
 
- <header class="header" id="top">
-        <nav class="navbar">
-            <div class="navbar__left">
-                <a href="#top" class="navbar__brand">
-                    <span class="navbar__logo">MA</span>
-                    <span id="nav-name" class="navbar__name">Mohammed Alkhanov</span>
-                </a>
-            </div>
-            <button class="navbar__toggle" aria-label="Toggle navigation">
-                <span class="navbar__toggle-line"></span>
-                <span class="navbar__toggle-line"></span>
-            </button>
-            <div class="navbar__right">
-                <ul class="navbar__links">
-                    <li><a href="#hero" data-nav="hero" class="nav-link active" id="nav-hero">Home</a></li>
-                    <li><a href="#about" data-nav="about" class="nav-link" id="nav-about">About</a></li>
-                    <li><a href="#skills" data-nav="skills" class="nav-link" id="nav-skills">Skills</a></li>
-                    <li><a href="#projects" data-nav="projects" class="nav-link" id="nav-projects">Projects</a></li>
-                    <li><a href="#certificates" data-nav="certificates" class="nav-link" id="nav-certificates">Certificates</a></li>
-                    <li><a href="#contact" data-nav="contact" class="nav-link" id="nav-contact">Contact</a></li>
-                </ul>
-                <div class="navbar__controls">
-                    <button class="lang-switch" id="lang-en" data-lang="en">EN</button>
-                    <button class="lang-switch lang-switch--inactive" id="lang-ru" data-lang="ru">RU</button>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <!-- Hero -->
-        <section class="section hero" id="hero">
-            <div class="container hero__content">
-                <div class="hero__text">
-                    <p class="hero__eyebrow" id="hero-eyebrow">Backend Go Developer</p>
-                    <h1 class="hero__title" id="hero-title">Mohammed Alkhanov</h1>
-                    <p class="hero__subtitle" id="hero-subtitle">
-                       High-load Go backend engineer. Distributed systems. Built for reliability.
-                    </p>
-                    <div class="hero__actions">
-                        <a href="https://t.me/carrerachka95" class="btn btn--primary" id="btn-contact">Telegram</a>
-                        <a href="cv_en.pdf" class="btn btn--ghost" id="btn-resume" download>Resume</a>
-                    </div>
-                </div>
-                <div class="hero__meta">
-                    <div class="hero__meta-item">
-                        <span class="hero__meta-label" id="hero-meta-role-label">Role</span>
-                        <span class="hero__meta-value" id="hero-meta-role">Backend Engineer (Go)</span>
-                    </div>
-                    <div class="hero__meta-item">
-                        <span class="hero__meta-label" id="hero-meta-focus-label">Focus</span>
-                        <span class="hero__meta-value" id="hero-meta-focus">Performance. Reliability. Scale.</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About -->
-        <section class="section" id="about">
-            <div class="container">
-                <header class="section__header">
-                    <h2 class="section__title" id="about-title">About Me</h2>
-                    <p class="section__subtitle" id="about-subtitle">
-                        Designing distributed systems with predictable performance and production reliability.
-                    </p>
-                </header>
-<div class="about__text">
-    <p id="about-p1">
-        I design and operate Go backends that handle real traffic — high load, low latency, and strict reliability requirements.
-    </p>
-    <p id="about-p2">
-        Microservices, databases, caching, and asynchronous processing, with full observability through metrics and tracing.
-    </p>
-    <p id="about-p3">
-        Clean architecture and fault tolerance by default — systems built to survive production, not demos.
-    </p>
-</div>
-
-<div class="about__highlights">
-    <div class="about__highlight">
-        <span class="about__highlight-label" id="about-highlight-1-label">Core stack</span>
-        <span class="about__highlight-value" id="about-highlight-1-value">Go, PostgreSQL, Redis, Kafka</span>
-    </div>
-    <div class="about__highlight">
-        <span class="about__highlight-label" id="about-highlight-2-label">Domains</span>
-        <span class="about__highlight-value" id="about-highlight-2-value">APIs, highload, microservices</span>
-    </div>
-    <div class="about__highlight">
-        <span class="about__highlight-label" id="about-highlight-3-label">Mindset</span>
-        <span class="about__highlight-value" id="about-highlight-3-value">Reliability, clarity, ownership</span>
-    </div>
-</div>
-        </section>
-
-        <!-- Skills -->
-        <section class="section" id="skills">
-            <div class="container">
-                <header class="section__header">
-                    <h2 class="section__title" id="skills-title">Skills</h2>
-                    <p class="section__subtitle" id="skills-subtitle">
-                        Core technologies I use to design, build, and operate production systems.
-                    </p>
-                </header>
-
-                <div class="skills-grid">
-                    <article class="card card--skill">
-                        <h3 class="card__title" id="skills-backend-title">Backend</h3>
-                        <p class="card__body" id="skills-backend-body">
-                            Go, SQL, Linux, Shell, Backend, REST, gRPC, Concurrency, Highload, Caching, Retries, Idempotency
-                        </p>
-                    </article>
-
-                    <article class="card card--skill">
-                        <h3 class="card__title" id="skills-databases-title">Databases</h3>
-                        <p class="card__body" id="skills-databases-body">
-                            PostgreSQL, Redis, ClickHouse, Indexes, Transactions
-                        </p>
-                    </article>
-
-                    <article class="card card--skill">
-                        <h3 class="card__title" id="skills-messaging-title">Messaging</h3>
-                        <p class="card__body" id="skills-messaging-body">
-                            Kafka, Async, Consumers, DLQ
-                        </p>
-                    </article>
-
-                    <article class="card card--skill">
-                        <h3 class="card__title" id="skills-devops-title">DevOps</h3>
-                        <p class="card__body" id="skills-devops-body">
-                            Docker, Kubernetes, CI/CD
-                        </p>
-                    </article>
-
-                    <article class="card card--skill">
-                        <h3 class="card__title" id="skills-observability-title">Observability</h3>
-                        <p class="card__body" id="skills-observability-body">
-                            Prometheus, Grafana, OpenTelemetry, Jaeger
-                        </p>
-                    </article>
-
-                    <article class="card card--skill">
-                        <h3 class="card__title" id="skills-architecture-title">Architecture</h3>
-                        <p class="card__body" id="skills-architecture-body">
-                            Microservices, API Design, Scaling, Fault tolerance, Clean Architecture
-                        </p>
-                    </article>
-
-                    <article class="card card--skill">
-                        <h3 class="card__title" id="skills-testing-title">Testing</h3>
-                        <p class="card__body" id="skills-testing-body">
-                            Unit tests, Integration tests, Mocks
-                        </p>
-                    </article>
-
-                    <article class="card card--skill">
-                        <h3 class="card__title" id="skills-tools-title">Tools</h3>
-                        <p class="card__body" id="skills-tools-body">
-                            Git, GitLab, Swagger, Postman, curl
-                        </p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects -->
-        <section class="section" id="projects">
-            <div class="container">
-                <header class="section__header">
-                    <h2 class="section__title" id="projects-title">Projects</h2>
-                    <p class="section__subtitle" id="projects-subtitle">
-                        Selected projects focused on reliability, performance, and real-world scale.
-                    </p>
-                </header>
-
-                <div class="projects-grid">
-                    <article class="card card--project">
-                        <div class="card__header">
-                            <h3 class="card__title" id="project-1-title">Crypto Exchange</h3>
-                            <span class="card__tag" id="project-1-tag">High-load trading engine</span>
-                        </div>
-                        <p class="card__body" id="project-1-body">
-                            Built a low-latency matching engine with real-time order books, concurrent trade execution, and fault-tolerant processing under heavy load.
-                        </p>
-                        <p class="card__stack" id="project-1-stack">
-                            Stack: Go, PostgreSQL, Redis, Kafka
-                        </p>
-                        <a href="https://github.com/Alkhanov95/crypto-exchange" class="btn btn--ghost btn--small" target="_blank" rel="noopener noreferrer" id="project-1-github">
-                            View on GitHub
-                        </a>
-                    </article>
-
-                    <article class="card card--project">
-                        <div class="card__header">
-                            <h3 class="card__title" id="project-2-title">API Gateway</h3>
-                            <span class="card__tag" id="project-2-tag">Microservices gateway</span>
-                        </div>
-                        <p class="card__body" id="project-2-body">
-                              API Gateway prototype providing centralized request routing, authentication, rate limiting, and monitoring for backend services.
-                        </p>
-                        <p class="card__stack" id="project-2-stack">
-                            Stack: Go, Redis, Docker, Prometheus, OpenTelemetry
-                        </p>
-                        <a href="https://github.com/Alkhanov95/blog-api-gateway" class="btn btn--ghost btn--small" target="_blank" rel="noopener noreferrer" id="project-2-github">
-                            View on GitHub
-                        </a>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Certificates -->
-        <section class="section" id="certificates">
-            <div class="container">
-                <header class="section__header">
-                    <h2 class="section__title" id="certificates-title">Certificates</h2>
-                    <p class="section__subtitle" id="certificates-subtitle">
-                        Formal recognition of skills in backend engineering and distributed systems.
-                    </p>
-                </header>
-
-                <div class="certificates">
-                    <article class="card card--certificate">
-                        <div class="card__header">
-                            <h3 class="card__title" id="cert-1-title">Go Backend Development</h3>
-                            <span class="card__tag" id="cert-1-tag">Go</span>
-                        </div>
-                        <p class="card__body" id="cert-1-body">
-                            Certificate confirming strong understanding of Go, concurrency patterns, and production-ready backend development.
-                        </p>
-                    </article>
-
-                    <article class="card card--certificate">
-                        <div class="card__header">
-                            <h3 class="card__title" id="cert-2-title">STEP IT Academy<</h3>
-                            <span class="card__tag" id="cert-2-tag">CS</span>
-                        </div>
-                        <p class="card__body" id="cert-2-body">
-                            Professional training program in software engineering and computer science fundamentals.
-                        </p>
-                    </article>
-
-                    <article class="card card--certificate">
-                        <div class="card__header">
-                            <h3 class="card__title" id="cert-3-title">SQL Academy<</h3>
-                            <span class="card__tag" id="cert-3-tag">DB</span>
-                        </div>
-                        <p class="card__body" id="cert-3-body">
-                            Advanced SQL training focused on query optimization, indexing strategies, and real-world database performance.
-                        </p>
-                    </article>
-                        
-                    
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact -->
-        <section class="section" id="contact">
-            <div class="container">
-                <header class="section__header">
-                    <h2 class="section__title" id="contact-title">Contacts</h2>
-                    <p class="section__subtitle" id="contact-subtitle">
-                        Reach out for backend roles, consulting, or collaborations.
-                    </p>
-                </header>
-
-                <div class="contact">
-                    <div class="contact__item">
-                        <span class="contact__label" id="contact-email-label">Email</span>
-                        <a class="contact__value" href="mailto:mohammedalkhanov95@gmail.com" id="contact-email-value">
-                            mohammedalkhanov95@gmail.com
-                        </a>
-                    </div>
-
-                    <div class="contact__item">
-                        <span class="contact__label" id="contact-github-label">GitHub</span>
-                        <a class="contact__value" href="https://github.com/Alkhanov95" target="_blank" rel="noopener noreferrer" id="contact-github-value">
-                            Alkhanov95
-                        </a>
-                    </div>
-
-                    <div class="contact__item">
-                        <span class="contact__label" id="contact-linkedin-label">LinkedIn</span>
-                        <a class="contact__value" href="https://www.linkedin.com/in/mohammed-alkhanov" target="_blank" rel="noopener noreferrer" id="contact-linkedin-value">
-                            Mohammed Alkhanov
-                        </a>
-                    </div>
-
-                    <div class="contact__item">
-                        <span class="contact__label" id="contact-telegram-label">Telegram</span>
-                        <a class="contact__value" href="https://t.me/carrerachka95" target="_blank" rel="noopener noreferrer" id="contact-telegram-value">
-                            @carrerachka95
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container footer__content">
-            <span class="footer__text" id="footer-text">
-                © 2026 Mohammed Alkhanov. Backend - Go Developer.
-            </span>
+    <section id="hero">
+        <div class="container">
+            <h1>Alkhanov Mohammed</h1>
+            <h2>Go Developer with 2 years of experience</h2>
+            <p>Passionate about building efficient, scalable applications with a focus on backend development. Expertise in Go, system design, and integrating modern technologies for robust solutions.</p>
         </div>
-    </footer>
+    </section>
+
+    <section id="skills">
+        <div class="container">
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div>
+                    <h3>Programming Languages</h3>
+                    <ul>
+                        <li>Go</li>
+                        <li>Python</li>
+                        <li>C++</li>
+                        <li>SQL</li>
+                        <li>Bash</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Languages</h3>
+                    <ul>
+                        <li>English (C1)</li>
+                        <li>Russian (Native)</li>
+                        <li>Turkish (Native)</li>
+                        <li>Azerbaijani (Native)</li>
+                        <li>Spanish (B1)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <div class="container">
+            <h2>Education</h2>
+            <ul>
+                <li>Financial University, Faculty of Information Technologies and Big Data Analysis, Applied Informatics (Graduating 2026)</li>
+                <li>Oxbridge Academy International School, Baku (Pearson international certificate)</li>
+                <li>STEP IT Computer Academy, Baku (International diploma in digital technologies)</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="certificates">
+        <div class="container">
+            <h2>Certificates</h2>
+            <div class="cert-buttons">
+                <button onclick="alert('IT certificates coming soon')">View IT Certificates</button>
+                <button onclick="alert('International Relations certificates coming soon')">View International Relations Certificates (UN, EYP)</button>
+                <button onclick="alert('Sports certificates coming soon')">View Sports Certificates</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="container">
+            <h2>Projects</h2>
+            <div class="project">
+                <h3>API-gateway</h3>
+                <p>REST API for user management with UUID auto-generation, configuration via config.yaml, structured logging with slog, custom errors, layered architecture.</p>
+            </div>
+            <div class="project">
+                <h3>Crypto-exchange</h3>
+                <p>In-memory matching engine, orderbook, REST API, basic Ethereum integration, Next.js frontend with MetaMask.</p>
+            </div>
+            <div class="project">
+                <h3>California Housing Price Predictor</h3>
+                <p>Data cleaning, feature engineering, regression model comparison.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Contact</h2>
+            <div class="contact-buttons">
+                <a href="#" target="_blank" class="btn">Resume</a>
+                <a href="https://github.com/yourusername" target="_blank" class="btn">GitHub</a>
+                <a href="https://t.me/yourusername" target="_blank" class="btn">Telegram</a>
+            </div>
+        </div>
+    </section>
 
     <script src="script.js"></script>
 </body>
