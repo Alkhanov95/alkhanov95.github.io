@@ -1,8 +1,9 @@
 const canvas = document.getElementById('particle-canvas');
 const ctx = canvas.getContext('2d');
+
 let particles = [];
 
-function resizeCanvas() {
+function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
@@ -15,30 +16,28 @@ class Particle {
     reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * -canvas.height - 100;
-        this.size = Math.random() * 3 + 1;
-        this.speed = Math.random() * 2 + 0.6;
-        this.color = ['#B8860B', '#D4AF37', '#CD9B1D'][Math.floor(Math.random() * 3)];
-        this.opacity = Math.random() * 0.4 + 0.2;
+        this.size = Math.random() * 2.5 + 0.8;
+        this.speed = Math.random() * 1.6 + 0.4;
+        this.color = ['#b8860b', '#d4af37', '#cd9b1d'][Math.floor(Math.random() * 3)];
+        this.opacity = Math.random() * 0.35 + 0.15;
         this.rotation = Math.random() * 360;
-        this.rotSpeed = Math.random() * 1.2 - 0.6;
+        this.rotSpeed = Math.random() * 1.4 - 0.7;
         this.baseScale = Math.random() * 0.6 + 0.7;
     }
 
     update() {
         this.y += this.speed;
         this.rotation += this.rotSpeed;
-
-        // Gentle pulsing scale
-        this.scale = this.baseScale + Math.sin(Date.now() * 0.001 + this.x) * 0.15;
+        this.scale = this.baseScale + Math.sin(Date.now() * 0.001 + this.x) * 0.12;
 
         if (this.y > canvas.height + 50) {
             this.reset();
         }
 
-        // Fade near top and bottom
+        // Fade top/bottom
         this.alpha = this.opacity;
-        if (this.y < 80) this.alpha *= (this.y / 80);
-        if (this.y > canvas.height - 80) this.alpha *= ((canvas.height - this.y) / 80);
+        if (this.y < 100) this.alpha *= this.y / 100;
+        if (this.y > canvas.height - 100) this.alpha *= (canvas.height - this.y) / 100;
     }
 
     draw() {
@@ -57,16 +56,16 @@ class Particle {
     }
 }
 
-function initParticles() {
+function init() {
     particles = [];
-    const count = Math.min(80, Math.floor(window.innerWidth * window.innerHeight / 15000));
+    const count = Math.min(90, Math.floor(canvas.width * canvas.height / 14000));
     for (let i = 0; i < count; i++) {
         particles.push(new Particle());
     }
 }
 
 function animate() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillStyle = 'rgba(0,0,0,0.06)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     particles.forEach(p => {
@@ -77,12 +76,11 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-// Initialize
 window.addEventListener('resize', () => {
-    resizeCanvas();
-    initParticles();
+    resize();
+    init();
 });
 
-resizeCanvas();
-initParticles();
+resize();
+init();
 animate();
