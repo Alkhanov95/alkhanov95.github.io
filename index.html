@@ -1,98 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alkhanov Mohammed - Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Alkhanov Mohammed | Go Developer</title>
+    <link rel="stylesheet" href="styles.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <canvas id="particle-canvas"></canvas>
 
+    <!-- Hero -->
     <section id="hero">
         <div class="container">
-            <h1>Alkhanov Mohammed</h1>
-            <h2>Go Developer with 2 years of experience</h2>
-            <p>Passionate about building efficient, scalable applications with a focus on backend development. Expertise in Go, system design, and integrating modern technologies for robust solutions.</p>
+            <h1>Alkhanov <span>Mohammed</span></h1>
+            <h2>Go Developer</h2>
+            <p class="lead">2+ years building scalable backend systems • Passionate about clean architecture, performance, and reliable software</p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary">View Projects</a>
+                <a href="#contact" class="btn btn-outline">Get in Touch</a>
+            </div>
         </div>
     </section>
 
+    <!-- Skills -->
     <section id="skills">
         <div class="container">
             <h2>Skills</h2>
             <div class="skills-grid">
-                <div>
-                    <h3>Programming Languages</h3>
+                <div class="skill-card">
+                    <h3>Programming</h3>
                     <ul>
-                        <li>Go</li>
+                        <li>Go (primary)</li>
                         <li>Python</li>
                         <li>C++</li>
                         <li>SQL</li>
                         <li>Bash</li>
                     </ul>
                 </div>
-                <div>
+                <div class="skill-card">
                     <h3>Languages</h3>
                     <ul>
-                        <li>English (C1)</li>
-                        <li>Russian (Native)</li>
-                        <li>Turkish (Native)</li>
-                        <li>Azerbaijani (Native)</li>
-                        <li>Spanish (B1)</li>
+                        <li>English — C1</li>
+                        <li>Russian — Native</li>
+                        <li>Turkish — Native</li>
+                        <li>Azerbaijani — Native</li>
+                        <li>Spanish — B1</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Education -->
     <section id="education">
         <div class="container">
             <h2>Education</h2>
-            <ul>
-                <li>Financial University, Faculty of Information Technologies and Big Data Analysis, Applied Informatics (Graduating 2026)</li>
-                <li>Oxbridge Academy International School, Baku (Pearson international certificate)</li>
-                <li>STEP IT Computer Academy, Baku (International diploma in digital technologies)</li>
-            </ul>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2022 – 2026 (expected)</div>
+                    <div class="timeline-content">
+                        <h3>Applied Informatics</h3>
+                        <p>Financial University under the Government of the Russian Federation<br>
+                        Faculty of Information Technologies and Big Data Analysis</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2018 – 2022</div>
+                    <div class="timeline-content">
+                        <h3>Pearson International Certificate</h3>
+                        <p>Oxbridge Academy International School, Baku</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2020 – 2022</div>
+                    <div class="timeline-content">
+                        <h3>International Diploma in Digital Technologies</h3>
+                        <p>STEP IT Computer Academy, Baku</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
+    <!-- Certificates -->
     <section id="certificates">
         <div class="container">
             <h2>Certificates</h2>
             <div class="cert-buttons">
-                <button onclick="alert('IT certificates coming soon')">View IT Certificates</button>
-                <button onclick="alert('International Relations certificates coming soon')">View International Relations Certificates (UN, EYP)</button>
-                <button onclick="alert('Sports certificates coming soon')">View Sports Certificates</button>
+                <button class="btn btn-outline" disabled>IT Certificates (soon)</button>
+                <button class="btn btn-outline" disabled>International Relations (UN, EYP) (soon)</button>
+                <button class="btn btn-outline" disabled>Sports Certificates (soon)</button>
             </div>
         </div>
     </section>
 
+    <!-- Projects -->
     <section id="projects">
         <div class="container">
-            <h2>Projects</h2>
-            <div class="project">
-                <h3>API-gateway</h3>
-                <p>REST API for user management with UUID auto-generation, configuration via config.yaml, structured logging with slog, custom errors, layered architecture.</p>
-            </div>
-            <div class="project">
-                <h3>Crypto-exchange</h3>
-                <p>In-memory matching engine, orderbook, REST API, basic Ethereum integration, Next.js frontend with MetaMask.</p>
-            </div>
-            <div class="project">
-                <h3>California Housing Price Predictor</h3>
-                <p>Data cleaning, feature engineering, regression model comparison.</p>
+            <h2>Selected Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>API Gateway</h3>
+                    <p>RESTful user management service with:</p>
+                    <ul>
+                        <li>UUID v4 auto-generation</li>
+                        <li>Configuration via config.yaml</li>
+                        <li>Structured logging (slog)</li>
+                        <li>Custom error types</li>
+                        <li>Clean layered architecture</li>
+                    </ul>
+                </div>
+
+                <div class="project-card">
+                    <h3>Crypto Exchange Engine</h3>
+                    <p>In-memory trading engine featuring:</p>
+                    <ul>
+                        <li>Order book & matching engine</li>
+                        <li>REST API</li>
+                        <li>Basic Ethereum integration</li>
+                        <li>Next.js frontend with MetaMask</li>
+                    </ul>
+                </div>
+
+                <div class="project-card">
+                    <h3>California Housing Price Predictor</h3>
+                    <p>Machine learning project including:</p>
+                    <ul>
+                        <li>Data cleaning & preprocessing</li>
+                        <li>Feature engineering</li>
+                        <li>Comparison of regression models</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Contact -->
     <section id="contact">
         <div class="container">
-            <h2>Contact</h2>
+            <h2>Let’s Connect</h2>
             <div class="contact-buttons">
-                <a href="#" target="_blank" class="btn">Resume</a>
-                <a href="https://github.com/yourusername" target="_blank" class="btn">GitHub</a>
-                <a href="https://t.me/yourusername" target="_blank" class="btn">Telegram</a>
+                <a href="#" class="btn btn-primary">Download Resume</a>
+                <a href="https://github.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="btn btn-outline">GitHub</a>
+                <a href="https://t.me/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Telegram</a>
             </div>
         </div>
     </section>
