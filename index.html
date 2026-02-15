@@ -1,155 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Alkhanov Mohammed | Go Developer</title>
-    <link rel="stylesheet" href="styles.css"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alkhanov Mohammed | Go Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <canvas id="particle-canvas"></canvas>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
-    <!-- Hero -->
-    <section id="hero">
-        <div class="container">
-            <h1>Alkhanov <span>Mohammed</span></h1>
-            <h2>Go Developer</h2>
-            <p class="lead">2+ years building scalable backend systems • Passionate about clean architecture, performance, and reliable software</p>
-            <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary">View Projects</a>
-                <a href="#contact" class="btn btn-outline">Get in Touch</a>
-            </div>
-        </div>
+  <header class="header">
+    <nav class="nav">
+      <a href="#hero" class="nav-logo">AM</a>
+      <ul class="nav-links">
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#certificates">Certificates</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero" class="hero">
+      <div class="hero-content">
+        <p class="hero-greeting">Hello, I'm</p>
+        <h1 class="hero-name">Alkhanov Mohammed</h1>
+        <p class="hero-title">Go Developer</p>
+        <p class="hero-experience">2 years of experience</p>
+        <p class="hero-intro">
+          I build scalable backend systems and APIs with Go. Passionate about clean architecture, 
+          performance, and delivering robust solutions. Experienced in REST APIs, microservices, 
+          and distributed systems.
+        </p>
+        <a href="#projects" class="btn btn-primary">View my work</a>
+      </div>
     </section>
 
-    <!-- Skills -->
-    <section id="skills">
-        <div class="container">
-            <h2>Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <h3>Programming</h3>
-                    <ul>
-                        <li>Go (primary)</li>
-                        <li>Python</li>
-                        <li>C++</li>
-                        <li>SQL</li>
-                        <li>Bash</li>
-                    </ul>
-                </div>
-                <div class="skill-card">
-                    <h3>Languages</h3>
-                    <ul>
-                        <li>English — C1</li>
-                        <li>Russian — Native</li>
-                        <li>Turkish — Native</li>
-                        <li>Azerbaijani — Native</li>
-                        <li>Spanish — B1</li>
-                    </ul>
-                </div>
-            </div>
+    <section id="skills" class="section">
+      <div class="container">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h3 class="skill-heading">Programming Languages</h3>
+            <ul class="skill-tags">
+              <li>Go</li>
+              <li>Python</li>
+              <li>C++</li>
+              <li>SQL</li>
+              <li>Bash</li>
+            </ul>
+          </div>
+          <div class="skill-card">
+            <h3 class="skill-heading">Languages</h3>
+            <ul class="skill-tags">
+              <li>English (C1)</li>
+              <li>Russian (Native)</li>
+              <li>Turkish (Native)</li>
+              <li>Azerbaijani (Native)</li>
+              <li>Spanish (B1)</li>
+            </ul>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Education -->
-    <section id="education">
-        <div class="container">
-            <h2>Education</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">2022 – 2026 (expected)</div>
-                    <div class="timeline-content">
-                        <h3>Applied Informatics</h3>
-                        <p>Financial University under the Government of the Russian Federation<br>
-                        Faculty of Information Technologies and Big Data Analysis</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">2018 – 2022</div>
-                    <div class="timeline-content">
-                        <h3>Pearson International Certificate</h3>
-                        <p>Oxbridge Academy International School, Baku</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">2020 – 2022</div>
-                    <div class="timeline-content">
-                        <h3>International Diploma in Digital Technologies</h3>
-                        <p>STEP IT Computer Academy, Baku</p>
-                    </div>
-                </div>
-            </div>
+    <section id="education" class="section section-alt">
+      <div class="container">
+        <h2 class="section-title">Education</h2>
+        <div class="education-list">
+          <article class="education-item">
+            <span class="education-year">Graduating 2026</span>
+            <h3>Financial University</h3>
+            <p>Faculty of Information Technologies and Big Data Analysis — Applied Informatics</p>
+          </article>
+          <article class="education-item">
+            <span class="education-year">—</span>
+            <h3>Oxbridge Academy International School, Baku</h3>
+            <p>Pearson international certificate</p>
+          </article>
+          <article class="education-item">
+            <span class="education-year">—</span>
+            <h3>STEP IT Computer Academy, Baku</h3>
+            <p>International diploma in digital technologies</p>
+          </article>
         </div>
+      </div>
     </section>
 
-    <!-- Certificates -->
-    <section id="certificates">
-        <div class="container">
-            <h2>Certificates</h2>
-            <div class="cert-buttons">
-                <button class="btn btn-outline" disabled>IT Certificates (soon)</button>
-                <button class="btn btn-outline" disabled>International Relations (UN, EYP) (soon)</button>
-                <button class="btn btn-outline" disabled>Sports Certificates (soon)</button>
-            </div>
+    <section id="projects" class="section">
+      <div class="container">
+        <h2 class="section-title">Projects</h2>
+        <div class="projects-grid">
+          <article class="project-card">
+            <h3>API Gateway</h3>
+            <p>REST API for user management with UUID auto-generation, configuration via config.yaml, structured logging with slog, custom errors, and layered architecture.</p>
+          </article>
+          <article class="project-card">
+            <h3>Crypto Exchange</h3>
+            <p>In-memory matching engine, orderbook, REST API, basic Ethereum integration. Next.js frontend with MetaMask connectivity.</p>
+          </article>
+          <article class="project-card">
+            <h3>California Housing Price Predictor</h3>
+            <p>Data cleaning, feature engineering, and regression model comparison for housing price prediction.</p>
+          </article>
         </div>
+      </div>
     </section>
 
-    <!-- Projects -->
-    <section id="projects">
-        <div class="container">
-            <h2>Selected Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3>API Gateway</h3>
-                    <p>RESTful user management service with:</p>
-                    <ul>
-                        <li>UUID v4 auto-generation</li>
-                        <li>Configuration via config.yaml</li>
-                        <li>Structured logging (slog)</li>
-                        <li>Custom error types</li>
-                        <li>Clean layered architecture</li>
-                    </ul>
-                </div>
-
-                <div class="project-card">
-                    <h3>Crypto Exchange Engine</h3>
-                    <p>In-memory trading engine featuring:</p>
-                    <ul>
-                        <li>Order book & matching engine</li>
-                        <li>REST API</li>
-                        <li>Basic Ethereum integration</li>
-                        <li>Next.js frontend with MetaMask</li>
-                    </ul>
-                </div>
-
-                <div class="project-card">
-                    <h3>California Housing Price Predictor</h3>
-                    <p>Machine learning project including:</p>
-                    <ul>
-                        <li>Data cleaning & preprocessing</li>
-                        <li>Feature engineering</li>
-                        <li>Comparison of regression models</li>
-                    </ul>
-                </div>
-            </div>
+    <section id="certificates" class="section section-alt">
+      <div class="container">
+        <h2 class="section-title">Certificates</h2>
+        <div class="certificates-grid">
+          <div class="cert-card">
+            <h3>IT Certificates</h3>
+            <button class="btn btn-outline" type="button">View certificates</button>
+          </div>
+          <div class="cert-card">
+            <h3>International Relations</h3>
+            <p class="cert-sub">UN, EYP</p>
+            <button class="btn btn-outline" type="button">View certificates</button>
+          </div>
+          <div class="cert-card">
+            <h3>Sports</h3>
+            <button class="btn btn-outline" type="button">View certificates</button>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact">
-        <div class="container">
-            <h2>Let’s Connect</h2>
-            <div class="contact-buttons">
-                <a href="#" class="btn btn-primary">Download Resume</a>
-                <a href="https://github.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="btn btn-outline">GitHub</a>
-                <a href="https://t.me/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Telegram</a>
-            </div>
+    <section id="contact" class="section contact-section">
+      <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <p class="contact-intro">Let's connect — resume, code, and chat.</p>
+        <div class="contact-links">
+          <a href="#" class="btn btn-primary" id="resume-btn">Resume</a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline">GitHub</a>
+          <a href="https://t.me" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Telegram</a>
         </div>
+      </div>
     </section>
+  </main>
 
-    <script src="script.js"></script>
+  <footer class="footer">
+    <p>&copy; <span id="year"></span> Alkhanov Mohammed. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
