@@ -1,86 +1,151 @@
-const canvas = document.getElementById('particle-canvas');
-const ctx = canvas.getContext('2d');
+(function () {
+  'use strict';
 
-let particles = [];
+  // ----- Particle system -----
+  const GOLD_COLORS = ['#B8860B', '#D4AF37', '#CD9B1D'];
+  const PARTICLE_COUNT = 80;
+  const MIN_SIZE = 1;
+  const MAX_SIZE = 4;
+  const MIN_SPEED = 0.3;
+  const MAX_SPEED = 1.8;
+  const MIN_OPACITY = 0.15;
+  const MAX_OPACITY = 0.55;
+  const ROTATION_SPEED = 0.002;
+  const PARALLAX_DEPTH = 0.15; // how much horizontal drift based on "depth"
+  const FADE_BAND = 0.12; // fraction of height for fade in/out
 
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
+  let canvas, ctx, particles, animationId;
+  let width, height;
 
-class Particle {
-    constructor() {
-        this.reset();
+  function createParticle() {
+    const size = MIN_SIZE + Math.random() * (MAX_SIZE - MIN_SIZE);
+    const speed = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED);
+    const depth = Math.random(); // 0 = back, 1 = front (parallax)
+    return {
+      x: Math.random() * (width + 100) - 50,
+      y: Math.random() * (height + 100) - 50,
+      size,
+      speed,
+      depth,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * ROTATION_SPEED * 2,
+      scale: 0.7 + Math.random() * 0.6,
+      color: GOLD_COLORS[Math.floor(Math.random() * GOLD_COLORS.length)],
+      baseOpacity: MIN_OPACITY + Math.random() * (MAX_OPACITY - MIN_OPACITY),
+      drift: (Math.random() - 0.5) * 2 * (0.5 + depth * PARALLAX_DEPTH * 20),
+    };
+  }
+
+  function getParticleOpacity(p) {
+    const yNorm = p.y / height;
+    if (yNorm < FADE_BAND) return p.baseOpacity * (yNorm / FADE_BAND);
+    if (yNorm > 1 - FADE_BAND) return p.baseOpacity * ((1 - yNorm) / FADE_BAND);
+    return p.baseOpacity;
+  }
+
+  function drawParticle(p) {
+    const opacity = getParticleOpacity(p);
+    if (opacity <= 0) return;
+
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.scale(p.scale, p.scale);
+    ctx.globalAlpha = opacity;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.size, p.size * 1.2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function updateParticle(p, dt) {
+    p.y += p.speed * (60 * dt);
+    p.x += p.drift * (60 * dt) * 0.05;
+    p.rotation += p.rotationSpeed;
+
+    if (p.y > height + 50) {
+      p.y = -20;
+      p.x = Math.random() * (width + 50) - 25;
     }
+    if (p.y < -50) p.y = height + 20;
+    if (p.x > width + 50) p.x = -50;
+    if (p.x < -50) p.x = width + 50;
+  }
 
-    reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * -canvas.height - 100;
-        this.size = Math.random() * 2.5 + 0.8;
-        this.speed = Math.random() * 1.6 + 0.4;
-        this.color = ['#b8860b', '#d4af37', '#cd9b1d'][Math.floor(Math.random() * 3)];
-        this.opacity = Math.random() * 0.35 + 0.15;
-        this.rotation = Math.random() * 360;
-        this.rotSpeed = Math.random() * 1.4 - 0.7;
-        this.baseScale = Math.random() * 0.6 + 0.7;
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    if (!particles || particles.length === 0) {
+      particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
     }
+  }
 
-    update() {
-        this.y += this.speed;
-        this.rotation += this.rotSpeed;
-        this.scale = this.baseScale + Math.sin(Date.now() * 0.001 + this.x) * 0.12;
+  let lastTime = 0;
+  function loop(now) {
+    const dt = Math.min((now - lastTime) / 1000, 0.1);
+    lastTime = now;
 
-        if (this.y > canvas.height + 50) {
-            this.reset();
-        }
-
-        // Fade top/bottom
-        this.alpha = this.opacity;
-        if (this.y < 100) this.alpha *= this.y / 100;
-        if (this.y > canvas.height - 100) this.alpha *= (canvas.height - this.y) / 100;
-    }
-
-    draw() {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation * Math.PI / 180);
-        ctx.scale(this.scale, this.scale);
-
-        ctx.beginPath();
-        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-
-        ctx.restore();
-    }
-}
-
-function init() {
-    particles = [];
-    const count = Math.min(90, Math.floor(canvas.width * canvas.height / 14000));
-    for (let i = 0; i < count; i++) {
-        particles.push(new Particle());
-    }
-}
-
-function animate() {
-    ctx.fillStyle = 'rgba(0,0,0,0.06)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    particles.forEach(p => {
-        p.update();
-        p.draw();
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(function (p) {
+      updateParticle(p, dt);
+      drawParticle(p);
     });
+    animationId = requestAnimationFrame(loop);
+  }
 
-    requestAnimationFrame(animate);
-}
-
-window.addEventListener('resize', () => {
+  function initParticles() {
+    canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+    ctx = canvas.getContext('2d');
     resize();
-    init();
-});
+    particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
+    lastTime = performance.now();
+    loop(lastTime);
 
-resize();
-init();
-animate();
+    window.addEventListener('resize', function () {
+      resize();
+    });
+  }
+
+  // ----- Smooth scroll for anchor links -----
+  function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+      anchor.addEventListener('click', function (e) {
+        var id = this.getAttribute('href');
+        if (id === '#') return;
+        var el = document.querySelector(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelector('.nav-links')?.classList.remove('is-open');
+          document.querySelector('.nav-toggle')?.classList.remove('is-open');
+        }
+      });
+    });
+  }
+
+  // ----- Mobile nav toggle -----
+  function initNav() {
+    var toggle = document.querySelector('.nav-toggle');
+    var links = document.querySelector('.nav-links');
+    if (toggle && links) {
+      toggle.addEventListener('click', function () {
+        toggle.classList.toggle('is-open');
+        links.classList.toggle('is-open');
+      });
+    }
+  }
+
+  // ----- Footer year -----
+  function initFooterYear() {
+    var yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+  }
+
+  // ----- Run -----
+  initParticles();
+  initSmoothScroll();
+  initNav();
+  initFooterYear();
+})();
