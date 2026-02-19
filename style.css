@@ -339,6 +339,7 @@ body {
   grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
   gap: 32px;
   padding-inline: 20px;
+  justify-items: center; /* ← centers each grid item */
 }
 
 @media (max-width: 900px) {
@@ -365,7 +366,7 @@ body {
   font-weight: 600;
   letter-spacing: -0.02em;
   margin-bottom: 6px;
-  text-align: center;
+
 }
 
 .hero-role {
