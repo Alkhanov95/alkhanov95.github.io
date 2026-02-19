@@ -1,151 +1,239 @@
-(function () {
-  'use strict';
+;(function () {
+  'use strict'
 
-  // ----- Particle system -----
-  const GOLD_COLORS = ['#B8860B', '#D4AF37', '#CD9B1D'];
-  const PARTICLE_COUNT = 80;
-  const MIN_SIZE = 1;
-  const MAX_SIZE = 4;
-  const MIN_SPEED = 0.3;
-  const MAX_SPEED = 1.8;
-  const MIN_OPACITY = 0.15;
-  const MAX_OPACITY = 0.55;
-  const ROTATION_SPEED = 0.002;
-  const PARALLAX_DEPTH = 0.15; // how much horizontal drift based on "depth"
-  const FADE_BAND = 0.12; // fraction of height for fade in/out
+  // --- Canvas network background (nodes + connections) ---
+  var canvas = document.getElementById('particle-canvas')
+  if (!canvas) return
+  var ctx = canvas.getContext('2d')
 
-  let canvas, ctx, particles, animationId;
-  let width, height;
+  var width = window.innerWidth
+  var height = window.innerHeight
+  canvas.width = width
+  canvas.height = height
 
-  function createParticle() {
-    const size = MIN_SIZE + Math.random() * (MAX_SIZE - MIN_SIZE);
-    const speed = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED);
-    const depth = Math.random(); // 0 = back, 1 = front (parallax)
+  var NODE_COUNT = Math.min(140, Math.floor((width * height) / 18000))
+  var MAX_DISTANCE = 150
+  var MOUSE_RADIUS = 160
+
+  var nodes = []
+  var mouse = { x: null, y: null, active: false }
+
+  function createNode() {
     return {
-      x: Math.random() * (width + 100) - 50,
-      y: Math.random() * (height + 100) - 50,
-      size,
-      speed,
-      depth,
-      rotation: Math.random() * Math.PI * 2,
-      rotationSpeed: (Math.random() - 0.5) * ROTATION_SPEED * 2,
-      scale: 0.7 + Math.random() * 0.6,
-      color: GOLD_COLORS[Math.floor(Math.random() * GOLD_COLORS.length)],
-      baseOpacity: MIN_OPACITY + Math.random() * (MAX_OPACITY - MIN_OPACITY),
-      drift: (Math.random() - 0.5) * 2 * (0.5 + depth * PARALLAX_DEPTH * 20),
-    };
-  }
-
-  function getParticleOpacity(p) {
-    const yNorm = p.y / height;
-    if (yNorm < FADE_BAND) return p.baseOpacity * (yNorm / FADE_BAND);
-    if (yNorm > 1 - FADE_BAND) return p.baseOpacity * ((1 - yNorm) / FADE_BAND);
-    return p.baseOpacity;
-  }
-
-  function drawParticle(p) {
-    const opacity = getParticleOpacity(p);
-    if (opacity <= 0) return;
-
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.rotate(p.rotation);
-    ctx.scale(p.scale, p.scale);
-    ctx.globalAlpha = opacity;
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, p.size, p.size * 1.2, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function updateParticle(p, dt) {
-    p.y += p.speed * (60 * dt);
-    p.x += p.drift * (60 * dt) * 0.05;
-    p.rotation += p.rotationSpeed;
-
-    if (p.y > height + 50) {
-      p.y = -20;
-      p.x = Math.random() * (width + 50) - 25;
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      size: 1 + Math.random() * 1.6,
+      depth: 0.3 + Math.random() * 0.7
     }
-    if (p.y < -50) p.y = height + 20;
-    if (p.x > width + 50) p.x = -50;
-    if (p.x < -50) p.x = width + 50;
+  }
+
+  function initNodes() {
+    nodes = []
+    for (var i = 0; i < NODE_COUNT; i++) {
+      nodes.push(createNode())
+    }
   }
 
   function resize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-    if (!particles || particles.length === 0) {
-      particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
+    width = window.innerWidth
+    height = window.innerHeight
+    canvas.width = width
+    canvas.height = height
+    initNodes()
+  }
+
+  window.addEventListener('resize', function () {
+    resize()
+  })
+
+  window.addEventListener('mousemove', function (e) {
+    mouse.x = e.clientX
+    mouse.y = e.clientY
+    mouse.active = true
+  })
+
+  window.addEventListener('mouseleave', function () {
+    mouse.active = false
+  })
+
+  function updateNode(node) {
+    node.x += node.vx * (0.6 + node.depth)
+    node.y += node.vy * (0.6 + node.depth)
+
+    if (node.x < -50) node.x = width + 50
+    if (node.x > width + 50) node.x = -50
+    if (node.y < -50) node.y = height + 50
+    if (node.y > height + 50) node.y = -50
+
+    if (mouse.active && mouse.x != null) {
+      var dx = node.x - mouse.x
+      var dy = node.y - mouse.y
+      var dist = Math.sqrt(dx * dx + dy * dy)
+      if (dist < MOUSE_RADIUS && dist > 0) {
+        var force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS
+        node.x += (dx / dist) * force * 2.2
+        node.y += (dy / dist) * force * 2.2
+      }
     }
   }
 
-  let lastTime = 0;
-  function loop(now) {
-    const dt = Math.min((now - lastTime) / 1000, 0.1);
-    lastTime = now;
-
-    ctx.clearRect(0, 0, width, height);
-    particles.forEach(function (p) {
-      updateParticle(p, dt);
-      drawParticle(p);
-    });
-    animationId = requestAnimationFrame(loop);
+  function drawNode(node) {
+    var alpha = 0.15 + node.depth * 0.35
+    ctx.beginPath()
+    ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2)
+    ctx.fillStyle = 'rgba(200,164,74,' + alpha.toFixed(3) + ')'
+    ctx.fill()
   }
 
-  function initParticles() {
-    canvas = document.getElementById('particle-canvas');
-    if (!canvas) return;
-    ctx = canvas.getContext('2d');
-    resize();
-    particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
-    lastTime = performance.now();
-    loop(lastTime);
-
-    window.addEventListener('resize', function () {
-      resize();
-    });
-  }
-
-  // ----- Smooth scroll for anchor links -----
-  function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-      anchor.addEventListener('click', function (e) {
-        var id = this.getAttribute('href');
-        if (id === '#') return;
-        var el = document.querySelector(id);
-        if (el) {
-          e.preventDefault();
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          document.querySelector('.nav-links')?.classList.remove('is-open');
-          document.querySelector('.nav-toggle')?.classList.remove('is-open');
+  function drawConnections() {
+    for (var i = 0; i < nodes.length; i++) {
+      for (var j = i + 1; j < nodes.length; j++) {
+        var a = nodes[i]
+        var b = nodes[j]
+        var dx = a.x - b.x
+        var dy = a.y - b.y
+        var dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < MAX_DISTANCE) {
+          var alpha = 0.02 + (1 - dist / MAX_DISTANCE) * 0.12
+          ctx.strokeStyle = 'rgba(200,164,74,' + alpha.toFixed(3) + ')'
+          ctx.lineWidth = 0.6
+          ctx.beginPath()
+          ctx.moveTo(a.x, a.y)
+          ctx.lineTo(b.x, b.y)
+          ctx.stroke()
         }
-      });
-    });
-  }
-
-  // ----- Mobile nav toggle -----
-  function initNav() {
-    var toggle = document.querySelector('.nav-toggle');
-    var links = document.querySelector('.nav-links');
-    if (toggle && links) {
-      toggle.addEventListener('click', function () {
-        toggle.classList.toggle('is-open');
-        links.classList.toggle('is-open');
-      });
+      }
     }
   }
 
-  // ----- Footer year -----
-  function initFooterYear() {
-    var yearEl = document.getElementById('year');
-    if (yearEl) yearEl.textContent = new Date().getFullYear();
+  function loop() {
+    ctx.clearRect(0, 0, width, height)
+    for (var i = 0; i < nodes.length; i++) {
+      updateNode(nodes[i])
+    }
+    drawConnections()
+    for (var j = 0; j < nodes.length; j++) {
+      drawNode(nodes[j])
+    }
+    requestAnimationFrame(loop)
   }
 
-  // ----- Run -----
-  initParticles();
-  initSmoothScroll();
-  initNav();
-  initFooterYear();
-})();
+  initNodes()
+  loop()
+
+  // --- Smooth scroll for anchor links ---
+  function initSmoothScroll() {
+    var anchors = document.querySelectorAll('a[href^="#"]')
+    anchors.forEach(function (anchor) {
+      anchor.addEventListener('click', function (e) {
+        var id = this.getAttribute('href')
+        if (id === '#') return
+        var el = document.querySelector(id)
+        if (el) {
+          e.preventDefault()
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          var navLinks = document.getElementById('nav-links')
+          var navToggle = document.getElementById('nav-toggle')
+          if (navLinks && navToggle) {
+            navLinks.classList.remove('is-open')
+            navToggle.classList.remove('is-open')
+          }
+        }
+      })
+    })
+  }
+
+  // --- Mobile nav toggle ---
+  function initNav() {
+    var toggle = document.getElementById('nav-toggle')
+    var links = document.getElementById('nav-links')
+    if (!toggle || !links) return
+
+    toggle.addEventListener('click', function () {
+      toggle.classList.toggle('is-open')
+      links.classList.toggle('is-open')
+    })
+  }
+
+  // --- Fade-up sections with IntersectionObserver ---
+  function initFadeSections() {
+    var sections = document.querySelectorAll('.fade-section')
+    if (!('IntersectionObserver' in window) || sections.length === 0) {
+      sections.forEach(function (s) {
+        s.classList.add('is-visible')
+      })
+      return
+    }
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.12 }
+    )
+    sections.forEach(function (s) {
+      observer.observe(s)
+    })
+  }
+
+  // --- Language switching (RU / EN) ---
+  function initLanguage() {
+    var defaultLang = 'ru'
+    try {
+      var stored = window.localStorage.getItem('lang')
+      if (stored === 'en' || stored === 'ru') defaultLang = stored
+    } catch (_) {}
+
+    function applyLanguage(lang) {
+      if (!window.TRANSLATIONS || !window.TRANSLATIONS[lang]) return
+      var map = window.TRANSLATIONS[lang]
+      var nodes = document.querySelectorAll('[data-i18n]')
+      nodes.forEach(function (node) {
+        var key = node.getAttribute('data-i18n')
+        if (map[key] != null) {
+          node.textContent = map[key]
+        }
+      })
+
+      var ruBtn = document.getElementById('lang-ru')
+      var enBtn = document.getElementById('lang-en')
+      if (ruBtn && enBtn) {
+        ruBtn.classList.toggle('lang-active', lang === 'ru')
+        enBtn.classList.toggle('lang-active', lang === 'en')
+      }
+
+      try {
+        window.localStorage.setItem('lang', lang)
+      } catch (_) {}
+      document.documentElement.lang = lang
+    }
+
+    var ruBtn = document.getElementById('lang-ru')
+    var enBtn = document.getElementById('lang-en')
+
+    if (ruBtn) {
+      ruBtn.addEventListener('click', function () {
+        applyLanguage('ru')
+      })
+    }
+    if (enBtn) {
+      enBtn.addEventListener('click', function () {
+        applyLanguage('en')
+      })
+    }
+
+    applyLanguage(defaultLang)
+  }
+
+  // --- Init ---
+  initSmoothScroll()
+  initNav()
+  initFadeSections()
+  initLanguage()
+})()
