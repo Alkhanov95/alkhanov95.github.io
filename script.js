@@ -83,7 +83,7 @@
     var alpha = 0.15 + node.depth * 0.35
     ctx.beginPath()
     ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2)
-    ctx.fillStyle = 'rgba(200,164,74,' + alpha.toFixed(3) + ')'
+    ctx.fillStyle = 'rgba(34,197,94,' + alpha.toFixed(3) + ')'
     ctx.fill()
   }
 
@@ -97,7 +97,7 @@
         var dist = Math.sqrt(dx * dx + dy * dy)
         if (dist < MAX_DISTANCE) {
           var alpha = 0.02 + (1 - dist / MAX_DISTANCE) * 0.12
-          ctx.strokeStyle = 'rgba(200,164,74,' + alpha.toFixed(3) + ')'
+          ctx.strokeStyle = 'rgba(34,197,94,' + alpha.toFixed(3) + ')'
           ctx.lineWidth = 0.6
           ctx.beginPath()
           ctx.moveTo(a.x, a.y)
