@@ -338,7 +338,7 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
   gap: 32px;
-  padding-inline: 50px;
+  padding-inline: 20px;
   
 }
 
@@ -509,7 +509,7 @@ body {
   border-radius: 999px;
   border: 1px solid rgba(34, 197, 94, 0.4);
   font-size: 0.78rem;
-  color: var(--accent);
+  color: white;
   background: rgba(17, 17, 17, 0.95);
   box-shadow: 0 0 10px rgba(34, 197, 94, 0.35);
 }
