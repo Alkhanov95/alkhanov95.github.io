@@ -1,158 +1,319 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alkhanov Mohammed | Go Developer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Алханов Мохаммед | Senior Golang Developer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
-  <header class="header">
-    <nav class="nav">
-      <a href="#hero" class="nav-logo">AM</a>
-      <ul class="nav-links">
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#certificates">Certificates</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
+  <header class="site-header">
+    <nav class="site-nav">
+      <a href="#home" class="brand">
+        <span class="brand-mark">AM</span>
+        <span class="brand-text">
+          <span data-i18n="hero.nameShort">Алханов Мохаммед</span>
+          <span class="brand-role" data-i18n="hero.role">Golang-разработчик</span>
+        </span>
+      </a>
+
+      <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
       </button>
+
+      <div id="nav-links" class="nav-links">
+        <a href="#home" class="nav-link" data-i18n="nav.home">Главная</a>
+        <a href="#skills" class="nav-link" data-i18n="nav.skills">Навыки</a>
+        <a href="#projects" class="nav-link" data-i18n="nav.projects">Проекты</a>
+        <a href="#education" class="nav-link" data-i18n="nav.education">Образование</a>
+        <a href="#certificates" class="nav-link" data-i18n="nav.certificates">Сертификаты</a>
+        <a href="#contact" class="nav-link" data-i18n="nav.contacts">Контакты</a>
+
+        <div class="nav-lang">
+          <button id="lang-ru" class="lang-toggle lang-active" data-lang="ru">RU</button>
+          <span class="lang-separator">|</span>
+          <button id="lang-en" class="lang-toggle" data-lang="en">EN</button>
+        </div>
+      </div>
     </nav>
   </header>
 
-  <main>
-    <section id="hero" class="hero">
-      <div class="hero-content">
-        <p class="hero-greeting">Hello, I'm</p>
-        <h1 class="hero-name">Alkhanov Mohammed</h1>
-        <p class="hero-title">Go Developer</p>
-        <p class="hero-experience">2 years of experience</p>
-        <p class="hero-intro">
-          I build scalable backend systems and APIs with Go. Passionate about clean architecture, 
-          performance, and delivering robust solutions. Experienced in REST APIs, microservices, 
-          and distributed systems.
-        </p>
-        <a href="#projects" class="btn btn-primary">View my work</a>
-      </div>
-    </section>
-
-    <section id="skills" class="section">
-      <div class="container">
-        <h2 class="section-title">Skills</h2>
-        <div class="skills-grid">
-          <div class="skill-card">
-            <h3 class="skill-heading">Programming Languages</h3>
-            <ul class="skill-tags">
-              <li>Go</li>
-              <li>Python</li>
-              <li>C++</li>
-              <li>SQL</li>
-              <li>Bash</li>
-            </ul>
+  <main class="page">
+    <!-- Hero -->
+    <section id="home" class="section hero fade-section">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <p class="hero-badge" data-i18n="hero.badge">Golang-разработчик</p>
+          <h1 class="hero-name">
+            <span data-i18n="hero.name">Алханов Мохаммед</span>
+          </h1>
+          <p class="hero-role" data-i18n="hero.role">Golang-разработчик / Golang Developer</p>
+          <p class="hero-text" data-i18n="hero.description">
+            Разрабатываю высоконагруженные backend-сервисы и микросервисы на Go: от REST/gRPC API до распределённых систем с мониторингом и трассировкой. В фокусе — чистая архитектура, наблюдаемость и инженерная строгость.
+          </p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn-primary" data-i18n="hero.cta">Связаться со мной</a>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+              Backend, микросервисы, распределённые системы.
+            </p>
           </div>
-          <div class="skill-card">
-            <h3 class="skill-heading">Languages</h3>
-            <ul class="skill-tags">
-              <li>English (C1)</li>
-              <li>Russian (Native)</li>
-              <li>Turkish (Native)</li>
-              <li>Azerbaijani (Native)</li>
-              <li>Spanish (B1)</li>
-            </ul>
+        </div>
+
+        <div class="hero-right">
+          <div class="info-card">
+            <p class="info-label" data-i18n="hero.highlight1.label">Язык</p>
+            <p class="info-value" data-i18n="hero.highlight1.value">Go, микросервисы</p>
+          </div>
+          <div class="info-card">
+            <p class="info-label" data-i18n="hero.highlight2.label">Стек</p>
+            <p class="info-value" data-i18n="hero.highlight2.value">Fiber, Gin, gRPC, Kafka</p>
+          </div>
+          <div class="info-card info-card-wide">
+            <p class="info-label" data-i18n="hero.highlight3.label">Области фокуса</p>
+            <p class="info-note" data-i18n="hero.highlight3.value">
+              Надёжные REST/gRPC API, очереди сообщений, мониторинг (Prometheus, Grafana), трассировка (Jaeger), CI/CD.
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="education" class="section section-alt">
-      <div class="container">
-        <h2 class="section-title">Education</h2>
-        <div class="education-list">
-          <article class="education-item">
-            <span class="education-year">Graduating 2026</span>
-            <h3>Financial University</h3>
-            <p>Faculty of Information Technologies and Big Data Analysis — Applied Informatics</p>
+    <!-- Skills -->
+    <section id="skills" class="section fade-section">
+      <div class="section-inner">
+        <h2 class="section-heading" data-i18n="skills.title">Навыки</h2>
+        <div class="card-grid">
+          <article class="card">
+            <h3 class="card-title" data-i18n="skills.languagesTitle">Языки программирования</h3>
+            <div class="tag-grid">
+              <span class="tag">Go</span>
+              <span class="tag">Python</span>
+              <span class="tag">C++</span>
+              <span class="tag">SQL</span>
+              <span class="tag">Bash</span>
+            </div>
           </article>
-          <article class="education-item">
-            <span class="education-year">—</span>
-            <h3>Oxbridge Academy International School, Baku</h3>
-            <p>Pearson international certificate</p>
+
+          <article class="card">
+            <h3 class="card-title" data-i18n="skills.backendTitle">Backend &amp; Tools</h3>
+            <div class="tag-grid">
+              <span class="tag">Golang</span>
+              <span class="tag">Fiber</span>
+              <span class="tag">Gin</span>
+              <span class="tag">Echo</span>
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">MySQL</span>
+              <span class="tag">Docker</span>
+              <span class="tag">Redis</span>
+              <span class="tag">Kafka</span>
+              <span class="tag">RabbitMQ</span>
+              <span class="tag">REST API</span>
+              <span class="tag">HTTP</span>
+              <span class="tag">Git</span>
+              <span class="tag">Linux</span>
+              <span class="tag">gRPC</span>
+              <span class="tag">Grafana</span>
+              <span class="tag">Prometheus</span>
+              <span class="tag">CI/CD</span>
+              <span class="tag">Jaeger</span>
+              <span class="tag">Clickhouse</span>
+              <span class="tag">Elasticsearch</span>
+            </div>
           </article>
-          <article class="education-item">
-            <span class="education-year">—</span>
-            <h3>STEP IT Computer Academy, Baku</h3>
-            <p>International diploma in digital technologies</p>
+
+          <article class="card">
+            <h3 class="card-title" data-i18n="skills.archTitle">Архитектура</h3>
+            <div class="tag-grid">
+              <span class="tag">SOLID</span>
+              <span class="tag">Architectural Patterns</span>
+              <span class="tag">Microservices</span>
+              <span class="tag">Clean Architecture</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title" data-i18n="skills.dataScienceTitle">Data Science</h3>
+            <div class="tag-grid">
+              <span class="tag">Pandas</span>
+              <span class="tag">Numpy</span>
+              <span class="tag">Matplotlib</span>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="projects" class="section">
-      <div class="container">
-        <h2 class="section-title">Projects</h2>
-        <div class="projects-grid">
-          <article class="project-card">
-            <h3>API Gateway</h3>
-            <p>REST API for user management with UUID auto-generation, configuration via config.yaml, structured logging with slog, custom errors, and layered architecture.</p>
+    <!-- Projects -->
+    <section id="projects" class="section section-alt fade-section">
+      <div class="section-inner">
+        <h2 class="section-heading" data-i18n="projects.title">Проекты</h2>
+        <div class="card-grid">
+          <article class="card">
+            <h3 class="card-title" data-i18n="projects.apiGateway.name">API-gateway</h3>
+            <p class="card-body" data-i18n="projects.apiGateway.desc">
+              REST API для управления пользователями (создание, получение, обновление, удаление) с авто-генерацией UUID, конфигурированием через config.yaml и логированием через slog в стиле Clean Architecture.
+            </p>
+            <p class="card-stack" data-i18n="projects.apiGateway.stack">
+              Go, Fiber, PostgreSQL, Docker, GitHub Actions
+            </p>
           </article>
-          <article class="project-card">
-            <h3>Crypto Exchange</h3>
-            <p>In-memory matching engine, orderbook, REST API, basic Ethereum integration. Next.js frontend with MetaMask connectivity.</p>
+
+          <article class="card">
+            <h3 class="card-title" data-i18n="projects.crypto.name">Crypto-exchange</h3>
+            <p class="card-body" data-i18n="projects.crypto.desc">
+              In-memory matching engine и ордербук, REST API для заявок, интеграция с Ethereum (Ganache/ERC20). Учебный HFT-проект с фронтендом на Next.js/React и интеграцией с MetaMask.
+            </p>
+            <p class="card-stack" data-i18n="projects.crypto.stack">
+              Go, Goroutines, Channels, Next.js, React, Ethers.js, MetaMask
+            </p>
           </article>
-          <article class="project-card">
-            <h3>California Housing Price Predictor</h3>
-            <p>Data cleaning, feature engineering, and regression model comparison for housing price prediction.</p>
+
+          <article class="card">
+            <h3 class="card-title" data-i18n="projects.california.name">California Housing Price Predictor</h3>
+            <p class="card-body" data-i18n="projects.california.desc">
+              Прогноз медианной стоимости жилья по данным переписи 1990 года с использованием feature engineering и сравнения регрессионных моделей.
+            </p>
+            <p class="card-stack" data-i18n="projects.california.stack">
+              Python, pandas, numpy, scikit-learn, matplotlib
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title" data-i18n="projects.audio.name">Audio Emergency Detection System</h3>
+            <p class="card-body" data-i18n="projects.audio.desc">
+              Интеллектуальная система анализа аудиосигналов на перекрёстках для обнаружения чрезвычайных ситуаций (аварии, сирены, крики) с целью ускорения реагирования служб.
+            </p>
+            <p class="card-stack" data-i18n="projects.audio.stack">
+              Audio Processing, Algorithms, Microphone Arrays
+            </p>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="certificates" class="section section-alt">
-      <div class="container">
-        <h2 class="section-title">Certificates</h2>
-        <div class="certificates-grid">
-          <div class="cert-card">
-            <h3>IT Certificates</h3>
-            <button class="btn btn-outline" type="button">View certificates</button>
-          </div>
-          <div class="cert-card">
-            <h3>International Relations</h3>
-            <p class="cert-sub">UN, EYP</p>
-            <button class="btn btn-outline" type="button">View certificates</button>
-          </div>
-          <div class="cert-card">
-            <h3>Sports</h3>
-            <button class="btn btn-outline" type="button">View certificates</button>
-          </div>
+    <!-- Education -->
+    <section id="education" class="section fade-section">
+      <div class="section-inner">
+        <h2 class="section-heading" data-i18n="education.title">Образование</h2>
+        <div class="timeline">
+          <article class="timeline-item">
+            <div class="timeline-point"></div>
+            <div class="timeline-content">
+              <p class="timeline-period" data-i18n="education.item1.period">2022–2026</p>
+              <h3 class="timeline-title" data-i18n="education.item1.title">
+                Financial University under the Government of the Russian Federation
+              </h3>
+              <p class="timeline-body" data-i18n="education.item1.desc">
+                Faculty of IT and Big Data Analytics, Applied Informatics, Bachelor.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-point"></div>
+            <div class="timeline-content">
+              <p class="timeline-period" data-i18n="education.item2.period">2015–2021</p>
+              <h3 class="timeline-title" data-i18n="education.item2.title">Oxbridge Academy, Baku</h3>
+              <p class="timeline-body" data-i18n="education.item2.desc">
+                General Secondary Education, Pearson International Certificate (English medium).
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-point"></div>
+            <div class="timeline-content">
+              <p class="timeline-period" data-i18n="education.item3.period">2016–2019</p>
+              <h3 class="timeline-title" data-i18n="education.item3.title">STEP IT Academy, Baku</h3>
+              <p class="timeline-body" data-i18n="education.item3.desc">
+                Digital Technologies Program (3D Modeling, Web Dev, Python, Arduino, Unity, Design).
+              </p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <section id="contact" class="section contact-section">
-      <div class="container">
-        <h2 class="section-title">Contact</h2>
-        <p class="contact-intro">Let's connect — resume, code, and chat.</p>
+    <!-- Certificates -->
+    <section id="certificates" class="section section-alt fade-section">
+      <div class="section-inner">
+        <h2 class="section-heading" data-i18n="certificates.title">Сертификаты</h2>
+        <div class="card-grid card-grid-4">
+          <article class="card">
+            <h3 class="card-title" data-i18n="certificates.it">IT Certificates</h3>
+            <p class="card-body card-small" data-i18n="certificates.placeholder">
+              Плейсхолдер для IT-сертификатов (онлайн-курсы, интенсивы, экзамены).
+            </p>
+          </article>
+          <article class="card">
+            <h3 class="card-title" data-i18n="certificates.ir">International Relations</h3>
+            <p class="card-body card-small" data-i18n="certificates.placeholder">
+              Плейсхолдер для IT-сертификатов (онлайн-курсы, интенсивы, экзамены).
+            </p>
+          </article>
+          <article class="card">
+            <h3 class="card-title" data-i18n="certificates.sport">Sport</h3>
+            <p class="card-body card-small" data-i18n="certificates.placeholder">
+              Плейсхолдер для IT-сертификатов (онлайн-курсы, интенсивы, экзамены).
+            </p>
+          </article>
+          <article class="card">
+            <h3 class="card-title" data-i18n="certificates.aviation">Aviation</h3>
+            <p class="card-body card-small" data-i18n="certificates.placeholder">
+              Плейсхолдер для IT-сертификатов (онлайн-курсы, интенсивы, экзамены).
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section fade-section">
+      <div class="section-inner section-inner-contact">
+        <div class="contact-text">
+          <h2 class="section-heading" data-i18n="contact.title">Контакты</h2>
+          <p class="contact-subtitle" data-i18n="contact.subtitle">
+            Открыт к предложениям по backend-разработке, микросервисам и исследовательским проектам.
+          </p>
+        </div>
         <div class="contact-links">
-          <a href="#" class="btn btn-primary" id="resume-btn">Resume</a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline">GitHub</a>
-          <a href="https://t.me" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Telegram</a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="GitHub">
+            <span class="icon-circle">GH</span>
+            <span class="icon-label">GitHub</span>
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="LinkedIn">
+            <span class="icon-circle">in</span>
+            <span class="icon-label">LinkedIn</span>
+          </a>
+          <a href="https://t.me" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="Telegram">
+            <span class="icon-circle">TG</span>
+            <span class="icon-label">Telegram</span>
+          </a>
+          <a href="mailto:example@mail.com" class="icon-button" aria-label="Email">
+            <span class="icon-circle">@</span>
+            <span class="icon-label">Email</span>
+          </a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <p>&copy; <span id="year"></span> Alkhanov Mohammed. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p data-i18n="footer.copyright">© 2024 Alkhanov Mohammed.</p>
+      <p class="footer-note" data-i18n="footer.madeBy">Сайт-портфолио Senior Golang Developer.</p>
+    </div>
   </footer>
 
+  <script src="translations.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
