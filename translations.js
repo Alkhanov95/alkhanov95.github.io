@@ -13,19 +13,19 @@
 
       'hero.nameShort': 'Алханов Мохаммед',
       'hero.name': 'Алханов Мохаммед',
-      'hero.role': 'Golang-разработчик / Golang Developer',
+      'hero.role': 'Golang-разработчик',
       'hero.badge': 'Golang-разработчик',
       'hero.description':
         'Разрабатываю высоконагруженные backend-сервисы и микросервисы на Go: от REST/gRPC API до распределённых систем с мониторингом и трассировкой. В фокусе — чистая архитектура, наблюдаемость и инженерная строгость.',
       'hero.cta': 'Связаться со мной',
-      'hero.subtitle': 'Backend, микросервисы, распределённые системы.',
+      'hero.subtitle': '',
       'hero.highlight1.label': 'Язык',
-      'hero.highlight1.value': 'Go, микросервисы',
+      'hero.highlight1.value': 'Go, Python, Java, SQL, C++, Bash',
       'hero.highlight2.label': 'Стек',
-      'hero.highlight2.value': 'Fiber, Gin, gRPC, Kafka',
+      'hero.highlight2.value': 'Fiber, Gin, Echo, Docker, gRPC, Kafka, CI/CD, REST API,  HTTP',
       'hero.highlight3.label': 'Области фокуса',
       'hero.highlight3.value':
-        'Надёжные REST/gRPC API, очереди сообщений, мониторинг (Prometheus, Grafana), трассировка (Jaeger), CI/CD.',
+        'Надёжная серверная логика, обмен сообщениями между сервисами и полный контроль состояния системы.',
 
       'skills.title': 'Навыки',
       'skills.languagesTitle': 'Языки программирования',
