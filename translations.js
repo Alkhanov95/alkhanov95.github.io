@@ -76,19 +76,19 @@
         'Digital Technologies Program (3D Modeling, Web Dev, Python, Arduino, Unity, Design).',
 
       'certificates.title': 'Сертификаты',
-      'certificates.it': 'IT Certificates',
-      'certificates.ir': 'International Relations',
-      'certificates.sport': 'Sport',
-      'certificates.aviation': 'Aviation',
+      'certificates.it': 'Информационные Технологии',
+      'certificates.ir': 'Международные Отношения',
+      'certificates.sport': 'Спорт',
+      'certificates.aviation': 'Еще',
       'certificates.placeholder':
-        'Плейсхолдер для сертификатов (онлайн-курсы, интенсивы, экзамены).',
+        'Дипломы / Сертификаты в области языков, авиации, образования...',
 
       'contact.title': 'Контакты',
       'contact.subtitle':
         'Открыт к предложениям по backend-разработке, микросервисам и исследовательским проектам.',
 
-      'footer.copyright': '© 2024 Alkhanov Mohammed.',
-      'footer.madeBy': 'Сайт-портфолио Senior Golang Developer.'
+      'footer.copyright': '© 2026 Alkhanov Mohammed.',
+      'footer.madeBy': 'Сайт-портфолио Golang Developer.'
     },
 
     en: {
@@ -167,16 +167,16 @@
       'certificates.it': 'IT Certificates',
       'certificates.ir': 'International Relations',
       'certificates.sport': 'Sport',
-      'certificates.aviation': 'Aviation',
+      'certificates.aviation': 'Else',
       'certificates.placeholder':
-        'Placeholder block for certificates (courses, exams, intensives).',
+        'Diplomas / Certificates in Languages, Aviation, Education',
 
       'contact.title': 'Contacts',
       'contact.subtitle':
         'Open to backend, microservices and research-oriented opportunities.',
 
-      'footer.copyright': '© 2024 Alkhanov Mohammed.',
-      'footer.madeBy': 'Portfolio website of a Senior Golang Developer.'
+      'footer.copyright': '© 2026 Alkhanov Mohammed.',
+      'footer.madeBy': 'Portfolio website of a Golang Developer.'
     }
   }
 })()
