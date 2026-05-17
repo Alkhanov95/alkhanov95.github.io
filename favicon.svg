@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AM">
+  <defs>
+    <radialGradient id="bg" cx="30%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="#2a2a2d"/>
+      <stop offset="55%" stop-color="#080809"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="12" y1="8" x2="52" y2="58">
+      <stop offset="0%" stop-color="#f4e3b0"/>
+      <stop offset="44%" stop-color="#b99145"/>
+      <stop offset="100%" stop-color="#f0f0fa"/>
+    </linearGradient>
+    <linearGradient id="text" x1="18" y1="20" x2="48" y2="46">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#e8d19a"/>
+      <stop offset="100%" stop-color="#f0f0fa"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <rect x="7.5" y="7.5" width="49" height="49" rx="13" fill="none" stroke="url(#ring)" stroke-width="1.6"/>
+  <path d="M16 48L25.5 17H29.3L38.8 48H33.8L31.7 40.5H23.1L21 48H16ZM24.2 36.2H30.6L27.4 24.8L24.2 36.2Z" fill="url(#text)"/>
+  <path d="M39.8 48V17H44.1L49.5 34.8L54.8 17H59V48H54.8V29.3L50.9 42.2H48L44 29.3V48H39.8Z" fill="url(#text)" transform="translate(-3.5 0)"/>
+</svg>
