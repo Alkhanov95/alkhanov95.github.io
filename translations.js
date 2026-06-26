@@ -54,6 +54,13 @@
 
       'projects.eyebrow': 'Selected engineering work',
       'projects.title': 'Проекты',
+      'projects.viewSource': 'Исходный код',
+      'projects.oilForecast.aria': 'Открыть репозиторий «Oil Forecast» на GitHub',
+      'projects.aviationWeather.aria': 'Открыть репозиторий «Aviation Weather API» на GitHub',
+      'projects.apiGateway.aria': 'Открыть репозиторий «API-gateway» на GitHub',
+      'projects.crypto.aria': 'Открыть репозиторий «Crypto-exchange» на GitHub',
+      'projects.california.aria': 'Открыть репозиторий «California Housing Price Predictor» на GitHub',
+      'projects.audio.aria': 'Открыть репозиторий «Audio Emergency Detection System» на GitHub',
       'projects.oilForecast.name': 'Oil Forecast',
       'projects.oilForecast.desc':
         'Backend-система для сбора, хранения и прогнозирования цен Brent/WTI. Go отвечает за API, загрузку данных из FRED и PostgreSQL, а Python ML-service строит объяснимый pipeline: подготовка данных, признаки, baseline, модель, метрики и сохранение прогноза.',
@@ -199,6 +206,13 @@
 
       'projects.eyebrow': 'Selected engineering work',
       'projects.title': 'Projects',
+      'projects.viewSource': 'View source',
+      'projects.oilForecast.aria': 'Open the Oil Forecast repository on GitHub',
+      'projects.aviationWeather.aria': 'Open the Aviation Weather API repository on GitHub',
+      'projects.apiGateway.aria': 'Open the API-gateway repository on GitHub',
+      'projects.crypto.aria': 'Open the Crypto-exchange repository on GitHub',
+      'projects.california.aria': 'Open the California Housing Price Predictor repository on GitHub',
+      'projects.audio.aria': 'Open the Audio Emergency Detection System repository on GitHub',
       'projects.oilForecast.name': 'Oil Forecast',
       'projects.oilForecast.desc':
         'A backend system for collecting, storing and forecasting Brent/WTI prices. Go handles the API, FRED ingestion and PostgreSQL persistence, while Python ML service builds an explainable pipeline: preprocessing, features, baseline, model, metrics and saved forecast.',

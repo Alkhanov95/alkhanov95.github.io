@@ -278,9 +278,94 @@
     applyLanguage(defaultLang)
   }
 
+  function initScrollProgress() {
+    var bar = document.querySelector('.scroll-progress')
+    if (!bar) return
+
+    var ticking = false
+
+    function update() {
+      var doc = document.documentElement
+      var max = (doc.scrollHeight || 0) - window.innerHeight
+      var ratio = max > 0 ? Math.min(1, Math.max(0, window.pageYOffset / max)) : 0
+      bar.style.transform = 'scaleX(' + ratio.toFixed(4) + ')'
+      ticking = false
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (!ticking) {
+          ticking = true
+          window.requestAnimationFrame(update)
+        }
+      },
+      { passive: true }
+    )
+    window.addEventListener('resize', update)
+    update()
+  }
+
+  function initScrollSpy() {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.nav-link'))
+    if (!links.length || !('IntersectionObserver' in window)) return
+
+    var byId = {}
+    links.forEach(function (link) {
+      var href = link.getAttribute('href') || ''
+      if (href.charAt(0) === '#' && href.length > 1) byId[href.slice(1)] = link
+    })
+
+    var sections = Object.keys(byId)
+      .map(function (id) {
+        return document.getElementById(id)
+      })
+      .filter(Boolean)
+    if (!sections.length) return
+
+    function setActive(id) {
+      links.forEach(function (link) {
+        link.classList.toggle('is-active', byId[id] === link)
+      })
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) setActive(entry.target.id)
+        })
+      },
+      { rootMargin: '-45% 0px -50% 0px', threshold: 0 }
+    )
+
+    sections.forEach(function (section) {
+      observer.observe(section)
+    })
+  }
+
+  function initCardGlow() {
+    if (reduceMotion) return
+    if (window.matchMedia && window.matchMedia('(hover: none)').matches) return
+
+    var cards = document.querySelectorAll('.card')
+    cards.forEach(function (card) {
+      card.addEventListener('mousemove', function (e) {
+        var rect = card.getBoundingClientRect()
+        if (!rect.width || !rect.height) return
+        var x = ((e.clientX - rect.left) / rect.width) * 100
+        var y = ((e.clientY - rect.top) / rect.height) * 100
+        card.style.setProperty('--mx', x.toFixed(2) + '%')
+        card.style.setProperty('--my', y.toFixed(2) + '%')
+      })
+    })
+  }
+
   if (!initVantaBackground()) initCanvasBackground()
   initSmoothScroll()
   initNav()
   initFadeSections()
   initLanguage()
+  initScrollProgress()
+  initScrollSpy()
+  initCardGlow()
 })()

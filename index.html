@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="scroll-progress" aria-hidden="true"></div>
   <div id="vanta-background" aria-hidden="true"></div>
   <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
@@ -196,46 +197,66 @@
           <h2 id="projects-title" class="section-heading" data-i18n="projects.title">Проекты</h2>
         </div>
         <div class="project-grid">
-          <article class="card project-card">
-            <span class="card-index">01</span>
-            <h3 class="card-title" data-i18n="projects.oilForecast.name">Oil Forecast</h3>
-            <p class="card-body" data-i18n="projects.oilForecast.desc">Backend-система для сбора, хранения и прогнозирования цен на нефть Brent/WTI.</p>
-            <p class="card-stack" data-i18n="projects.oilForecast.stack">Stack: Go, Python, PostgreSQL, FRED API, ML pipeline</p>
+          <article class="card project-card card-clickable">
+            <a href="https://github.com/Alkhanov95/alkhan-oil-forecast" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Open Oil Forecast repository on GitHub" data-i18n-aria-label="projects.oilForecast.aria">
+              <span class="card-index">01</span>
+              <h3 class="card-title" data-i18n="projects.oilForecast.name">Oil Forecast</h3>
+              <p class="card-body" data-i18n="projects.oilForecast.desc">Backend-система для сбора, хранения и прогнозирования цен на нефть Brent/WTI.</p>
+              <p class="card-stack" data-i18n="projects.oilForecast.stack">Stack: Go, Python, PostgreSQL, FRED API, ML pipeline</p>
+              <span class="project-source" data-i18n="projects.viewSource">View source</span>
+            </a>
           </article>
 
-          <article class="card project-card">
-            <span class="card-index">02</span>
-            <h3 class="card-title" data-i18n="projects.aviationWeather.name">Aviation Weather API</h3>
-            <p class="card-body" data-i18n="projects.aviationWeather.desc">Go-сервис для получения и отображения авиационной погоды по аэропорту.</p>
-            <p class="card-stack" data-i18n="projects.aviationWeather.stack">Stack: Go, net/http, REST API, Aviation weather data</p>
+          <!-- TODO: replace with the exact Aviation Weather API repo URL (currently points to GitHub profile) -->
+          <article class="card project-card card-clickable">
+            <a href="https://github.com/Alkhanov95" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Open Aviation Weather API repository on GitHub" data-i18n-aria-label="projects.aviationWeather.aria">
+              <span class="card-index">02</span>
+              <h3 class="card-title" data-i18n="projects.aviationWeather.name">Aviation Weather API</h3>
+              <p class="card-body" data-i18n="projects.aviationWeather.desc">Go-сервис для получения и отображения авиационной погоды по аэропорту.</p>
+              <p class="card-stack" data-i18n="projects.aviationWeather.stack">Stack: Go, net/http, REST API, Aviation weather data</p>
+              <span class="project-source" data-i18n="projects.viewSource">View source</span>
+            </a>
           </article>
 
-          <article class="card project-card">
-            <span class="card-index">03</span>
-            <h3 class="card-title" data-i18n="projects.apiGateway.name">API-gateway</h3>
-            <p class="card-body" data-i18n="projects.apiGateway.desc">REST API для управления пользователями с UUID, config.yaml, slog и Clean Architecture.</p>
-            <p class="card-stack" data-i18n="projects.apiGateway.stack">Stack: Go, Fiber, PostgreSQL, Docker, GitHub Actions</p>
+          <article class="card project-card card-clickable">
+            <a href="https://github.com/Alkhanov95/api-gateway" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Open API-gateway repository on GitHub" data-i18n-aria-label="projects.apiGateway.aria">
+              <span class="card-index">03</span>
+              <h3 class="card-title" data-i18n="projects.apiGateway.name">API-gateway</h3>
+              <p class="card-body" data-i18n="projects.apiGateway.desc">REST API для управления пользователями с UUID, config.yaml, slog и Clean Architecture.</p>
+              <p class="card-stack" data-i18n="projects.apiGateway.stack">Stack: Go, Fiber, PostgreSQL, Docker, GitHub Actions</p>
+              <span class="project-source" data-i18n="projects.viewSource">View source</span>
+            </a>
           </article>
 
-          <article class="card project-card">
-            <span class="card-index">04</span>
-            <h3 class="card-title" data-i18n="projects.crypto.name">Crypto-exchange</h3>
-            <p class="card-body" data-i18n="projects.crypto.desc">In-memory matching engine и ордербук, REST API для заявок, Ethereum integration.</p>
-            <p class="card-stack" data-i18n="projects.crypto.stack">Stack: Go, Goroutines, Channels, Next.js, React, Ethers.js, MetaMask</p>
+          <article class="card project-card card-clickable">
+            <a href="https://github.com/Alkhanov95/crypto-exchange" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Open Crypto-exchange repository on GitHub" data-i18n-aria-label="projects.crypto.aria">
+              <span class="card-index">04</span>
+              <h3 class="card-title" data-i18n="projects.crypto.name">Crypto-exchange</h3>
+              <p class="card-body" data-i18n="projects.crypto.desc">In-memory matching engine и ордербук, REST API для заявок, Ethereum integration.</p>
+              <p class="card-stack" data-i18n="projects.crypto.stack">Stack: Go, Goroutines, Channels, Next.js, React, Ethers.js, MetaMask</p>
+              <span class="project-source" data-i18n="projects.viewSource">View source</span>
+            </a>
           </article>
 
-          <article class="card project-card">
-            <span class="card-index">05</span>
-            <h3 class="card-title" data-i18n="projects.california.name">California Housing Price Predictor</h3>
-            <p class="card-body" data-i18n="projects.california.desc">Прогноз медианной стоимости жилья с feature engineering и сравнением моделей.</p>
-            <p class="card-stack" data-i18n="projects.california.stack">Stack: Python, pandas, numpy, scikit-learn, matplotlib</p>
+          <!-- TODO: replace with the exact California Housing Price Predictor repo URL (currently points to GitHub profile) -->
+          <article class="card project-card card-clickable">
+            <a href="https://github.com/Alkhanov95" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Open California Housing Price Predictor repository on GitHub" data-i18n-aria-label="projects.california.aria">
+              <span class="card-index">05</span>
+              <h3 class="card-title" data-i18n="projects.california.name">California Housing Price Predictor</h3>
+              <p class="card-body" data-i18n="projects.california.desc">Прогноз медианной стоимости жилья с feature engineering и сравнением моделей.</p>
+              <p class="card-stack" data-i18n="projects.california.stack">Stack: Python, pandas, numpy, scikit-learn, matplotlib</p>
+              <span class="project-source" data-i18n="projects.viewSource">View source</span>
+            </a>
           </article>
 
-          <article class="card project-card">
-            <span class="card-index">06</span>
-            <h3 class="card-title" data-i18n="projects.audio.name">Audio Emergency Detection System</h3>
-            <p class="card-body" data-i18n="projects.audio.desc">Система анализа аудио на перекрёстках для распознавания аварий, сирен и криков.</p>
-            <p class="card-stack" data-i18n="projects.audio.stack">Stack: Audio Processing, Algorithms, Microphone Arrays</p>
+          <article class="card project-card card-clickable">
+            <a href="https://github.com/Alkhanov95/audiocross-monitor" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Open Audio Emergency Detection System repository on GitHub" data-i18n-aria-label="projects.audio.aria">
+              <span class="card-index">06</span>
+              <h3 class="card-title" data-i18n="projects.audio.name">Audio Emergency Detection System</h3>
+              <p class="card-body" data-i18n="projects.audio.desc">Система анализа аудио на перекрёстках для распознавания аварий, сирен и криков.</p>
+              <p class="card-stack" data-i18n="projects.audio.stack">Stack: Audio Processing, Algorithms, Microphone Arrays</p>
+              <span class="project-source" data-i18n="projects.viewSource">View source</span>
+            </a>
           </article>
         </div>
       </div>
