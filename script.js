@@ -162,22 +162,6 @@
     navToggle.setAttribute('aria-expanded', 'false')
   }
 
-  function initSmoothScroll() {
-    var anchors = document.querySelectorAll('a[href^="#"]')
-    anchors.forEach(function (anchor) {
-      anchor.addEventListener('click', function (e) {
-        var id = this.getAttribute('href')
-        if (id === '#') return
-        var el = document.querySelector(id)
-        if (!el) return
-
-        e.preventDefault()
-        el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
-        closeNav()
-      })
-    })
-  }
-
   function initNav() {
     var toggle = document.getElementById('nav-toggle')
     var links = document.getElementById('nav-links')
@@ -190,34 +174,19 @@
       toggle.setAttribute('aria-expanded', String(isOpen))
     })
 
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeNav()
+    links.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', closeNav)
     })
-  }
+    document.addEventListener('click', function (event) {
+      if (!event.target.closest('.site-nav')) closeNav()
+    })
+    window.matchMedia('(min-width: 1101px)').addEventListener('change', closeNav)
 
-  function initFadeSections() {
-    var sections = document.querySelectorAll('.fade-section')
-    if (reduceMotion || !('IntersectionObserver' in window) || sections.length === 0) {
-      sections.forEach(function (section) {
-        section.classList.add('is-visible')
-      })
-      return
-    }
-
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible')
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.12 }
-    )
-
-    sections.forEach(function (section) {
-      observer.observe(section)
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && links.classList.contains('is-open')) {
+        closeNav()
+        toggle.focus()
+      }
     })
   }
 
@@ -259,6 +228,13 @@
         window.localStorage.setItem('lang', lang)
       } catch (_) {}
       document.documentElement.lang = lang
+      document.title = map['meta.title']
+      document.querySelectorAll('meta[name="description"], meta[property="og:description"], meta[name="twitter:description"]').forEach(function (node) {
+        node.setAttribute('content', map['meta.description'])
+      })
+      document.querySelectorAll('meta[property="og:title"], meta[name="twitter:title"]').forEach(function (node) {
+        node.setAttribute('content', map['meta.title'])
+      })
     }
 
     var ruBtn = document.getElementById('lang-ru')
@@ -325,7 +301,10 @@
 
     function setActive(id) {
       links.forEach(function (link) {
-        link.classList.toggle('is-active', byId[id] === link)
+        var active = byId[id] === link
+        link.classList.toggle('is-active', active)
+        if (active) link.setAttribute('aria-current', 'location')
+        else link.removeAttribute('aria-current')
       })
     }
 
@@ -343,29 +322,13 @@
     })
   }
 
-  function initCardGlow() {
-    if (reduceMotion) return
-    if (window.matchMedia && window.matchMedia('(hover: none)').matches) return
-
-    var cards = document.querySelectorAll('.card')
-    cards.forEach(function (card) {
-      card.addEventListener('mousemove', function (e) {
-        var rect = card.getBoundingClientRect()
-        if (!rect.width || !rect.height) return
-        var x = ((e.clientX - rect.left) / rect.width) * 100
-        var y = ((e.clientY - rect.top) / rect.height) * 100
-        card.style.setProperty('--mx', x.toFixed(2) + '%')
-        card.style.setProperty('--my', y.toFixed(2) + '%')
-      })
-    })
+  try {
+    if (!initVantaBackground()) initCanvasBackground()
+  } catch (_) {
+    initCanvasBackground()
   }
-
-  if (!initVantaBackground()) initCanvasBackground()
-  initSmoothScroll()
   initNav()
-  initFadeSections()
   initLanguage()
   initScrollProgress()
   initScrollSpy()
-  initCardGlow()
 })()
